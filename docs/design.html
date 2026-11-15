@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+</head>
+<body>
+<title>Rivers &amp; Crowns</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,600;1,600;1,700&family=Alegreya:wght@500;700&family=Alegreya+Sans:wght@400;500;700&display=swap">
+<style>
+/* Layout: single navy reading column that borrows the game's own UI dress (navy, gold rules, parchment panels); mock-up stages run full width. Single deliberate dark look. */
+:root {
+  --navy: #13213d; --navy-2: #1a2c50; --deep: #0b1428; --gold: #d6b25a; --gold-hi: #f2d68c;
+  --parch: #efe2c2; --parch-2: #e3d2aa; --parch-ink: #3b2a17; --ink: #ebe5d4; --muted: #a8b1c5;
+  --bad: #e0705a; --good: #8fd07a;
+  --display: "Cormorant Garamond", "Iowan Old Style", Georgia, serif;
+  --ui: "Alegreya", "Iowan Old Style", Georgia, serif;
+  --body: "Alegreya Sans", "Gill Sans", "Segoe UI", system-ui, sans-serif;
+  color-scheme: dark;
+}
+body { background: var(--navy); color: var(--ink); font: 400 17px/1.55 var(--body);
+  background-image: radial-gradient(1200px 600px at 50% -10%, #20365f 0%, transparent 70%); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-block: 36px 80px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: flex; flex-direction: column; gap: 60px; }
+h1, h2, h3 { margin: 0; text-wrap: balance; font-weight: 600; }
+h1 { font: italic 700 clamp(48px, 9vw, 96px)/1 var(--display); color: var(--ink); }
+h2 { font: italic 600 clamp(30px, 4.4vw, 42px)/1.1 var(--display); }
+h3 { font: 700 20px/1.25 var(--ui); color: var(--gold-hi); }
+p { margin: 0; max-width: 68ch; }
+.eyebrow { font: 700 12px/1 var(--body); letter-spacing: .16em; text-transform: uppercase; color: var(--gold); }
+.muted { color: var(--muted); }
+section { display: flex; flex-direction: column; gap: 20px; }
+header { display: flex; flex-direction: column; gap: 16px; align-items: flex-start; }
+.crown { width: 44px; height: 22px; }
+.lede { font-size: 21px; line-height: 1.45; max-width: 62ch; }
+
+.parch { background: var(--parch); color: var(--parch-ink); border-radius: 6px; padding: 24px; box-shadow: inset 0 0 40px rgba(120,80,30,.18), 0 0 0 2px var(--gold), 0 0 0 4px var(--deep); }
+.parch h3 { color: var(--parch-ink); }
+.split { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+.split > div { display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+.parch ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+
+.stage-scroll { overflow-x: auto; border-radius: 8px; padding: 6px; }
+.gframe { position: relative; min-width: 760px; border-radius: 8px; overflow: hidden; background: var(--deep);
+  box-shadow: 0 0 0 2px var(--gold), 0 0 0 5px var(--deep), 0 12px 40px rgba(0,0,0,.45); container-type: inline-size; }
+.cap { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+.cap b { font: 700 12px/1 var(--body); letter-spacing: .14em; text-transform: uppercase; color: var(--gold); }
+.cap span { color: var(--muted); max-width: 90ch; }
+
+/* --- town mock --- */
+.town { aspect-ratio: 16 / 9; background: url("../art/reference/R4-french-town.webp") center / cover; }
+.tbar { position: absolute; left: 0; right: 0; bottom: 0; height: 10.5cqw; display: flex; align-items: center; gap: 1.2cqw; padding: 0 1.4cqw;
+  background: linear-gradient(#1b2d52, #101d38); border-top: .25cqw solid var(--gold); }
+.logo { font: italic 700 2.3cqw/1 var(--display); color: var(--ink); white-space: nowrap; padding-right: 1.2cqw; border-right: 1px solid rgba(214,178,90,.5); }
+.slots { display: flex; gap: .6cqw; }
+.slot { width: 6.2cqw; height: 7.6cqw; border-radius: .5cqw; border: .15cqw solid #6d5a2f; background: #0e1a33; padding: .3cqw; display: flex; flex-direction: column; align-items: center; justify-content: space-between; cursor: pointer; color: var(--ink); font: 500 .95cqw/1.05 var(--ui); text-align: center; position: relative; }
+.slot img, .slot svg { width: 100%; height: 4.6cqw; object-fit: contain; }
+.slot.built { border-color: var(--gold); }
+.slot.sel { box-shadow: 0 0 0 .2cqw var(--gold-hi), 0 0 1.2cqw rgba(242,214,140,.55); }
+.slot:not(.built) img, .slot:not(.built) svg { filter: grayscale(.9) brightness(.65); }
+.slot .dot { position: absolute; top: .3cqw; right: .3cqw; width: .8cqw; height: .8cqw; border-radius: 50%; background: var(--good); }
+.slot:not(.built) .dot { display: none; }
+.slot:focus-visible, .gbtn:focus-visible, .act:focus-visible, .branch:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
+.res { display: flex; gap: 1.1cqw; margin-left: auto; padding-left: 1.2cqw; border-left: 1px solid rgba(214,178,90,.5); }
+.res span { display: flex; align-items: center; gap: .4cqw; font: 700 1.5cqw/1 var(--ui); font-variant-numeric: tabular-nums; transition: color .3s; }
+.res img, .res svg { height: 2.4cqw; width: 2.8cqw; object-fit: contain; }
+.res span.flash { color: var(--bad); }
+.day { font: 500 1.25cqw/1.25 var(--ui); text-align: right; white-space: nowrap; padding-left: 1.2cqw; border-left: 1px solid rgba(214,178,90,.5); }
+.day b { color: var(--gold-hi); font-weight: 700; display: block; }
+.drawer { position: absolute; top: 1.6cqw; left: 1.6cqw; width: 29cqw; background: var(--parch); color: var(--parch-ink); border-radius: .6cqw; padding: 1.4cqw;
+  box-shadow: inset 0 0 3cqw rgba(120,80,30,.22), 0 0 0 .2cqw var(--gold), 0 0 0 .45cqw var(--deep), 0 1cqw 2cqw rgba(0,0,0,.35); display: flex; flex-direction: column; gap: .9cqw; font: 400 1.25cqw/1.4 var(--body); }
+.drawer h4 { margin: 0; font: 700 2cqw/1.1 var(--ui); display: flex; justify-content: space-between; align-items: baseline; gap: 1cqw; }
+.drawer h4 small { font: 700 .95cqw/1 var(--body); letter-spacing: .12em; text-transform: uppercase; color: #7a5a22; }
+.cost { display: flex; gap: 1cqw; flex-wrap: wrap; font: 700 1.25cqw/1 var(--ui); font-variant-numeric: tabular-nums; }
+.cost span { display: flex; align-items: center; gap: .3cqw; }
+.cost img, .cost svg { height: 1.7cqw; width: 2cqw; object-fit: contain; }
+.cost .short { color: #a3321e; }
+.branches { display: grid; grid-template-columns: 1fr 1fr; gap: .8cqw; }
+.branch { text-align: left; font: inherit; color: inherit; background: var(--parch-2); border: .15cqw solid #b89b5e; border-radius: .5cqw; padding: .8cqw; cursor: pointer; display: flex; flex-direction: column; gap: .5cqw; }
+.branch b { font: 700 1.35cqw/1.15 var(--ui); }
+.branch:not([disabled]):hover { border-color: #7a5a22; background: #ecdcb4; }
+.branch.chosen { border-color: #2c6a2f; background: #dfe8c6; opacity: 1; }
+.branch.closed { opacity: .45; }
+.branch[disabled] { cursor: default; }
+.gbtn { font: 700 1.5cqw/1 var(--ui); color: #fff3d6; background: linear-gradient(#a8642a, #7a4318); border: .15cqw solid var(--gold); border-radius: .5cqw; padding: .8cqw 1.4cqw; cursor: pointer; box-shadow: inset 0 .15cqw 0 rgba(255,220,160,.4); align-self: flex-start; }
+.gbtn[disabled] { filter: grayscale(.8); opacity: .6; cursor: not-allowed; }
+.note { font: 500 1.1cqw/1.35 var(--body); color: #6b4e22; }
+
+/* --- battle mock --- */
+.battle svg { display: block; width: 100%; height: auto; }
+.bhud { display: grid; grid-template-columns: auto 1fr auto; gap: 1.4cqw; align-items: center; padding: 1.1cqw 1.4cqw; background: linear-gradient(#1b2d52, #101d38); border-top: .25cqw solid var(--gold); }
+.queue { display: flex; gap: .5cqw; align-items: center; }
+.queue .q { width: 4.6cqw; height: 4.6cqw; border-radius: 50%; border: .2cqw solid #6d5a2f; background: radial-gradient(#e9dcb8, #c8b388); display: grid; place-items: center; overflow: hidden; }
+.queue .q img { width: 82%; height: 82%; object-fit: contain; }
+.queue .q.en { border-color: #c0443a; }
+.queue .q.fr { border-color: #4a74c8; }
+.queue .q.now { width: 6cqw; height: 6cqw; border-color: var(--gold-hi); box-shadow: 0 0 1cqw rgba(242,214,140,.6); }
+.acts { display: flex; flex-wrap: wrap; gap: .6cqw; }
+.act { font: 700 1.25cqw/1 var(--ui); color: var(--ink); background: #0e1a33; border: .15cqw solid #6d5a2f; border-radius: .5cqw; padding: .7cqw 1cqw; cursor: pointer; display: flex; gap: .5cqw; align-items: center; }
+.act:not([disabled]):hover { border-color: var(--gold-hi); }
+.act .c { color: var(--gold-hi); font-variant-numeric: tabular-nums; }
+.act.cmd { border-color: var(--gold); background: #1d2f57; }
+.act[disabled] { opacity: .4; cursor: not-allowed; }
+.cmdpips { display: flex; flex-direction: column; gap: .5cqw; align-items: flex-end; font: 500 1.1cqw/1 var(--ui); color: var(--muted); }
+.pips { display: flex; gap: .45cqw; }
+.pips i { width: 1.1cqw; height: 1.1cqw; transform: rotate(45deg); background: var(--gold); display: block; }
+.pips i.off { background: transparent; border: .12cqw solid #6d5a2f; }
+.blog { grid-column: 1 / -1; font: 500 1.35cqw/1.3 var(--ui); color: var(--ink); border-top: 1px solid rgba(214,178,90,.35); padding-top: .8cqw; display: flex; justify-content: space-between; align-items: center; gap: 1cqw; }
+.blog button { font: 700 1.05cqw/1 var(--body); color: var(--muted); background: none; border: 1px solid #3a4a6e; border-radius: .4cqw; padding: .4cqw .8cqw; cursor: pointer; }
+
+/* mood board */
+.mood { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 22px 18px; }
+.mood figure { margin: 0; display: flex; flex-direction: column; gap: 10px; min-width: 0; grid-column: span 2; }
+.mood figure:nth-child(-n+2) { grid-column: span 3; }
+.mood img { width: 100%; border-radius: 6px; box-shadow: 0 0 0 1px rgba(214,178,90,.6); display: block; }
+.mood figcaption { font-size: 15px; color: var(--muted); }
+.mood figcaption b { color: var(--ink); }
+@media (max-width: 760px) { .mood { grid-template-columns: 1fr; } .mood figure:nth-child(n) { grid-column: auto; } }
+
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 16px; }
+th, td { text-align: left; padding: 12px 14px 12px 0; border-bottom: 1px solid #2c3d63; vertical-align: top; }
+th { font: 700 12px/1.2 var(--body); letter-spacing: .12em; text-transform: uppercase; color: var(--gold); }
+td:first-child { font: 700 17px/1.3 var(--ui); color: var(--gold-hi); }
+.pill { display: inline-block; font: 700 11px/1 var(--body); letter-spacing: .1em; text-transform: uppercase; padding: 4px 7px; border-radius: 3px; background: #24395f; color: var(--muted); margin-top: 6px; }
+.pill.go { background: #2c4a2a; color: #cfe8c2; }
+
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 28px 36px; }
+.grid3 > div { display: flex; flex-direction: column; gap: 8px; min-width: 0; border-top: 1px solid #2c3d63; padding-top: 14px; }
+.grid3 ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 4px; }
+
+ol.road { margin: 0; padding: 0; list-style: none; counter-reset: m; }
+ol.road li { counter-increment: m; display: grid; grid-template-columns: 56px 1fr auto; gap: 16px; padding: 14px 0; border-bottom: 1px solid #2c3d63; align-items: baseline; }
+ol.road li::before { content: "M" counter(m); font: 700 16px/1 var(--ui); color: var(--gold); }
+ol.road li > div { min-width: 0; display: flex; flex-direction: column; gap: 2px; }
+ol.road .wk { font-size: 14px; color: var(--muted); white-space: nowrap; }
+@media (max-width: 520px) { ol.road li { grid-template-columns: 40px 1fr; } ol.road .wk { grid-column: 2; } }
+
+.prompts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+.prompt { background: var(--navy-2); border: 1px solid #2f4470; border-radius: 6px; padding: 16px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.prompt pre { margin: 0; white-space: pre-wrap; font: 400 14px/1.5 var(--body); color: var(--ink); background: var(--deep); padding: 12px; border-radius: 4px; max-height: 220px; overflow: auto; }
+.prompt .row { display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+.copy { font: 700 13px/1 var(--body); color: var(--navy); background: var(--gold); border: 0; border-radius: 4px; padding: 8px 12px; cursor: pointer; }
+.copy:focus-visible { outline: 2px solid var(--gold-hi); outline-offset: 2px; }
+
+.qs { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 16px; }
+.q { border: 1px solid #2f4470; border-radius: 6px; padding: 16px; display: flex; flex-direction: column; gap: 6px; }
+.q b { font: 700 18px/1.2 var(--ui); }
+.q .rec { font-size: 15px; color: var(--gold-hi); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="i-corn" viewBox="0 0 32 32"><path d="M16 3c4 3 5 9 4 15-1 5-3 9-4 11-1-2-3-6-4-11-1-6 0-12 4-15z" fill="#f0c43c" stroke="#8a5a14" stroke-width="1.2"/><path d="M13 9h6M12 13h8M12 17h8M13 21h6" stroke="#c48a1c" stroke-width="1"/><path d="M16 29c-3-4-8-6-11-6 3 4 6 6 11 6zM16 29c3-4 8-6 11-6-3 4-6 6-11 6z" fill="#5e9a34" stroke="#2f5a1a" stroke-width="1"/></symbol>
+  <symbol id="i-wharf" viewBox="0 0 32 32"><rect x="3" y="18" width="26" height="4" fill="#8a5a2a" stroke="#4a2e14"/><path d="M6 22v7M12 22v7M20 22v7M26 22v7" stroke="#6b4420" stroke-width="2.4"/><path d="M4 28c3-1.5 5 1.5 8 0s5 1.5 8 0 5 1.5 8 0" stroke="#5aa0d8" stroke-width="1.6" fill="none"/><path d="M17 4v13" stroke="#5a3a1a" stroke-width="1.6"/><path d="M17 5l9 9h-9z" fill="#f2ead6" stroke="#8a7a5a"/></symbol>
+  <symbol id="i-musket" viewBox="0 0 32 32"><path d="M5 27L27 5M5 5l22 22" stroke="#6b4420" stroke-width="2.6" stroke-linecap="round"/><path d="M21 11l6-6M11 11L5 5" stroke="#b9c2c8" stroke-width="2.6" stroke-linecap="round"/><circle cx="16" cy="16" r="3" fill="#d6b25a" stroke="#6d5a2f"/></symbol>
+</svg>
+
+<div class="wrap">
+
+<header>
+  <svg class="crown" viewBox="0 0 44 22" aria-hidden="true"><path d="M3 20h38L39 7l-8 7-9-12-9 12-8-7z" fill="#d6b25a" stroke="#8a6a26"/><circle cx="22" cy="3" r="2" fill="#f2d68c"/></svg>
+  <h1>Rivers &amp; Crowns</h1>
+  <p class="lede">Lead a nation's expeditions through a contested river basin, in a fictional region inspired by northeastern North America around 1700. Move heroes, grow settlements, recruit troops, sign agreements and decide which crossings and trade routes to hold.</p>
+  <p class="muted">Explore → find an opportunity → fight or negotiate → gain resources → upgrade the settlement → recruit something exciting.</p>
+</header>
+
+<div class="parch">
+  <div class="split">
+    <div>
+      <h3>Can I paint art like this? No.</h3>
+      <p>I can't generate painted images. My pixel scenes in the first draft were placeholders, and they will never reach the level of your concepts. Use ChatGPT, or another image model, for the art. That is the right tool for it.</p>
+    </div>
+    <div>
+      <h3>What I can do with it</h3>
+      <ul>
+        <li>Build the real game UI, like the two working mock-ups below, using your art.</li>
+        <li>Turn generated sheets into game sprites. I cut the units, landmarks and resources below out of your asset sheet and removed the backgrounds.</li>
+        <li>Write the design, the prompts, and the game code.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>One rule for the art</h3>
+      <p>Ask the image model for art with <b>no UI and no text</b> in it: scenes, buildings and units on plain backgrounds. Menus, numbers and buttons are built in code so they stay sharp and can change. The prompts further down follow this rule.</p>
+    </div>
+  </div>
+</div>
+
+<section>
+  <div class="eyebrow">Mock-up 1 · working</div>
+  <h2>Town screen</h2>
+  <div class="stage-scroll"><div class="gframe">
+    <div class="town" id="town">
+      <div class="drawer" id="drawer"></div>
+      <div class="tbar">
+        <div class="slots" id="slots"></div>
+        <div class="res" id="res"></div>
+        <div class="day"><b>Day 18</b>Late Harvest</div>
+      </div>
+    </div>
+  </div></div>
+  <div class="cap"><b>Try it</b><span>Click a building in the bar. The Trading Wharf has two upgrades and you can pick only one. Building costs real resources, and only one building can go up per day. The town illustration is yours; the UI is HTML and CSS.</span></div>
+</section>
+
+<section>
+  <div class="eyebrow">Mock-up 2 · working</div>
+  <h2>Battle: fire, reload, maneuver</h2>
+  <div class="stage-scroll"><div class="gframe battle">
+    <svg id="bsvg" viewBox="0 0 1600 820" role="img" aria-label="Hex battlefield with French units on the left and English line infantry on the right"></svg>
+    <div class="bhud">
+      <div class="queue" id="queue"></div>
+      <div class="acts" id="acts"></div>
+      <div class="cmdpips"><span>Command</span><div class="pips" id="pips"></div></div>
+      <div class="blog"><span id="blog"></span><button type="button" id="breset">Reset</button></div>
+    </div>
+  </div></div>
+  <div class="cap"><b>Try it</b><span>Press Fire. The Voyageurs shoot and then have to reload, and the English line takes its turn. Woods give cover. Command abilities spend the hero's Command points. The unit sprites are cut from your asset sheet and the meadow is a stand-in; a real battlefield painting would replace it.</span></div>
+</section>
+
+<section>
+  <div class="eyebrow">Your mood board</div>
+  <h2>The direction we're using</h2>
+  <div class="mood">
+    <figure><img src="../art/reference/R5-adventure-map.webp" alt="Adventure map concept" loading="lazy"><figcaption><b>Campaign-map baseline.</b> Art fix: the hero's flag is red with a white cross, which reads as Denmark's flag. Use the French blue and gold.</figcaption></figure>
+    <figure><img src="../art/reference/R2-hero-screen.webp" alt="Hero screen concept" loading="lazy"><figcaption><b>Hero screen.</b> This one is close to ready. Pick one coat colour for the French and use it everywhere: blue, as here, or grey-white with blue cuffs.</figcaption></figure>
+    <figure><img src="../art/reference/R3-haudenosaunee-town.webp" alt="Haudenosaunee settlement concept" loading="lazy"><figcaption><b>Haudenosaunee settlement.</b> The longhouses, corn store and fields are strong. A good base for the town screen.</figcaption></figure>
+    <figure><img src="../art/reference/R1-asset-language.webp" alt="Asset language sheet" loading="lazy"><figcaption><b>Asset language.</b> This is the most useful image for production, because everything is on a plain background. Ask for future sheets in this format.</figcaption></figure>
+    <figure><img src="../art/reference/R4-french-town.webp" alt="French settlement concept" loading="lazy"><figcaption><b>French settlement.</b> A redcoat with a crossed-muskets banner stands in a French town. Remove him or make him a prisoner.</figcaption></figure>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Revised design</div>
+  <h2>Factions</h2>
+  <p class="muted">Every faction gets a full economy, firearms, and towns with as much spectacle as the others.</p>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th>Faction</th><th>Strategic identity</th><th>Settlement</th><th>Tradeoff</th></tr></thead>
+      <tbody>
+        <tr><td>French expedition<br><span class="pill go">Prototype</span></td><td>Connected river outposts, trade agreements, flexible armies</td><td>Riverfront warehouses, workshops, fortified trading towns</td><td>Long reach, but scattered holdings are hard to defend</td></tr>
+        <tr><td>Haudenosaunee nation<br><span class="pill go">Prototype</span></td><td>Political coordination, prosperous inland communities, control of interior routes</td><td>Longhouses, cultivated fields, councils, palisades</td><td>A powerful regional network, but expanding means keeping relationships intact</td></tr>
+        <tr><td>English colony<br><span class="pill">Release 1</span></td><td>Productive ports, organized infantry, expensive artillery</td><td>Harbors, markets, farms, foundries</td><td>Strong where developed, but heavy armies move slowly</td></tr>
+        <tr><td>Wabanaki<br><span class="pill">Later</span></td><td>Coastal and river mobility, spread-out settlements, flexible trade</td><td>Distinct coastal communities, canoe landings</td><td>Reaches across many waterways, but massing forces takes planning.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="grid3">
+    <div>
+      <h3>Rivers are the signature</h3>
+      <ul>
+        <li>Boats move armies fast downstream and slowly upstream.</li>
+        <li>Fords and bridges are chokepoints, and portages link separate river systems.</li>
+        <li>A small post at the right junction matters more than a big fort far away.</li>
+        <li>Independent communities can grant passage, trade or recruits through agreements.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Heroes and Command</h3>
+      <ul>
+        <li>Specialties: commander, navigator, diplomat, engineer, quartermaster.</li>
+        <li>Command points replace mana: Rally, Coordinated Volley, Forced March, Fieldworks, Feigned Retreat.</li>
+        <li>Equipment includes instruments, fine weapons, dispatches and charts. A chart can reveal a shortcut.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Combat</h3>
+      <ul>
+        <li>Small hex fields, readable stacks, and 5–10 minute battles.</li>
+        <li>Fire, reload, maneuver: firing opens a window for the enemy to advance or flank.</li>
+        <li>Cover, elevation, morale and short sight lines.</li>
+        <li>Each unit has a job: hold, scout, skirmish, breach or support. Higher tiers are not just better musketeers.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Settlements</h3>
+      <ul>
+        <li>8–12 buildings per faction. Every one visibly changes the town painting.</li>
+        <li>A few upgrades branch, for example Wharf → Commercial Harbor or Military Dock.</li>
+        <li>Each building needs a "before" and "after" art layer. Plan for this in the art budget.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Four resources</h3>
+      <ul>
+        <li>Coin, timber, provisions and iron.</li>
+        <li>Trade goods give bonuses but are not a fifth resource to manage.</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Deferred</h3>
+      <ul>
+        <li>Naval combat, detailed seasons, online multiplayer and long campaigns.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="eyebrow">Prototype</div>
+  <h2>One river, 30–45 minutes</h2>
+  <p>Two playable factions and one independent community. Three heroes per side, five unit types and eight buildings per faction. One river map with a ford, a portage, a trading settlement and a fort. You win by holding the key routes or taking the enemy headquarters. Local hotseat play and a basic AI.</p>
+  <ol class="road">
+    <li><div><b>Combat slice</b><span class="muted">Fire, reload, maneuver, cover and morale, using five units and placeholder art. Gate: a fight you want to replay.</span></div><span class="wk">2–3 wk</span></li>
+    <li><div><b>River map</b><span class="muted">Hero movement, boats, ford, portage, fog of war, pickups and guarded sites.</span></div><span class="wk">3 wk</span></li>
+    <li><div><b>Settlement</b><span class="muted">The town screen from mock-up 1, with eight buildings, branching, weekly growth and recruitment.</span></div><span class="wk">2–3 wk</span></li>
+    <li><div><b>Playable scenario</b><span class="muted">Both factions, an agreement with the independent community, both victory conditions, hotseat and a basic AI. Gate: do players want to click "next turn"?</span></div><span class="wk">4 wk</span></li>
+  </ol>
+  <p class="muted">The art runs in parallel: lock a style guide, then generate one sprite sheet per milestone. Unit animation (walking, firing) is the hardest part for image models. Budget for a pixel artist or keep animation minimal.</p>
+</section>
+
+<section>
+  <div class="eyebrow">Prompt pack</div>
+  <h2>Next images to generate</h2>
+  <p class="muted">Attach the asset-language sheet as the style reference each time. That keeps the camera, light and palette consistent.</p>
+  <div class="prompts" id="prompts"></div>
+</section>
+
+<section>
+  <div class="eyebrow">Your call</div>
+  <h2>Decisions before M1</h2>
+  <div class="qs">
+    <div class="q"><b>Prototype pair</b><span>Which two factions get built first?</span><span class="rec">Suggest French and Haudenosaunee. Asymmetric factions are the riskiest part of the design, so test them first. Their towns are already in your concepts.</span></div>
+    <div class="q"><b>French coat colour</b><span>Blue, as in your concepts, or grey-white with blue cuffs?</span><span class="rec">Suggest blue. It reads better on screen, and your hero art already uses it.</span></div>
+    <div class="q"><b>Map size</b><span>How big is the first scenario map?</span><span class="rec">Suggest small: two towns, one river fork, about 36 × 28 tiles.</span></div>
+    <div class="q"><b>Hero names</b><span>Name all six prototype heroes now, or use titles until later?</span><span class="rec">Suggest naming them now. Names make the playtests feel like a game.</span></div>
+  </div>
+</section>
+
+</div>
+
+<script>
+(() => {
+const S = n => `rc/${n}.png`;
+const icon = n => n.startsWith('#') ? `<svg aria-hidden="true"><use href="${n}"/></svg>` : `<img src="${S(n)}" alt="">`;
+const RES = { coin: 'coin', timber: 'logs', prov: '#i-corn', iron: 'iron' };
+const RES_NAME = { coin: 'Coin', timber: 'Timber', prov: 'Provisions', iron: 'Iron' };
+
+// ---------- town ----------
+const START = { coin: 2100, timber: 96, prov: 132, iron: 48 };
+const B0 = [
+  { id: 'wharf', name: 'Trading Wharf', ic: '#i-wharf', built: true, text: 'A river landing for canoes and bateaux. Pick one upgrade; the other closes for this town.',
+    branches: [ { id: 'harbor', name: 'Commercial Harbor', cost: { coin: 900, timber: 20 }, text: '+250 coin a week. Opens trade agreements with river communities.' },
+                { id: 'dock', name: 'Military Dock', cost: { coin: 700, timber: 25, iron: 10 }, text: 'Bateaux carry an army downstream at double speed. Controls the nearest crossing.' } ] },
+  { id: 'sawmill', name: 'Sawmill', ic: 'mill', built: true, text: '+6 timber a week. Built on the stream behind the town.' },
+  { id: 'lodge', name: 'Voyageur Lodge', ic: 'coureur', built: true, text: 'Recruit Voyageurs, fast river scouts who fight from cover. 8 a week.' },
+  { id: 'palisade', name: 'Palisade', ic: 'fort', built: true, text: 'Wooden walls around the town. Breached by one cannon hit.', up: { name: 'Stone Bastion', cost: { coin: 1500, timber: 10, iron: 20 }, text: 'Adds two cannon to the town defense. Walls take three hits instead of one.' } },
+  { id: 'barracks', name: 'Marine Barracks', ic: '#i-musket', cost: { coin: 1000, timber: 20, iron: 10, prov: 20 }, text: 'Recruit Troupes de la Marine, line infantry that hold ground. 10 a week.' },
+  { id: 'artillery', name: 'Artillery Park', ic: 'cannon', cost: { coin: 2500, timber: 10, iron: 30 }, req: 'barracks', text: 'Recruit field guns that breach palisades. 2 a week.' },
+  { id: 'warehouse', name: 'Warehouse', ic: 'goods', cost: { coin: 500, timber: 15 }, text: 'Trade goods stop spoiling. Opens caravans between your river outposts.' },
+  { id: 'tower', name: 'Watchtower', ic: 'tower', cost: { coin: 400, timber: 10 }, text: 'Clears six tiles of fog around the town and warns of armies two days away.' },
+];
+let T;
+function townReset() { T = { res: { ...START }, b: B0.map(b => ({ ...b })), sel: 'wharf', builtToday: null, choice: null, flash: [] }; }
+const afford = c => Object.entries(c).every(([k, v]) => T.res[k] >= v);
+const costHTML = c => `<div class="cost">${Object.entries(c).map(([k, v]) => `<span class="${T.res[k] < v ? 'short' : ''}" title="${RES_NAME[k]}">${icon(RES[k])}${v}</span>`).join('')}</div>`;
+function renderTown() {
+  document.getElementById('slots').innerHTML = T.b.map(b => `<button type="button" class="slot ${b.built ? 'built' : ''} ${T.sel === b.id ? 'sel' : ''}" data-id="${b.id}" aria-pressed="${T.sel === b.id}">${icon(b.ic)}<span>${b.name.replace(' ', '<br>')}</span><i class="dot"></i></button>`).join('');
+  document.getElementById('res').innerHTML = Object.keys(RES).map(k => `<span class="${T.flash.includes(k) ? 'flash' : ''}" title="${RES_NAME[k]}">${icon(RES[k])}${T.res[k].toLocaleString('en-US')}</span>`).join('');
+  const b = T.b.find(x => x.id === T.sel), d = document.getElementById('drawer');
+  const busy = !!T.builtToday;
+  let body = `<h4>${b.name}<small>${b.built ? 'Built' : 'Not built'}</small></h4><div>${b.text}</div>`;
+  if (b.branches) {
+    body += `<div class="branches">${b.branches.map(br => { const st = T.choice ? (T.choice === br.id ? 'chosen' : 'closed') : '';
+      const dis = T.choice || busy || !afford(br.cost);
+      return `<button type="button" class="branch ${st}" data-br="${br.id}" ${dis ? 'disabled' : ''}><b>${br.name}</b><span>${br.text}</span>${st === 'chosen' ? '<b style="color:#2c6a2f">Built</b>' : costHTML(br.cost)}</button>`; }).join('')}</div>`;
+    if (!T.choice && !busy) body += `<div class="note">Click an upgrade to build it.</div>`;
+  } else if (b.up) {
+    body += `<div><b>Upgrade: ${b.up.name}.</b> ${b.up.text}</div>`;
+    body += b.upDone ? `<div class="note">${b.up.name} built.</div>` : `${costHTML(b.up.cost)}<button type="button" class="gbtn" data-act="up" ${!afford(b.up.cost) || busy ? 'disabled' : ''}>Build ${b.up.name}</button>`;
+  } else if (!b.built) {
+    const req = b.req && T.b.find(x => x.id === b.req), reqOk = !req || req.built;
+    body += costHTML(b.cost);
+    if (!reqOk) body += `<div class="note">Needs ${req.name} first.</div>`;
+    else if (!afford(b.cost)) body += `<div class="note">Not enough resources. Shortfalls are shown in red.</div>`;
+    body += `<button type="button" class="gbtn" data-act="build" ${!reqOk || !afford(b.cost) || busy ? 'disabled' : ''}>Build</button>`;
+  }
+  if (busy) body += `<div class="note">Built today: ${T.builtToday}. One building per day.</div><button type="button" class="gbtn" data-act="day">End day</button>`;
+  d.innerHTML = body;
+}
+function pay(c, name) { for (const [k, v] of Object.entries(c)) T.res[k] -= v; T.flash = Object.keys(c); T.builtToday = name; setTimeout(() => { T.flash = []; renderTown(); }, 700); }
+document.getElementById('town').addEventListener('click', e => {
+  const s = e.target.closest('.slot'); if (s) { T.sel = s.dataset.id; return renderTown(); }
+  const br = e.target.closest('.branch'); if (br) { if (br.disabled) return; const b = T.b.find(x => x.id === 'wharf').branches.find(x => x.id === br.dataset.br);
+    T.choice = b.id; pay(b.cost, b.name); return renderTown(); }
+  const a = e.target.closest('[data-act]'); if (!a || a.disabled) return;
+  const b = T.b.find(x => x.id === T.sel);
+  if (a.dataset.act === 'build') { pay(b.cost, b.name); b.built = true; }
+  if (a.dataset.act === 'up') { pay(b.up.cost, b.up.name); b.upDone = true; }
+  if (a.dataset.act === 'day') T.builtToday = null;
+  renderTown();
+});
+townReset(); renderTown();
+
+// ---------- battle ----------
+const svg = document.getElementById('bsvg'); const NS = 'http://www.w3.org/2000/svg';
+const el = (tag, at, parent = svg) => { const n = document.createElementNS(NS, tag); for (const k in at) n.setAttribute(k, at[k]); parent.appendChild(n); return n; };
+const COLS = 11, ROWS = 7, X0 = 140, Y0 = 92, RS = 102;
+const hc = (c, r) => [X0 + 60 + c * 120 + (r % 2) * 60, Y0 + r * RS];
+const hexPts = (c, r) => { const [x, y] = hc(c, r); return [[x, y - 68], [x + 60, y - 34], [x + 60, y + 34], [x, y + 68], [x - 60, y + 34], [x - 60, y - 34]].map(p => p.join(',')).join(' '); };
+function meadow() {
+  const cv = document.createElement('canvas'); cv.width = 800; cv.height = 410; const g = cv.getContext('2d');
+  let seed = 7; const R = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  const grd = g.createLinearGradient(0, 0, 0, 410); grd.addColorStop(0, '#8aa63a'); grd.addColorStop(1, '#9cb446'); g.fillStyle = grd; g.fillRect(0, 0, 800, 410);
+  const blot = ['rgba(180,196,84,.35)', 'rgba(110,140,46,.35)', 'rgba(200,190,100,.25)', 'rgba(96,128,40,.3)'];
+  for (let i = 0; i < 260; i++) { g.fillStyle = blot[i % 4]; g.beginPath(); g.ellipse(R() * 800, R() * 410, 20 + R() * 60, 10 + R() * 26, R() * 3, 0, 7); g.fill(); }
+  g.strokeStyle = 'rgba(200,170,110,.85)'; g.lineWidth = 22; g.lineCap = 'round'; g.beginPath(); g.moveTo(-20, 360); g.bezierCurveTo(220, 320, 360, 400, 520, 330); g.bezierCurveTo(640, 270, 720, 280, 820, 240); g.stroke();
+  for (let i = 0; i < 1600; i++) { const x = R() * 800, y = R() * 410; g.strokeStyle = R() > .5 ? 'rgba(70,100,30,.55)' : 'rgba(210,220,120,.45)'; g.lineWidth = 1; g.beginPath(); g.moveTo(x, y); g.lineTo(x + (R() - .5) * 3, y - 3 - R() * 4); g.stroke(); }
+  for (let i = 0; i < 40; i++) { g.fillStyle = ['#f4e9a8', '#ffffff', '#e8b04a'][i % 3]; g.fillRect(R() * 800, R() * 410, 2, 2); }
+  return cv.toDataURL('image/jpeg', .86);
+}
+const COVER = ['5,1', '6,1', '5,2', '4,5', '5,6'], ROCK = ['6,4'];
+const UNITS0 = [
+  { id: 'voy', name: 'Voyageurs', side: 'fr', sprite: 'coureur', c: 2, r: 3, n: 16, h: 150 },
+  { id: 'gun', name: 'Field Guns', side: 'fr', sprite: 'cannon', c: 0, r: 1, n: 2, h: 96 },
+  { id: 'voy2', name: 'Voyageurs', side: 'fr', sprite: 'coureur', c: 1, r: 5, n: 8, h: 150 },
+  { id: 'l1', name: 'Line Infantry', side: 'en', sprite: 'redcoats', c: 8, r: 2, n: 24, h: 150 },
+  { id: 'l2', name: 'Line Infantry', side: 'en', sprite: 'redcoats', c: 9, r: 4, n: 20, h: 150 },
+];
+const RATIO = { coureur: 131 / 168, cannon: 280 / 142, redcoats: 145 / 166 };
+const QUEUE = ['voy', 'l1', 'gun', 'l2', 'voy2'];
+let BT;
+function battleReset() { BT = { u: UNITS0.map(u => ({ ...u })), turn: 0, cmd: 4, reload: false, log: 'Voyageurs to act. Line Infantry in range, 5 hexes.' }; renderBattle(); }
+function txt(x, y, s, size, fill, parent) { const t = el('text', { x, y, 'text-anchor': 'middle', fill, 'font-family': 'Alegreya, Georgia, serif', 'font-weight': 700, 'font-size': size }, parent); t.textContent = s; return t; }
+function renderBattle() {
+  svg.innerHTML = '';
+  el('image', { href: BG, x: 0, y: 0, width: 1600, height: 820, preserveAspectRatio: 'none' });
+  const reach = new Set(['1,2', '2,2', '3,2', '1,3', '3,3', '4,3', '1,4', '2,4', '3,4', '2,5', '3,5', '2,1', '3,1']);
+  for (let r = 0; r < ROWS; r++) for (let c = 0; c < COLS; c++) {
+    const k = c + ',' + r, cov = COVER.includes(k);
+    el('polygon', { points: hexPts(c, r), fill: cov ? 'rgba(30,60,20,.28)' : (BT.turn === 0 && reach.has(k) ? 'rgba(255,255,255,.13)' : 'rgba(0,0,0,0)'), stroke: 'rgba(30,45,15,.45)', 'stroke-width': 2 });
+  }
+  const act = BT.u.find(u => u.id === QUEUE[BT.turn % QUEUE.length]);
+  el('polygon', { points: hexPts(act.c, act.r), fill: 'rgba(242,214,140,.28)', stroke: '#f2d68c', 'stroke-width': 4 });
+  if (BT.turn === 0) { const t = BT.u.find(u => u.id === 'l1'); el('polygon', { points: hexPts(t.c, t.r), fill: 'rgba(224,80,60,.18)', stroke: '#e0705a', 'stroke-width': 4, 'stroke-dasharray': '10 6' }); }
+  const items = [];
+  COVER.forEach(k => { const [c, r] = k.split(',').map(Number); const [x, y] = hc(c, r); items.push({ y: y - 30, f: () => el('image', { href: S('t_trees'), x: x - 70, y: y - 118, width: 140, height: 101 }) }); });
+  ROCK.forEach(k => { const [c, r] = k.split(',').map(Number); const [x, y] = hc(c, r); items.push({ y, f: () => el('image', { href: S('t_rocks'), x: x - 62, y: y - 50, width: 124, height: 70 }) }); });
+  BT.u.forEach(u => { const [x, y] = hc(u.c, u.r); items.push({ y: y + 1, f: () => {
+    const h = u.h, w = h * RATIO[u.sprite];
+    el('ellipse', { cx: x, cy: y + 40, rx: Math.min(w * .45, 70), ry: 12, fill: 'rgba(0,0,0,.25)' });
+    const im = el('image', { href: S(u.sprite), x: x - w / 2, y: y + 44 - h, width: w, height: h });
+    if (u.side === 'en') im.setAttribute('transform', `translate(${2 * x},0) scale(-1,1)`);
+    const bx = u.side === 'fr' ? x + 16 : x - 68, by = y + 28;
+    el('rect', { x: bx, y: by, width: 52, height: 30, rx: 5, fill: u.side === 'fr' ? '#2a4a8e' : '#8e2a24', stroke: '#f2d68c', 'stroke-width': 2 });
+    txt(bx + 26, by + 22, u.n, 22, '#fff6e0');
+    if (u.id === 'voy' && BT.reload) { el('rect', { x: x - 62, y: y - 126, width: 124, height: 30, rx: 5, fill: '#0b1428', stroke: '#d6b25a', 'stroke-width': 2 }); txt(x, y - 105, 'Reloading', 19, '#f2d68c'); }
+  } }); });
+  items.sort((a, b) => a.y - b.y).forEach(i => i.f());
+  el('image', { href: S('hero'), x: 8, y: 14, width: 112, height: 153 });
+  if (BT.turn === 1) { const v = BT.u.find(u => u.id === 'voy'); const [x, y] = hc(v.c, v.r);
+    for (let i = 0; i < 7; i++) el('circle', { cx: x + 70 + i * 26, cy: y - 70 - (i % 2) * 14, r: 18 + i * 3, fill: 'rgba(240,240,232,.55)' }); }
+  document.getElementById('queue').innerHTML = QUEUE.map((id, i) => { const u = BT.u.find(x => x.id === id); return `<div class="q ${u.side} ${i === BT.turn % QUEUE.length ? 'now' : ''}" title="${u.name}"><img src="${S(u.sprite)}" alt="${u.name}"></div>`; }).join('');
+  const mine = BT.turn === 0;
+  const cmd = [['Rally', 1], ['Coordinated Volley', 2], ['Fieldworks', 2], ['Feigned Retreat', 3]];
+  document.getElementById('acts').innerHTML =
+    `<button type="button" class="act" data-b="fire" ${mine ? '' : 'disabled'}>Fire</button><button type="button" class="act" ${mine ? '' : 'disabled'}>Advance</button><button type="button" class="act" disabled>Reload</button><button type="button" class="act" ${mine ? '' : 'disabled'}>Defend</button>` +
+    cmd.map(([n, c]) => `<button type="button" class="act cmd" data-b="cmd" data-c="${c}" data-n="${n}" ${mine && BT.cmd >= c ? '' : 'disabled'}>${n} <span class="c">◆${c}</span></button>`).join('');
+  document.getElementById('pips').innerHTML = Array.from({ length: 5 }, (_, i) => `<i class="${i < BT.cmd ? '' : 'off'}"></i>`).join('');
+  document.getElementById('blog').textContent = BT.log;
+}
+document.getElementById('acts').addEventListener('click', e => {
+  const b = e.target.closest('button'); if (!b || b.disabled) return;
+  if (b.dataset.b === 'fire') { BT.u.find(u => u.id === 'l1').n -= 5; BT.reload = true; BT.turn = 1;
+    BT.log = 'Voyageurs fire: 5 Line Infantry fall. The Voyageurs must reload, and the English line now advances on them.'; }
+  if (b.dataset.b === 'cmd') { BT.cmd -= +b.dataset.c; BT.log = `${b.dataset.n} used for ${b.dataset.c} Command. ${BT.cmd} left this battle.`; }
+  renderBattle();
+});
+document.getElementById('breset').addEventListener('click', battleReset);
+const BG = meadow(); battleReset();
+
+// ---------- prompts ----------
+const STYLE = 'Style: match the attached asset-language sheet exactly: detailed pixel-art illustration, warm autumn palette, soft top-left light, 3/4 overhead camera. No text, no UI, no logos, no borders.';
+const P = [
+  ['Battlefield background', `Empty battlefield background for a turn-based hex battle, 16:9, seen from a 3/4 overhead angle. An autumn meadow on the edge of a mixed pine and maple forest in a northeastern North American river valley, around 1700. A shallow ford on the right edge, a few rocks, and a dirt track crossing the field. Keep the centre open and evenly lit so a hex grid and troops can be placed on top. No people, no animals. ${STYLE}`],
+  ['Unit sheet: French expedition', `Sprite sheet of 5 French colonial units in North America around 1700, each standing on its own on a flat plain parchment background with even spacing: Troupes de la Marine infantryman (grey-white coat, blue cuffs, tricorne, musket), voyageur with paddle and musket, militia habitant in capote and tuque, small field cannon with two gunners, mounted officer with a blue-and-gold standard. All face right, at the same scale and angle. ${STYLE}`],
+  ['Town building states', `Two versions of the same French riverside trading wharf for a town screen, side by side on a flat parchment background: (A) a modest timber wharf with one bateau; (B) the same wharf grown into a busy commercial harbor with a warehouse, a crane and barrels. Same angle, same scale, New France around 1700. ${STYLE}`],
+  ['Hero portraits', `Set of 4 bust portraits for a strategy game, each in its own square on a plain dark navy background, painterly pixel-art style: a French river captain (a woman, around 1700), a French engineer with surveying instruments, a voyageur guide, and an elderly diplomat. Natural expressions, period-accurate clothing, consistent light from the top left. No text, no frames.`],
+];
+document.getElementById('prompts').innerHTML = P.map(([t, p], i) => `<div class="prompt"><div class="row"><h3>${t}</h3><button type="button" class="copy" data-i="${i}">Copy</button></div><pre id="pp${i}">${p}</pre></div>`).join('');
+document.getElementById('prompts').addEventListener('click', e => { const b = e.target.closest('.copy'); if (!b) return; const pre = document.getElementById('pp' + b.dataset.i);
+  const sel = () => { const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'Selected, press Ctrl+C'; };
+  try { navigator.clipboard.writeText(pre.textContent).then(() => { b.textContent = 'Copied'; setTimeout(() => b.textContent = 'Copy', 1500); }, sel); } catch (_) { sel(); } });
+})();
+</script>
+
+</body>
+</html>
