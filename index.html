@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#101d32">
+  <title>Rivers &amp; Crowns | Meadow Skirmish</title>
+  <link rel="stylesheet" href="/src/battle-view/battle.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="masthead">
+      <a class="wordmark" href="/" aria-label="Rivers and Crowns home">
+        <svg viewBox="0 0 36 36" aria-hidden="true" class="crest">
+          <path d="M18 1.5 34.5 18 18 34.5 1.5 18Z"/>
+          <path d="m9 13 4.5 4 4.5-6 4.5 6 4.5-4-2 9H11Z"/>
+          <path d="M12 25h12"/>
+        </svg>
+        <span>Rivers <i>&amp;</i> Crowns</span>
+      </a>
+      <button type="button" class="reset-button" id="restart">Restart battle</button>
+    </header>
+    <main>
+      <section class="battle-heading" aria-labelledby="battle-name">
+        <div>
+          <h1 id="battle-name">Meadow Skirmish</h1>
+          <p>French expedition <span class="versus">vs.</span> Haudenosaunee nation</p>
+        </div>
+        <p class="round-label" id="round"></p>
+      </section>
+
+      <div class="battle-layout">
+        <section class="battle-panel" aria-label="Battlefield and actions">
+          <div class="turn-bar">
+            <div class="turn-marker" id="turn-marker" aria-hidden="true"></div>
+            <div class="turn-message" id="turn-message" role="status"></div>
+          </div>
+          <div class="board-scroll">
+            <div class="board" id="board" aria-label="Hex battlefield" role="group"></div>
+          </div>
+          <div class="board-legend" aria-label="Battlefield legend">
+            <span><i class="swatch active"></i> Active unit</span>
+            <span><i class="swatch move"></i> Reachable hex</span>
+            <span><i class="swatch attack"></i> Attack target</span>
+            <span><i class="swatch cover"></i> Woodland cover</span>
+          </div>
+          <div class="orders">
+            <h2 class="sr-only">Orders</h2>
+            <div class="order-actions" id="order-actions">
+              <button type="button" data-order="move" aria-pressed="false">Move</button>
+              <button type="button" data-order="fire" aria-pressed="false">Fire</button>
+              <button type="button" data-order="melee" aria-pressed="false">Strike</button>
+              <button type="button" data-order="reload">Reload</button>
+              <button type="button" data-order="rally">Rally <span class="order-cost">1 Command</span></button>
+              <button type="button" data-order="pass">Pass</button>
+            </div>
+            <p class="order-hint" id="order-hint"></p>
+          </div>
+        </section>
+
+        <aside class="battle-sidebar" aria-label="Battle information">
+          <section class="sidebar-card unit-card" id="unit-card" aria-labelledby="unit-title"></section>
+          <section class="sidebar-card command-card" aria-labelledby="command-title">
+            <h2 id="command-title">Command</h2>
+            <div class="command-line"><span>French expedition</span><strong id="french-command"></strong></div>
+            <div class="command-line"><span>Haudenosaunee nation</span><strong id="haudenosaunee-command"></strong></div>
+          </section>
+          <section class="sidebar-card initiative-card" aria-labelledby="initiative-title">
+            <h2 id="initiative-title">Turn order</h2>
+            <ol class="turn-order" id="turn-order"></ol>
+          </section>
+        </aside>
+      </div>
+
+      <section class="battle-log" aria-labelledby="battle-log-title">
+        <h2 id="battle-log-title">Battle log</h2>
+        <ol id="battle-log" reversed></ol>
+      </section>
+    </main>
+  </div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>

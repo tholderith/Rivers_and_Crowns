@@ -7,6 +7,10 @@ crossings and trade routes that hold the map together.
 
 **Explore → find an opportunity → fight or negotiate → gain resources → upgrade the settlement → recruit something exciting.**
 
+## Play the combat prototype
+
+With Node.js 24 or later, run `npm run dev` and open http://127.0.0.1:5173. Two players share the controls. Run `npm test` to verify the combat rules. See [development.md](docs/development.md) for the current milestone and contributor handoff.
+
 ## What's here
 
 | Path | What it is |
