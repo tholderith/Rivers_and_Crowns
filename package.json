@@ -1,0 +1,13 @@
+{
+  "name": "rivers-and-crowns",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "node tools/dev-server.mjs",
+    "test": "node --test tests/*.test.ts"
+  }
+}
