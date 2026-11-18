@@ -216,3 +216,4 @@ button { font: inherit; color: inherit; }
 .hirepic { width: 56px; height: 56px; border-radius: 50%; object-fit: cover; object-position: top; border: 1px solid var(--gold); flex-shrink: 0; }
 .ok { color: var(--good); }
 #side > * { flex-shrink: 0; }
+.credits { font-size: 11px; color: var(--muted); margin: 10px 0 0; }

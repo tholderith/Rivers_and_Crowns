@@ -68,6 +68,7 @@ function startScreen() {
       <li><b>Woods</b> halve incoming fire. Woodland units cross them at full speed.</li>
       <li>Your hero's <b>Command</b> points pay for Rally, Coordinated Volley and Fieldworks, one per round.</li>
     </ul>
+    <p class="credits">Sound effects: “Oculus Audio Pack 01” by Oculus VR, LLC (CC BY 4.0); Kenney (CC0); Musket Mod by ewewukek (MIT/CC0). Details in assets/sfx/CREDITS.md.</p>
   </div>`;
   const cont = document.getElementById('contGame');
   if (cont) cont.onclick = () => { el.hidden = true; void continueCampaign(playBattle, startScreen).then(ok => { if (!ok) startScreen(); }); };
