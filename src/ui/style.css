@@ -71,3 +71,15 @@ button { font: inherit; color: inherit; }
 .screen .choice.primary span { color: #3b2a17; }
 .screen ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 14px; display: flex; flex-direction: column; gap: 3px; }
 @media (max-width: 520px) { .screen .choices { grid-template-columns: 1fr; } }
+
+@media (max-width: 640px) {
+  .topbar { grid-template-columns: 1fr 1fr; padding: 6px 8px; }
+  .roundbox { grid-column: 1 / -1; order: -1; }
+  .roundbox .title { display: none; }
+  .herocard img { width: 40px; height: 40px; }
+  .herocard .fx:first-of-type { display: none; }
+  .herocard .nm { font-size: 13px; }
+  .queue .q { width: 40px; height: 40px; }
+  .queue .q.now { width: 48px; height: 48px; }
+  .btn { padding: 8px 10px; font-size: 13px; }
+}

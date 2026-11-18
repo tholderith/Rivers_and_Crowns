@@ -59,5 +59,22 @@ including tests and redos, cost $5.50.
    upgrade. `python3 tools/town_layers.py art/towns/french.json` compares them and writes an
    empty base plus one layer per building, positioned by `layers.json`.
 
-Planned stack: TypeScript, Vite and PixiJS, with a deterministic turn-based simulation kept
-separate from rendering.
+## Running the game
+
+```bash
+npm install
+npm run dev        # play at http://localhost:5173
+npm run check      # typecheck + tests
+BALANCE=1 npx vitest run tests/balance.test.ts --reporter=verbose   # AI-vs-AI win rates
+```
+
+Stack: TypeScript, Vite and PixiJS. The battle rules live in `src/sim/` as pure, deterministic
+TypeScript (seeded dice, no DOM), so a battle replays exactly from its seed and actions.
+`src/render/` draws it with Pixi and `src/main.ts` runs the HTML interface and turn loop.
+
+## Status
+
+**M1 combat slice: playable.** A hex battle between New France and the Haudenosaunee, played against
+the AI, hotseat, or AI vs AI. It has fire / reload / maneuver, woods as cover, morale (wavering,
+faltering, inspired), strike-backs, and three hero Command abilities (Rally, Coordinated Volley,
+Fieldworks). In 300 AI-vs-AI battles the sides win 145–155, and a battle lasts about 11 rounds.
