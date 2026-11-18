@@ -331,11 +331,11 @@
   {
    "id": "g-toughs",
    "type": "guard",
-   "name": "River toughs at the portage",
+   "name": "River brigands at the portage",
    "army": [
     {
-     "unit": "U-NE-03",
-     "count": 12
+     "unit": "U-NE-05",
+     "count": 10
     },
     {
      "unit": "U-NE-03",
@@ -347,6 +347,38 @@
     17
    ],
    "sprite": "L-08/L-08-04"
+  },
+  {
+   "id": "g-cat-west",
+   "type": "guard",
+   "name": "Catamounts",
+   "army": [
+    {
+     "unit": "U-NE-04",
+     "count": 4
+    }
+   ],
+   "tile": [
+    3,
+    5
+   ],
+   "sprite": "U-NE-04/U-NE-04-01"
+  },
+  {
+   "id": "g-cat-east",
+   "type": "guard",
+   "name": "Catamounts",
+   "army": [
+    {
+     "unit": "U-NE-04",
+     "count": 4
+    }
+   ],
+   "tile": [
+    33,
+    23
+   ],
+   "sprite": "U-NE-04/U-NE-04-01"
   }
  ],
  "players": [

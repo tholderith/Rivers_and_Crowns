@@ -512,6 +512,36 @@
    "id": "walk-sheet-hd-clanmother-r3",
    "model": "google/gemini-nano-banana-2.1",
    "cost": 0.063828
+  },
+  {
+   "id": "U-FR-06",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0614655
+  },
+  {
+   "id": "U-FR-07",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0610605
+  },
+  {
+   "id": "U-HD-06",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0622395
+  },
+  {
+   "id": "U-HD-07",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.062439
+  },
+  {
+   "id": "U-NE-04",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0604815
+  },
+  {
+   "id": "U-NE-05",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.058713
   }
  ]
 }

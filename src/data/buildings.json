@@ -2,35 +2,307 @@
  "_note": "Town buildings. layer = image in public/assets/towns/<town>/. dwelling = units it lets you recruit. branch = only one building per branch name. needs = buildings required first. built = built at the start.",
  "french": {
   "town": "french",
-  "base": ["U-FR-01"],
+  "base": [
+   "U-FR-01"
+  ],
   "buildings": {
-   "palisade": { "name": "Palisade", "layer": "palisade", "cost": { "coin": 500, "timber": 10 }, "text": "Log walls. Sieges against the town face cover on the walls.", "walls": 1, "built": true },
-   "stone_rampart": { "name": "Stone Rampart", "layer": "stone_rampart", "replaces": "palisade", "needs": ["palisade"], "cost": { "coin": 1500, "timber": 5, "iron": 6 }, "text": "Fieldstone walls with gun platforms. Stronger siege defence.", "walls": 2 },
-   "lodge": { "name": "Voyageur Lodge", "layer": "lodge", "cost": { "coin": 500, "timber": 8 }, "text": "Recruit Voyageurs.", "dwelling": ["U-FR-02"], "built": true },
-   "barracks": { "name": "Marine Barracks", "layer": "barracks", "cost": { "coin": 1000, "timber": 10, "iron": 4 }, "text": "Recruit Troupes de la Marine and the Colour Party.", "dwelling": ["U-FR-03", "U-FR-04"] },
-   "artillery": { "name": "Artillery Park", "layer": "artillery", "needs": ["barracks"], "cost": { "coin": 2000, "timber": 5, "iron": 8 }, "text": "Recruit Field Guns. A gun joins the town's defence.", "dwelling": ["U-FR-05"] },
-   "sawmill": { "name": "Sawmill", "layer": "sawmill", "cost": { "coin": 400, "timber": 4 }, "text": "+2 timber a day.", "income": { "timber": 2 } },
-   "warehouse": { "name": "Warehouse", "layer": "warehouse", "cost": { "coin": 600, "timber": 10 }, "text": "+1 iron a day from the river trade.", "income": { "iron": 1 } },
-   "watchtower": { "name": "Watchtower", "layer": "watchtower", "cost": { "coin": 300, "timber": 5 }, "text": "See far around the town.", "reveal": 15 },
-   "wharf": { "name": "Trading Wharf", "layer": "wharf", "cost": { "coin": 600, "timber": 8 }, "text": "+150 coin a day.", "income": { "coin": 150 } },
-   "commercial_harbor": { "name": "Commercial Harbor", "layer": "commercial_harbor", "replaces": "wharf", "needs": ["wharf"], "branch": "wharf", "cost": { "coin": 1200, "timber": 10 }, "text": "+300 more coin a day.", "income": { "coin": 300 } },
-   "military_dock": { "name": "Military Dock", "layer": "military_dock", "replaces": "wharf", "needs": ["wharf"], "branch": "wharf", "cost": { "coin": 900, "timber": 12, "iron": 3 }, "text": "Bateaux carry the army: +5 hero movement a day.", "move": 50 }
+   "palisade": {
+    "name": "Palisade",
+    "layer": "palisade",
+    "cost": {
+     "coin": 500,
+     "timber": 10
+    },
+    "text": "Log walls. Sieges against the town face cover on the walls.",
+    "walls": 1,
+    "built": true
+   },
+   "stone_rampart": {
+    "name": "Stone Rampart",
+    "layer": "stone_rampart",
+    "replaces": "palisade",
+    "needs": [
+     "palisade"
+    ],
+    "cost": {
+     "coin": 1500,
+     "timber": 5,
+     "iron": 6
+    },
+    "text": "Fieldstone walls with gun platforms. Stronger siege defence.",
+    "walls": 2
+   },
+   "lodge": {
+    "name": "Voyageur Lodge",
+    "layer": "lodge",
+    "cost": {
+     "coin": 500,
+     "timber": 8
+    },
+    "text": "Recruit Voyageurs and Mounted Militia.",
+    "dwelling": [
+     "U-FR-02",
+     "U-FR-07"
+    ],
+    "built": true
+   },
+   "barracks": {
+    "name": "Marine Barracks",
+    "layer": "barracks",
+    "cost": {
+     "coin": 1000,
+     "timber": 10,
+     "iron": 4
+    },
+    "text": "Recruit Troupes de la Marine, the Colour Party and Grenadiers.",
+    "dwelling": [
+     "U-FR-03",
+     "U-FR-04",
+     "U-FR-06"
+    ]
+   },
+   "artillery": {
+    "name": "Artillery Park",
+    "layer": "artillery",
+    "needs": [
+     "barracks"
+    ],
+    "cost": {
+     "coin": 2000,
+     "timber": 5,
+     "iron": 8
+    },
+    "text": "Recruit Field Guns. A gun joins the town's defence.",
+    "dwelling": [
+     "U-FR-05"
+    ]
+   },
+   "sawmill": {
+    "name": "Sawmill",
+    "layer": "sawmill",
+    "cost": {
+     "coin": 400,
+     "timber": 4
+    },
+    "text": "+2 timber a day.",
+    "income": {
+     "timber": 2
+    }
+   },
+   "warehouse": {
+    "name": "Warehouse",
+    "layer": "warehouse",
+    "cost": {
+     "coin": 600,
+     "timber": 10
+    },
+    "text": "+1 iron a day from the river trade.",
+    "income": {
+     "iron": 1
+    }
+   },
+   "watchtower": {
+    "name": "Watchtower",
+    "layer": "watchtower",
+    "cost": {
+     "coin": 300,
+     "timber": 5
+    },
+    "text": "See far around the town.",
+    "reveal": 15
+   },
+   "wharf": {
+    "name": "Trading Wharf",
+    "layer": "wharf",
+    "cost": {
+     "coin": 600,
+     "timber": 8
+    },
+    "text": "+150 coin a day.",
+    "income": {
+     "coin": 150
+    }
+   },
+   "commercial_harbor": {
+    "name": "Commercial Harbor",
+    "layer": "commercial_harbor",
+    "replaces": "wharf",
+    "needs": [
+     "wharf"
+    ],
+    "branch": "wharf",
+    "cost": {
+     "coin": 1200,
+     "timber": 10
+    },
+    "text": "+300 more coin a day.",
+    "income": {
+     "coin": 300
+    }
+   },
+   "military_dock": {
+    "name": "Military Dock",
+    "layer": "military_dock",
+    "replaces": "wharf",
+    "needs": [
+     "wharf"
+    ],
+    "branch": "wharf",
+    "cost": {
+     "coin": 900,
+     "timber": 12,
+     "iron": 3
+    },
+    "text": "Bateaux carry the army: +5 hero movement a day.",
+    "move": 50
+   }
   }
  },
  "haudenosaunee": {
   "town": "haudenosaunee",
-  "base": ["U-HD-01"],
+  "base": [
+   "U-HD-01"
+  ],
   "buildings": {
-   "palisade": { "name": "Palisade", "layer": "palisade", "cost": { "coin": 500, "timber": 10 }, "text": "A ring of sharpened logs. Sieges against the town face cover on the walls.", "walls": 1, "built": true },
-   "fortified_palisade": { "name": "Fortified Palisade", "layer": "fortified_palisade", "replaces": "palisade", "needs": ["palisade"], "cost": { "coin": 1200, "timber": 15 }, "text": "Fighting platforms and a watch post. Stronger siege defence.", "walls": 2 },
-   "hunting_camp": { "name": "Hunting Camp", "layer": "hunting_camp", "cost": { "coin": 500, "timber": 6 }, "text": "Recruit Bowmen and Club Warriors.", "dwelling": ["U-HD-02", "U-HD-04"], "built": true },
-   "family_longhouses": { "name": "Family Longhouses", "layer": "family_longhouses", "cost": { "coin": 900, "timber": 12, "provisions": 4 }, "text": "Recruit Musket Warriors. +50% recruits each week.", "dwelling": ["U-HD-03"], "growth": 0.5 },
-   "three_sisters_fields": { "name": "Three Sisters Fields", "layer": "three_sisters_fields", "cost": { "coin": 300, "timber": 3 }, "text": "+3 provisions a day.", "income": { "provisions": 3 } },
-   "storehouse": { "name": "Corn Storehouse", "layer": "storehouse", "needs": ["three_sisters_fields"], "cost": { "coin": 400, "timber": 6 }, "text": "+150 coin a day from surplus trade.", "income": { "coin": 150 } },
-   "canoe_landing": { "name": "Canoe Landing", "layer": "canoe_landing", "cost": { "coin": 500, "timber": 8 }, "text": "Canoes carry the army: +5 hero movement a day.", "move": 50 },
-   "trade_house": { "name": "Trade House", "layer": "trade_house", "cost": { "coin": 700, "timber": 8 }, "text": "+1 iron a day through trade.", "income": { "iron": 1 } },
-   "great_trade_house": { "name": "Great Trade House", "layer": "great_trade_house", "replaces": "trade_house", "needs": ["trade_house"], "branch": "trade", "cost": { "coin": 1200, "timber": 12 }, "text": "+300 coin a day.", "income": { "coin": 300 } },
-   "gunsmith_forge": { "name": "Gunsmith's Forge", "layer": "gunsmith_forge", "adds": "trade_house", "needs": ["trade_house"], "branch": "trade", "cost": { "coin": 1500, "timber": 6, "iron": 6 }, "text": "Recruit the War Captain's Band.", "dwelling": ["U-HD-05"] }
+   "palisade": {
+    "name": "Palisade",
+    "layer": "palisade",
+    "cost": {
+     "coin": 500,
+     "timber": 10
+    },
+    "text": "A ring of sharpened logs. Sieges against the town face cover on the walls.",
+    "walls": 1,
+    "built": true
+   },
+   "fortified_palisade": {
+    "name": "Fortified Palisade",
+    "layer": "fortified_palisade",
+    "replaces": "palisade",
+    "needs": [
+     "palisade"
+    ],
+    "cost": {
+     "coin": 1200,
+     "timber": 15
+    },
+    "text": "Fighting platforms and a watch post. Stronger siege defence.",
+    "walls": 2
+   },
+   "hunting_camp": {
+    "name": "Hunting Camp",
+    "layer": "hunting_camp",
+    "cost": {
+     "coin": 500,
+     "timber": 6
+    },
+    "text": "Recruit Bowmen and Club Warriors.",
+    "dwelling": [
+     "U-HD-02",
+     "U-HD-04"
+    ],
+    "built": true
+   },
+   "family_longhouses": {
+    "name": "Family Longhouses",
+    "layer": "family_longhouses",
+    "cost": {
+     "coin": 900,
+     "timber": 12,
+     "provisions": 4
+    },
+    "text": "Recruit Musket Warriors and Slat-Armour Guards. +50% recruits each week.",
+    "dwelling": [
+     "U-HD-03",
+     "U-HD-07"
+    ],
+    "growth": 0.5
+   },
+   "three_sisters_fields": {
+    "name": "Three Sisters Fields",
+    "layer": "three_sisters_fields",
+    "cost": {
+     "coin": 300,
+     "timber": 3
+    },
+    "text": "+3 provisions a day.",
+    "income": {
+     "provisions": 3
+    }
+   },
+   "storehouse": {
+    "name": "Corn Storehouse",
+    "layer": "storehouse",
+    "needs": [
+     "three_sisters_fields"
+    ],
+    "cost": {
+     "coin": 400,
+     "timber": 6
+    },
+    "text": "+150 coin a day from surplus trade.",
+    "income": {
+     "coin": 150
+    }
+   },
+   "canoe_landing": {
+    "name": "Canoe Landing",
+    "layer": "canoe_landing",
+    "cost": {
+     "coin": 500,
+     "timber": 8
+    },
+    "text": "Canoes carry the army: +5 hero movement a day.",
+    "move": 50
+   },
+   "trade_house": {
+    "name": "Trade House",
+    "layer": "trade_house",
+    "cost": {
+     "coin": 700,
+     "timber": 8
+    },
+    "text": "+1 iron a day through trade.",
+    "income": {
+     "iron": 1
+    }
+   },
+   "great_trade_house": {
+    "name": "Great Trade House",
+    "layer": "great_trade_house",
+    "replaces": "trade_house",
+    "needs": [
+     "trade_house"
+    ],
+    "branch": "trade",
+    "cost": {
+     "coin": 1200,
+     "timber": 12
+    },
+    "text": "+300 coin a day.",
+    "income": {
+     "coin": 300
+    }
+   },
+   "gunsmith_forge": {
+    "name": "Gunsmith's Forge",
+    "layer": "gunsmith_forge",
+    "adds": "trade_house",
+    "needs": [
+     "trade_house"
+    ],
+    "branch": "trade",
+    "cost": {
+     "coin": 1500,
+     "timber": 6,
+     "iron": 6
+    },
+    "text": "Recruit the War Captain's Band and Sharpshooters.",
+    "dwelling": [
+     "U-HD-05",
+     "U-HD-06"
+    ]
+   }
   }
  }
 }

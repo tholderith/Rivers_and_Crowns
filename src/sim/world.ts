@@ -672,8 +672,8 @@ export function resolveBattle(st: WorldState, attackerWon: boolean, attackerSurv
 // ------------------------------------------------------------------ recruiting (until the full town screen)
 
 const GROWTH: Record<string, Record<string, number>> = {
-  french: { 'U-FR-01': 12, 'U-FR-02': 6, 'U-FR-03': 5, 'U-FR-04': 2, 'U-FR-05': 1 },
-  haudenosaunee: { 'U-HD-01': 9, 'U-HD-02': 8, 'U-HD-03': 5, 'U-HD-04': 4, 'U-HD-05': 2 },
+  french: { 'U-FR-01': 12, 'U-FR-02': 6, 'U-FR-03': 5, 'U-FR-04': 2, 'U-FR-05': 1, 'U-FR-06': 3, 'U-FR-07': 4 },
+  haudenosaunee: { 'U-HD-01': 9, 'U-HD-02': 8, 'U-HD-03': 5, 'U-HD-04': 4, 'U-HD-05': 2, 'U-HD-06': 3, 'U-HD-07': 4 },
 };
 const TIER_COST = [0, 30, 60, 110, 200, 500];
 export const unitCost = (unit: string) => TIER_COST[UNITS[unit].tier];

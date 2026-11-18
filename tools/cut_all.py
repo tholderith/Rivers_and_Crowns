@@ -14,7 +14,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 # sheets whose pieces sit far apart (smoke, splinters, muzzle flashes) need wider grouping
-GROUP = {"B-09": 22, "L-08": 14, "U-HD-03": 14, "U-FR-01": 14, "U-FR-03": 14, "U-FR-05": 14}
+GROUP = {"B-09": 22, "L-08": 14, "U-HD-03": 14, "U-FR-01": 14, "U-FR-03": 14, "U-FR-05": 14, "U-FR-06": 14, "U-HD-06": 14, "U-NE-05": 14}
 VERTICAL_ONLY = {"T-03"}  # directional textures
 
 

@@ -327,5 +327,156 @@
    "reload": 2,
    "defeated": 6
   }
+ },
+ "U-FR-06": {
+  "name": "Grenadiers",
+  "faction": "french",
+  "tier": 4,
+  "job": "Assault troops: grenades and bayonets",
+  "hp": 12,
+  "attack": 8,
+  "defense": 7,
+  "dmg": [
+   4,
+   7
+  ],
+  "speed": 4,
+  "range": 3,
+  "traits": [
+   "musket",
+   "bayonet",
+   "charge"
+  ],
+  "poses": {
+   "ready": 1,
+   "attack": 2,
+   "reload": 3,
+   "defeated": 21
+  }
+ },
+ "U-FR-07": {
+  "name": "Mounted Militia",
+  "faction": "french",
+  "tier": 3,
+  "job": "Fast raiders that charge exposed units",
+  "hp": 10,
+  "attack": 7,
+  "defense": 4,
+  "dmg": [
+   3,
+   6
+  ],
+  "speed": 7,
+  "range": 0,
+  "traits": [
+   "charge",
+   "heavy"
+  ],
+  "poses": {
+   "ready": 21,
+   "attack": 3,
+   "reload": 22,
+   "defeated": 23
+  }
+ },
+ "U-HD-06": {
+  "name": "Sharpshooters",
+  "faction": "haudenosaunee",
+  "tier": 4,
+  "job": "Long-range marksmen, deadly from cover",
+  "hp": 8,
+  "attack": 7,
+  "defense": 4,
+  "dmg": [
+   5,
+   8
+  ],
+  "speed": 5,
+  "range": 8,
+  "traits": [
+   "musket",
+   "woodland",
+   "ambush"
+  ],
+  "poses": {
+   "ready": 1,
+   "attack": 2,
+   "reload": 3,
+   "defeated": 4
+  }
+ },
+ "U-HD-07": {
+  "name": "Slat-Armour Guards",
+  "faction": "haudenosaunee",
+  "tier": 3,
+  "job": "Armoured defenders who steady the line",
+  "hp": 12,
+  "attack": 5,
+  "defense": 9,
+  "dmg": [
+   3,
+   5
+  ],
+  "speed": 4,
+  "range": 0,
+  "traits": [
+   "woodland",
+   "colours"
+  ],
+  "poses": {
+   "ready": 21,
+   "attack": 3,
+   "reload": 4,
+   "defeated": 5
+  }
+ },
+ "U-NE-04": {
+  "name": "Catamount",
+  "faction": "neutral",
+  "tier": 3,
+  "job": "A fast, dangerous big cat",
+  "hp": 12,
+  "attack": 8,
+  "defense": 4,
+  "dmg": [
+   4,
+   7
+  ],
+  "speed": 8,
+  "range": 0,
+  "traits": [
+   "woodland"
+  ],
+  "poses": {
+   "ready": 1,
+   "attack": 2,
+   "reload": 3,
+   "defeated": 4
+  }
+ },
+ "U-NE-05": {
+  "name": "River Brigands",
+  "faction": "neutral",
+  "tier": 3,
+  "job": "Smugglers who shoot and run",
+  "hp": 7,
+  "attack": 5,
+  "defense": 4,
+  "dmg": [
+   3,
+   5
+  ],
+  "speed": 5,
+  "range": 5,
+  "traits": [
+   "musket",
+   "skirmish"
+  ],
+  "poses": {
+   "ready": 21,
+   "attack": 22,
+   "reload": 5,
+   "defeated": 23
+  }
  }
 }
