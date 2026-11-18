@@ -255,5 +255,77 @@
    "reload": 4,
    "defeated": 6
   }
+ },
+ "U-NE-01": {
+  "name": "Wolves",
+  "faction": "neutral",
+  "tier": 2,
+  "job": "Fast pack hunters",
+  "hp": 5,
+  "attack": 5,
+  "defense": 2,
+  "dmg": [
+   2,
+   3
+  ],
+  "speed": 7,
+  "range": 0,
+  "traits": [
+   "woodland"
+  ],
+  "poses": {
+   "ready": 1,
+   "attack": 4,
+   "reload": 2,
+   "defeated": 5
+  }
+ },
+ "U-NE-02": {
+  "name": "Black Bear",
+  "faction": "neutral",
+  "tier": 4,
+  "job": "Hits very hard",
+  "hp": 30,
+  "attack": 9,
+  "defense": 6,
+  "dmg": [
+   7,
+   12
+  ],
+  "speed": 5,
+  "range": 0,
+  "traits": [
+   "woodland"
+  ],
+  "poses": {
+   "ready": 2,
+   "attack": 1,
+   "reload": 3,
+   "defeated": 4
+  }
+ },
+ "U-NE-03": {
+  "name": "Deserters",
+  "faction": "neutral",
+  "tier": 2,
+  "job": "Desperate musket men",
+  "hp": 5,
+  "attack": 4,
+  "defense": 3,
+  "dmg": [
+   2,
+   3
+  ],
+  "speed": 4,
+  "range": 5,
+  "traits": [
+   "musket"
+  ],
+  "poses": {
+   "ready": 1,
+   "attack": 3,
+   "reload": 2,
+   "defeated": 6
+  }
  }
 }

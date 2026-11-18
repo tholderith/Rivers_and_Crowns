@@ -27,6 +27,19 @@
       </div>
     </footer>
   </div>
+  <div id="map" hidden>
+    <header class="topbar mapbar">
+      <div class="mapres" id="mapres"></div>
+      <div class="roundbox"><div class="title">Rivers &amp; Crowns</div><div id="mapday"></div></div>
+      <div class="maphelp">Click a tile to plan a route, click it again to march.</div>
+    </header>
+    <div class="mapwrap">
+      <main class="field"><div id="mapstage"></div><div class="tip" id="maptip" hidden></div></main>
+      <aside class="side" id="side"></aside>
+    </div>
+    <div class="screen" id="recruit" hidden></div>
+    <div class="screen" id="pass" hidden></div>
+  </div>
   <div class="screen" id="start"></div>
   <div class="screen" id="end" hidden></div>
   <script type="module" src="/src/main.ts"></script>

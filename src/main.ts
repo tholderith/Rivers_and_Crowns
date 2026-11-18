@@ -8,6 +8,7 @@ import { chooseAbility, chooseAction } from './sim/ai';
 import { type Hex, distance, fromKey, key, neighbors, same } from './sim/hex';
 import { BattleView, center } from './render/battleView';
 import { asset, loadBattleTextures, poseUrl } from './render/assets';
+import { startCampaign } from './ui/mapScreen';
 
 type Controller = 'human' | 'ai';
 const BATTLE = 'forest-edge';
@@ -44,11 +45,17 @@ function startScreen() {
   el.hidden = false;
   el.innerHTML = `<div class="card">
     <h1>Rivers &amp; Crowns</h1>
-    <p>${battleInfo(BATTLE).name}. A turn-based battle at the edge of the autumn woods.</p>
+    <p><b>The River Basin.</b> Explore, claim mines, cross the ford and the portage, and take the enemy town.</p>
     <div class="choices">
-      <button class="choice primary" data-mode="french"><b>Play New France</b><span>Against the Haudenosaunee AI</span></button>
+      <button class="choice primary" data-camp="french"><b>Campaign: New France</b><span>Against the Haudenosaunee AI</span></button>
+      <button class="choice" data-camp="haudenosaunee"><b>Campaign: Haudenosaunee</b><span>Against the New France AI</span></button>
+      <button class="choice" data-camp="hotseat"><b>Campaign hotseat</b><span>Two players, one screen</span></button>
+    </div>
+    <p><b>Quick battle.</b> ${battleInfo(BATTLE).name}.</p>
+    <div class="choices">
+      <button class="choice" data-mode="french"><b>Play New France</b><span>Against the Haudenosaunee AI</span></button>
       <button class="choice" data-mode="haudenosaunee"><b>Play Haudenosaunee</b><span>Against the New France AI</span></button>
-      <button class="choice" data-mode="hotseat"><b>Hotseat</b><span>Two players, one screen</span></button>
+      <button class="choice" data-mode="hotseat"><b>Battle hotseat</b><span>Two players, one screen</span></button>
       <button class="choice" data-mode="watch"><b>Watch AI vs AI</b><span>See how a battle plays out</span></button>
     </div>
     <ul>
@@ -58,7 +65,13 @@ function startScreen() {
       <li>Your hero's <b>Command</b> points pay for Rally, Coordinated Volley and Fieldworks, one per round.</li>
     </ul>
   </div>`;
-  el.querySelectorAll<HTMLButtonElement>('.choice').forEach(b => b.addEventListener('click', () => {
+  el.querySelectorAll<HTMLButtonElement>('[data-camp]').forEach(b => b.addEventListener('click', () => {
+    const m = b.dataset.camp!;
+    const ctrl: [Controller, Controller] = m === 'french' ? ['human', 'ai'] : m === 'haudenosaunee' ? ['ai', 'human'] : ['human', 'human'];
+    el.hidden = true;
+    void startCampaign(ctrl, playBattle, startScreen);
+  }));
+  el.querySelectorAll<HTMLButtonElement>('[data-mode]').forEach(b => b.addEventListener('click', () => {
     const m = b.dataset.mode!;
     control = m === 'french' ? ['human', 'ai'] : m === 'haudenosaunee' ? ['ai', 'human'] : m === 'hotseat' ? ['human', 'human'] : ['ai', 'ai'];
     el.hidden = true;
@@ -68,11 +81,28 @@ function startScreen() {
 
 async function newBattle() {
   seed += 1;
-  st = createBattle(BATTLE, seed);
+  await playBattle(createBattle(BATTLE, seed), control);
+}
+
+let battleDone: ((s: BattleState) => void) | null = null;
+
+/** Show the battle screen for a prepared battle; resolves when the player leaves it. */
+function playBattle(state: BattleState, ctrl: [Controller, Controller], campaign = state.battleId.startsWith('map-')): Promise<BattleState> {
+  return new Promise(res => {
+    battleDone = campaign ? res : null;
+    void setupBattle(state, ctrl);
+    if (!campaign) res(state);
+  });
+}
+
+async function setupBattle(state: BattleState, ctrl: [Controller, Controller]) {
+  st = state;
+  control = ctrl;
+  $('game').hidden = false;
   $('stage').innerHTML = '';
   view = new BattleView();
-  const tex = await loadBattleTextures(battleInfo(BATTLE).background);
-  await view.init($('stage'), tex, battleInfo(BATTLE).background);
+  const tex = await loadBattleTextures(st.background);
+  await view.init($('stage'), tex, st.background);
   view.build(st);
   view.onHover = onHover;
   view.onClick = onClick;
@@ -234,9 +264,10 @@ function heroCard(i: SideIndex) {
   const s = activeStack(st);
   const el = $(`hero${i}`);
   el.className = `herocard${i === 1 ? ' right' : ''}${s && s.side === i ? ' turn' : ''}`;
-  el.style.setProperty('--fc', sd.faction === 'french' ? 'var(--french)' : 'var(--haud)');
+  el.style.setProperty('--fc', sd.faction === 'french' ? 'var(--french)' : sd.faction === 'haudenosaunee' ? 'var(--haud)' : '#7a6a4a');
   const pips = Array.from({ length: sd.hero.commandMax }, (_, k) => `<i class="${k < sd.hero.command ? '' : 'off'}"></i>`).join('');
-  el.innerHTML = `<img src="${asset(`portraits/${sd.hero.portrait}/${sd.hero.portrait}-01.webp`)}" alt="">
+  const pic = sd.hero.portrait.startsWith('U-') ? poseUrl(sd.hero.portrait, 'ready') : asset(`portraits/${sd.hero.portrait}/${sd.hero.portrait}-01.webp`);
+  el.innerHTML = `<img src="${pic}" alt="">
     <div><div class="nm">${sd.hero.name}</div><div class="fx">${sd.name} · ${control[i] === 'human' ? 'You' : 'AI'}</div>
     <div class="fx">Command<span class="pips">${pips}</span></div></div>`;
 }
@@ -251,7 +282,7 @@ function render() {
   const ids = [s?.id, ...st.queue].filter(Boolean).slice(0, 11) as string[];
   $('queue').innerHTML = ids.map((id, i) => {
     const o = st.stacks.find(x => x.id === id)!;
-    const fc = st.sides[o.side].faction === 'french' ? 'var(--french)' : 'var(--haud)';
+    const fc = st.sides[o.side].faction === 'french' ? 'var(--french)' : st.sides[o.side].faction === 'haudenosaunee' ? 'var(--haud)' : '#7a6a4a';
     return `<div class="q${i === 0 ? ' now' : ''}" style="--fc:${fc}" title="${unitOf(o).name}"><img src="${poseUrl(o.unit, 'ready')}" alt="${unitOf(o).name}"><b>${o.count}</b></div>`;
   }).join('') + (st.queue.length < 10 ? '<span class="sep">Next round</span>' : '');
   // actions
@@ -325,12 +356,16 @@ function endScreen() {
     const lost = mine.reduce((n, s) => n + s.startCount - s.count, 0), total = mine.reduce((n, s) => n + s.startCount, 0);
     return `<li>${sd.name}: lost ${lost} of ${total}</li>`;
   }).join('');
-  el.innerHTML = `<div class="card"><h2>${title}</h2><p>The battle lasted ${st.round} rounds.</p><ul>${losses}</ul>
-    <div class="choices"><button class="choice primary" data-end="again"><b>Fight again</b><span>Same sides, new dice</span></button>
-    <button class="choice" data-end="menu"><b>Main menu</b><span>Choose sides</span></button></div></div>`;
+  const buttons = battleDone
+    ? `<button class="choice primary" data-end="continue"><b>Continue</b><span>Back to the map</span></button>`
+    : `<button class="choice primary" data-end="again"><b>Fight again</b><span>Same sides, new dice</span></button>
+       <button class="choice" data-end="menu"><b>Main menu</b><span>Choose sides</span></button>`;
+  el.innerHTML = `<div class="card"><h2>${title}</h2><p>The battle lasted ${st.round} rounds.</p><ul>${losses}</ul><div class="choices">${buttons}</div></div>`;
   el.hidden = false;
   el.querySelectorAll<HTMLButtonElement>('[data-end]').forEach(b => b.addEventListener('click', () => {
     el.hidden = true;
+    if (b.dataset.end === 'continue') { $('game').hidden = true; const done = battleDone; battleDone = null; done?.(st); return; }
+    $('game').hidden = true;
     if (b.dataset.end === 'again') void newBattle(); else startScreen();
   }));
 }
@@ -338,4 +373,5 @@ function endScreen() {
 // test hook: lets automated playtests drive the game the same way a click would
 (window as unknown as { __rc: unknown }).__rc = { get st() { return st; }, submit, chooseAction: () => chooseAction(st), isHumanTurn, get busy() { return busy; } };
 void UNITS;
+$('game').hidden = true;
 startScreen();

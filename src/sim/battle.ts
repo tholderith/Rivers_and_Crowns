@@ -70,6 +70,7 @@ export interface Stack {
 
 export interface BattleState {
   battleId: string;
+  background: string; // battlefield painting (scenes/<id>.webp)
   rng: number;
   round: number;
   sides: [SideState, SideState];
@@ -139,11 +140,47 @@ export function createBattle(battleId: string, seed: number, leftFaction = 'fren
     return { faction: f, name: s.name, hero: { ...s.hero, commandMax: s.hero.command }, usedAbilityRound: 0 } as SideState;
   }) as [SideState, SideState];
   const st: BattleState = {
-    battleId, rng: seed | 0, round: 0, sides, stacks, woods: [...def.woods], rocks: [...def.rocks], works: [],
+    battleId, background: def.background, rng: seed | 0, round: 0, sides, stacks, woods: [...def.woods], rocks: [...def.rocks], works: [],
     queue: [], active: null, inspired: false, winner: null, log: [],
   };
   const events: BattleEvent[] = [];
   startRound(st, events);
+  return st;
+}
+
+export interface ArmySetup {
+  faction: string;
+  name: string;
+  hero: Omit<Hero, 'commandMax'>;
+  army: { unit: string; count: number }[];
+}
+
+/** Rows used to deploy an army of n stacks down its edge of the field. */
+const DEPLOY_ROWS: Record<number, number[]> = { 1: [3], 2: [2, 4], 3: [1, 3, 5], 4: [1, 2, 4, 5], 5: [0, 2, 3, 4, 6], 6: [0, 1, 2, 4, 5, 6], 7: [0, 1, 2, 3, 4, 5, 6] };
+
+/** A battle between any two armies, e.g. a hero meeting map guards. */
+export function createCustomBattle(id: string, seed: number, left: ArmySetup, right: ArmySetup, background: string, woods: string[], rocks: string[]): BattleState {
+  const stacks: Stack[] = [];
+  const sides = [left, right].map((side, i) => {
+    const army = side.army.filter(a => a.count > 0).slice(0, 7);
+    const rows = DEPLOY_ROWS[army.length] ?? [];
+    army.forEach((a, n) => {
+      const u = UNITS[a.unit];
+      const col = i === 0 ? (n % 2 ? 1 : 0) : (n % 2 ? 9 : 10);
+      stacks.push({
+        id: `${i}-${n}`, unit: a.unit, side: i as SideIndex, hex: { col, row: rows[n] }, count: a.count, startCount: a.count, topHp: u.hp,
+        loaded: true, retaliated: false, defending: false, waited: false, wavering: false, volley: false, rallied: 0,
+      });
+    });
+    return { faction: side.faction, name: side.name, hero: { ...side.hero, commandMax: side.hero.command }, usedAbilityRound: 0 } as SideState;
+  }) as [SideState, SideState];
+  const taken = new Set(stacks.map(s => key(s.hex)));
+  const st: BattleState = {
+    battleId: id, background, rng: seed | 0, round: 0, sides, stacks,
+    woods: woods.filter(k => !taken.has(k)), rocks: rocks.filter(k => !taken.has(k)), works: [],
+    queue: [], active: null, inspired: false, winner: null, log: [],
+  };
+  startRound(st, []);
   return st;
 }
 

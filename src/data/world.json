@@ -1,0 +1,404 @@
+{
+ "_note": "River basin map. Terrain: . grass, f forest, F ford, P portage, ~ water, ^ rock. Tiles are 48 px on the L-10 painting.",
+ "image": "L-10",
+ "tile": 48,
+ "terrain": [
+  "fff.ff....fffff..~~~~~ffff.fffffffff^^^^",
+  "ffffff....ffffff..~~~~.ffff.fff.fff^^^^^",
+  "ffffff.....ffff...~~~~.f..fffffff^^f^^^^",
+  "ffff............f.~~~~..fffffff^^fffffff",
+  "f.f..............~~~~~~.ffffff^^^fffffff",
+  "ff..f...ff.......~~~~~~..ffff^^^ffff..ff",
+  "ff.....fffff....~~~~.~~~~~fff^^^fffffff.",
+  "fff....ffffff..~~~~.ff~~~~.ff^^^fffffff.",
+  "fff....fffff..~~~~fffff~~~.ffff^ffffffff",
+  ".........ff.FFFFFFfffff~~~..^^^fffffffff",
+  "............FFFFFFffffff~~...^fffff....f",
+  "............FFFFFFffffff~~..f^ffff......",
+  "............FFFFFF.fffff~~...^ffff......",
+  "............FFFFFFffffff~~....f.........",
+  "............FFFFFFffffff~~....ff........",
+  "......ff....FFFFFFfffffff~..fffff.......",
+  ".......ff...FFFFFF.fffff~~..ffffff......",
+  ".......fff..FFFFFF~.fffPPP..fffffff.....",
+  "fff.............~~~..ffPP~.ff..fffffffff",
+  "fffff........f..~~~~..~~~~.fffffffffffff",
+  "fffff.......fff..~~~~~~~~~.ffffffffff..f",
+  "ffff........fffff.~~~~~~.....fffffffffff",
+  "fff..ff.....fffff.~~~~~.f.ff..ffffffffff",
+  "ff..ffff.....ff...~~~~..ffffffffffffffff",
+  ".....fff.........~~~~~..ffffffffffffffff",
+  "..........ffff.f~~~~~~.ffffffff.fffffff."
+ ],
+ "objects": [
+  {
+   "id": "town-fr",
+   "type": "town",
+   "faction": "french",
+   "name": "Fort Saint-Laurent",
+   "tile": [
+    4,
+    12
+   ],
+   "sprite": "L-01/L-01-01",
+   "owner": 0
+  },
+  {
+   "id": "town-hd",
+   "type": "town",
+   "faction": "haudenosaunee",
+   "name": "Kanyen Town",
+   "tile": [
+    36,
+    13
+   ],
+   "sprite": "L-02/L-02-01",
+   "owner": 1
+  },
+  {
+   "id": "mine-saw",
+   "type": "mine",
+   "kind": "timber",
+   "name": "Sawmill",
+   "income": {
+    "timber": 2
+   },
+   "tile": [
+    6,
+    9
+   ],
+   "sprite": "L-04/L-04-01"
+  },
+  {
+   "id": "mine-farm",
+   "type": "mine",
+   "kind": "provisions",
+   "name": "Farmstead",
+   "income": {
+    "provisions": 2
+   },
+   "tile": [
+    5,
+    18
+   ],
+   "sprite": "L-04/L-04-04"
+  },
+  {
+   "id": "mine-iron",
+   "type": "mine",
+   "kind": "iron",
+   "name": "Iron Mine",
+   "income": {
+    "iron": 1
+   },
+   "tile": [
+    28,
+    10
+   ],
+   "sprite": "L-04/L-04-02"
+  },
+  {
+   "id": "mine-weir",
+   "type": "mine",
+   "kind": "provisions",
+   "name": "Fishing Weir",
+   "income": {
+    "provisions": 2
+   },
+   "tile": [
+    26,
+    21
+   ],
+   "sprite": "L-04/L-04-05"
+  },
+  {
+   "id": "post-island",
+   "type": "mine",
+   "kind": "coin",
+   "name": "Island Trading Post",
+   "income": {
+    "coin": 250
+   },
+   "tile": [
+    20,
+    12
+   ],
+   "sprite": "L-05/L-05-02"
+  },
+  {
+   "id": "tower-west",
+   "type": "tower",
+   "name": "Lookout Tower",
+   "radius": 12,
+   "tile": [
+    9,
+    3
+   ],
+   "sprite": "L-05/L-05-03"
+  },
+  {
+   "id": "tower-east",
+   "type": "tower",
+   "name": "Blockhouse",
+   "radius": 12,
+   "tile": [
+    33,
+    20
+   ],
+   "sprite": "L-05/L-05-04"
+  },
+  {
+   "id": "pk-chest",
+   "type": "pickup",
+   "give": {
+    "coin": 500
+   },
+   "tile": [
+    2,
+    4
+   ],
+   "sprite": "L-07/L-07-05"
+  },
+  {
+   "id": "pk-logs",
+   "type": "pickup",
+   "give": {
+    "timber": 5
+   },
+   "tile": [
+    10,
+    20
+   ],
+   "sprite": "L-07/L-07-02"
+  },
+  {
+   "id": "pk-iron",
+   "type": "pickup",
+   "give": {
+    "iron": 3
+   },
+   "tile": [
+    31,
+    17
+   ],
+   "sprite": "L-07/L-07-03"
+  },
+  {
+   "id": "pk-corn",
+   "type": "pickup",
+   "give": {
+    "provisions": 5
+   },
+   "tile": [
+    35,
+    6
+   ],
+   "sprite": "L-07/L-07-04"
+  },
+  {
+   "id": "pk-satchel",
+   "type": "pickup",
+   "give": {
+    "coin": 300
+   },
+   "bonus": "command",
+   "tile": [
+    21,
+    15
+   ],
+   "sprite": "L-07/L-07-06"
+  },
+  {
+   "id": "pk-map",
+   "type": "pickup",
+   "bonus": "reveal",
+   "tile": [
+    14,
+    22
+   ],
+   "sprite": "L-07/L-07-07"
+  },
+  {
+   "id": "pk-crate",
+   "type": "pickup",
+   "give": {
+    "timber": 3,
+    "iron": 1
+   },
+   "tile": [
+    29,
+    14
+   ],
+   "sprite": "L-07/L-07-01"
+  },
+  {
+   "id": "pk-fire",
+   "type": "pickup",
+   "give": {
+    "coin": 200,
+    "provisions": 2
+   },
+   "tile": [
+    34,
+    24
+   ],
+   "sprite": "L-07/L-07-08"
+  },
+  {
+   "id": "g-wolves",
+   "type": "guard",
+   "name": "Wolf pack",
+   "army": [
+    {
+     "unit": "U-NE-01",
+     "count": 10
+    }
+   ],
+   "tile": [
+    9,
+    7
+   ],
+   "sprite": "L-08/L-08-01"
+  },
+  {
+   "id": "g-deserters",
+   "type": "guard",
+   "name": "Deserters at the ford",
+   "army": [
+    {
+     "unit": "U-NE-03",
+     "count": 14
+    },
+    {
+     "unit": "U-NE-01",
+     "count": 6
+    }
+   ],
+   "tile": [
+    15,
+    13
+   ],
+   "sprite": "L-08/L-08-03"
+  },
+  {
+   "id": "g-bear",
+   "type": "guard",
+   "name": "Black bear",
+   "army": [
+    {
+     "unit": "U-NE-02",
+     "count": 3
+    }
+   ],
+   "tile": [
+    27,
+    12
+   ],
+   "sprite": "L-08/L-08-02"
+  },
+  {
+   "id": "g-toughs",
+   "type": "guard",
+   "name": "River toughs at the portage",
+   "army": [
+    {
+     "unit": "U-NE-03",
+     "count": 12
+    },
+    {
+     "unit": "U-NE-03",
+     "count": 8
+    }
+   ],
+   "tile": [
+    24,
+    17
+   ],
+   "sprite": "L-08/L-08-04"
+  }
+ ],
+ "players": [
+  {
+   "faction": "french",
+   "name": "New France",
+   "hero": {
+    "name": "Élise Marchand",
+    "portrait": "H-FR-01",
+    "sprite": "L-09/L-09-01",
+    "tile": [
+     5,
+     12
+    ],
+    "attack": 1,
+    "defense": 1,
+    "command": 5,
+    "move": 22
+   },
+   "army": [
+    {
+     "unit": "U-FR-01",
+     "count": 20
+    },
+    {
+     "unit": "U-FR-02",
+     "count": 10
+    },
+    {
+     "unit": "U-FR-03",
+     "count": 8
+    },
+    {
+     "unit": "U-FR-05",
+     "count": 1
+    }
+   ],
+   "resources": {
+    "coin": 1500,
+    "timber": 10,
+    "iron": 4,
+    "provisions": 10
+   }
+  },
+  {
+   "faction": "haudenosaunee",
+   "name": "Haudenosaunee",
+   "hero": {
+    "name": "War Captain",
+    "portrait": "H-HD-02",
+    "sprite": "L-09/L-09-03",
+    "tile": [
+     35,
+     13
+    ],
+    "attack": 1,
+    "defense": 1,
+    "command": 5,
+    "move": 22
+   },
+   "army": [
+    {
+     "unit": "U-HD-01",
+     "count": 12
+    },
+    {
+     "unit": "U-HD-02",
+     "count": 14
+    },
+    {
+     "unit": "U-HD-03",
+     "count": 8
+    },
+    {
+     "unit": "U-HD-04",
+     "count": 5
+    }
+   ],
+   "resources": {
+    "coin": 1500,
+    "timber": 10,
+    "iron": 4,
+    "provisions": 10
+   }
+  }
+ ]
+}
