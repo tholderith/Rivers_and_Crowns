@@ -1,0 +1,13 @@
+{
+ "id": "M-03",
+ "model": "google/gemini-nano-banana-2.1",
+ "aspect_ratio": "3:2",
+ "refs": "A0, R1",
+ "cost": 0.0615855,
+ "seconds": 22,
+ "size": [
+  2528,
+  1696
+ ],
+ "extra_prompt": ""
+}

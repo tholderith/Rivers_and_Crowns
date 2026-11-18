@@ -1,0 +1,148 @@
+{
+ "name": "haudenosaunee",
+ "built": "TH-01",
+ "empty": "TH-02",
+ "buildings": {
+  "family_longhouses": {
+   "boxes": [
+    [
+     0.0433,
+     0.2987,
+     0.4433,
+     0.6033
+    ]
+   ]
+  },
+  "storehouse": {
+   "boxes": [
+    [
+     0.4367,
+     0.4839,
+     0.5767,
+     0.7288
+    ]
+   ]
+  },
+  "trade_house": {
+   "boxes": [
+    [
+     0.6033,
+     0.3524,
+     0.8333,
+     0.6332
+    ]
+   ]
+  },
+  "hunting_camp": {
+   "boxes": [
+    [
+     0.6933,
+     0.2091,
+     0.9733,
+     0.5018
+    ]
+   ]
+  },
+  "canoe_landing": {
+   "boxes": [
+    [
+     0.72,
+     0.6033,
+     1.0,
+     1.0
+    ]
+   ]
+  },
+  "three_sisters_fields": {
+   "boxes": [
+    [
+     0.0,
+     0.5137,
+     0.4667,
+     1.0
+    ]
+   ]
+  },
+  "palisade": {
+   "boxes": [
+    [
+     0.0,
+     0.1016,
+     0.74,
+     0.3584
+    ]
+   ],
+   "exclude": [
+    [
+     0.37,
+     0.1314,
+     0.6167,
+     0.3584
+    ]
+   ]
+  }
+ },
+ "leftovers": "townsfolk",
+ "draw_order": [
+  "palisade",
+  "hunting_camp",
+  "family_longhouses",
+  "trade_house",
+  "storehouse",
+  "three_sisters_fields",
+  "canoe_landing",
+  "townsfolk"
+ ],
+ "upgrades": {
+  "fortified_palisade": {
+   "image": "TH-03",
+   "replaces": "palisade",
+   "boxes": [
+    [
+     0.0,
+     0.0,
+     1.0,
+     0.3704
+    ]
+   ],
+   "exclude": [
+    [
+     0.37,
+     0.1314,
+     0.6167,
+     0.3584
+    ],
+    [
+     0.6933,
+     0.2091,
+     0.9733,
+     0.5018
+    ]
+   ]
+  },
+  "great_trade_house": {
+   "image": "TH-04",
+   "replaces": "trade_house",
+   "boxes": [
+    [
+     0.58,
+     0.3345,
+     0.9,
+     0.67
+    ]
+   ]
+  },
+  "gunsmith_forge": {
+   "image": "TH-05",
+   "boxes": [
+    [
+     0.58,
+     0.3345,
+     0.8667,
+     0.7168
+    ]
+   ],
+   "adds_to": "trade_house"
+  }
+ }
+}

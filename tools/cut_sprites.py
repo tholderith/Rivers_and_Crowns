@@ -2,10 +2,10 @@
 """Cut a generated sprite sheet into separate transparent PNGs.
 
 Removes the flat background (transparent, or the plain parchment colour the
-prompts ask for), finds each separate object, and saves one trimmed PNG per object,
+prompts ask for), finds each separate object, and saves one trimmed WebP (with transparency) per object,
 numbered left to right, top to bottom.
 
-    python3 tools/cut_sprites.py art/incoming/L-07.png public/assets/sprites/L-07
+    python3 tools/cut_sprites.py art/incoming/L-07.webp public/assets/sprites/L-07
     python3 tools/cut_sprites.py SHEET OUT_DIR --tolerance 40 --min-area 400
 
 Needs Pillow, numpy and scipy.
@@ -35,25 +35,36 @@ def background_mask(rgba: np.ndarray, tolerance: float) -> np.ndarray:
     return np.isin(labels, edge[edge > 0])
 
 
-def cut(sheet: Path, out_dir: Path, tolerance: float, min_area: int, pad: int) -> int:
+def cut(sheet: Path, out_dir: Path, tolerance: float, min_area: int, pad: int, group: int = 8, scale: float = 0.5) -> int:
     im = np.array(Image.open(sheet).convert("RGBA"))
     bg = background_mask(im, tolerance)
     im[bg, 3] = 0
-    # objects = connected non-background areas; a small dilation keeps shadows
-    # and thin parts (musket barrels, flag poles) attached to their object
-    solid = ndimage.binary_dilation(~bg, iterations=3)
-    labels, n = ndimage.label(solid)
-    boxes = [(sl, int((labels[sl] == i + 1).sum())) for i, sl in enumerate(ndimage.find_objects(labels))]
-    boxes = [sl for sl, area in boxes if area >= min_area]
+    fg = ~bg
+    # group pieces that sit close together (smoke wisps, splinters, a musket barrel
+    # crossing a gap) into one object, then keep only each object's own pixels
+    labels, n = ndimage.label(ndimage.binary_dilation(fg, iterations=group))
+    objs = []
+    for i, sl in enumerate(ndimage.find_objects(labels)):
+        mine = (labels[sl] == i + 1) & fg[sl]
+        area = int(mine.sum())
+        if area >= min_area:
+            objs.append((sl, i + 1, area))
     # reading order: rows (by top edge, in bands of 1/8 image height), then left to right
     band = max(1, im.shape[0] // 8)
-    boxes.sort(key=lambda sl: (sl[0].start // band, sl[1].start))
+    objs.sort(key=lambda o: (o[0][0].start // band, o[0][1].start))
     out_dir.mkdir(parents=True, exist_ok=True)
-    for k, (ys, xs) in enumerate(boxes, 1):
+    for old in list(out_dir.glob(f"{sheet.stem}-*.png")) + list(out_dir.glob(f"{sheet.stem}-*.webp")):
+        old.unlink()
+    for k, ((ys, xs), lab, _) in enumerate(objs, 1):
         y0, y1 = max(0, ys.start - pad), min(im.shape[0], ys.stop + pad)
         x0, x1 = max(0, xs.start - pad), min(im.shape[1], xs.stop + pad)
-        Image.fromarray(im[y0:y1, x0:x1]).save(out_dir / f"{sheet.stem}-{k:02d}.png")
-    return len(boxes)
+        crop = im[y0:y1, x0:x1].copy()
+        crop[..., 3] = np.where((labels[y0:y1, x0:x1] == lab) & fg[y0:y1, x0:x1], crop[..., 3], 0)
+        img = Image.fromarray(crop)
+        if scale != 1:
+            img = img.resize((max(1, round(img.width * scale)), max(1, round(img.height * scale))), Image.LANCZOS)
+        img.save(out_dir / f"{sheet.stem}-{k:02d}.webp", "WEBP", quality=90, method=4)
+    return len(objs)
 
 
 if __name__ == "__main__":
@@ -63,5 +74,7 @@ if __name__ == "__main__":
     ap.add_argument("--tolerance", type=float, default=38, help="colour distance counted as background (default 38)")
     ap.add_argument("--min-area", type=int, default=600, help="ignore specks smaller than this many pixels")
     ap.add_argument("--pad", type=int, default=2, help="transparent margin around each sprite")
+    ap.add_argument("--group", type=int, default=8, help="pieces closer than about this many pixels count as one object")
+    ap.add_argument("--scale", type=float, default=0.5, help="resize each sprite by this factor (default 0.5: game size)")
     a = ap.parse_args()
-    print(f"{cut(a.sheet, a.out_dir, a.tolerance, a.min_area, a.pad)} sprites -> {a.out_dir}")
+    print(f"{cut(a.sheet, a.out_dir, a.tolerance, a.min_area, a.pad, a.group, a.scale)} sprites -> {a.out_dir}")

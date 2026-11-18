@@ -12,10 +12,13 @@ crossings and trade routes that hold the map together.
 | Path | What it is |
 |---|---|
 | `docs/design.html` | Design direction, with working town-screen and battle mock-ups. Open it in a browser. |
-| `docs/art-list.html` | Every art asset, each with a complete ChatGPT image prompt and a done checklist. |
-| `art/reference/` | Concept art R1–R5. The art-list prompts refer to these by ID. |
-| `art/incoming/` | Raw image downloads from ChatGPT, named by card ID. See its README for the full list. |
-| `tools/cut_sprites.py` | Cuts a generated sprite sheet into separate transparent PNGs. |
+| `docs/art-list.html` | Every art asset (84 cards), each with its full image prompt. |
+| `art/prompts.json` | The same cards as data, read by the generation script. |
+| `art/reference/` | Concept art R1–R5. The prompts refer to these by ID. |
+| `art/incoming/` | Raw generated images, one per card, with cost and settings. Its README has the status of every card. |
+| `art/towns/` | How each town screen is split into building layers. |
+| `public/assets/` | Game-ready art: sprites, portraits, seamless textures and layered town screens. |
+| `tools/` | The art pipeline (below). |
 
 Online copies: [design](https://claude.ai/artifact/HhqbjSYEn2YR5BNLxdP8Aj) ·
 [art list](https://claude.ai/artifact/NEckq8AxSLxcsDtNkmwdJi)
@@ -43,18 +46,18 @@ headquarters. Local hotseat play plus a basic AI.
 
 ## Art workflow
 
-1. Generate images in ChatGPT with the prompts in `docs/art-list.html`, attaching the
-   references named on each card.
-2. Download the full-size PNG, name it by card ID (for example `U-FR-03.png`), and upload it to
-   `art/incoming/`.
-3. Sprite sheets are cut with:
+Images come from Google's Nano Banana 2.1 through OpenRouter, chosen in a five-model comparison
+for matching the concept art best. Each image costs about $0.06; generating all 84 cards,
+including tests and redos, cost $5.50.
 
-   ```bash
-   python3 tools/cut_sprites.py art/incoming/L-07.png public/assets/sprites/L-07
-   ```
-
-   Town screens are made as a fully built painting plus an empty version made by editing it.
-   Comparing the two gives each building as its own layer.
+1. **Generate.** `python3 tools/gen_art.py <IDs>` (or `--priority P0 --skip-existing`) sends each
+   card's prompt with its references (the S-01 style anchor and R1–R5) and saves
+   `art/incoming/<ID>.webp`. It reads `OPENROUTER_API_KEY` and stops before passing `--budget`.
+2. **Cut.** `python3 tools/cut_all.py` turns sprite sheets into one transparent sprite per pose,
+   portraits into cut-outs, and textures into seamless 512 px tiles under `public/assets/`.
+3. **Towns.** Each town is painted fully built, then edited into an empty version and into each
+   upgrade. `python3 tools/town_layers.py art/towns/french.json` compares them and writes an
+   empty base plus one layer per building, positioned by `layers.json`.
 
 Planned stack: TypeScript, Vite and PixiJS, with a deterministic turn-based simulation kept
 separate from rendering.

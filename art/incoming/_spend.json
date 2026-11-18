@@ -1,0 +1,452 @@
+{
+ "budget_note": "OpenRouter spend log, written by tools/gen_art.py",
+ "entries": [
+  {
+   "id": "S-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0611625,
+   "note": "chosen from 5-model comparison"
+  },
+  {
+   "id": "S-01-comparison",
+   "model": "other models (4)",
+   "cost": 0.32761100000000004,
+   "note": "nano banana pro, gpt image 2.6, flux 3, seedream 5.5"
+  },
+  {
+   "id": "TF-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.058839
+  },
+  {
+   "id": "TF-02",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.057027
+  },
+  {
+   "id": "TF-03",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0551505
+  },
+  {
+   "id": "B-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.055983
+  },
+  {
+   "id": "B-02",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0552855
+  },
+  {
+   "id": "B-06",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.06276
+  },
+  {
+   "id": "B-09",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.060501
+  },
+  {
+   "id": "H-FR-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0566175
+  },
+  {
+   "id": "H-FR-02",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0568215
+  },
+  {
+   "id": "H-FR-03",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0567195
+  },
+  {
+   "id": "H-HD-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0590205
+  },
+  {
+   "id": "H-HD-02",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.058755
+  },
+  {
+   "id": "H-HD-03",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.059334
+  },
+  {
+   "id": "I-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0575775
+  },
+  {
+   "id": "I-02",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0636315
+  },
+  {
+   "id": "I-03",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.061548
+  },
+  {
+   "id": "I-06",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.053982
+  },
+  {
+   "id": "I-07",
+   "model": "openai/gpt-image-2.6-flare",
+   "cost": 0.057668
+  },
+  {
+   "id": "I-08",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0544785
+  },
+  {
+   "id": "L-01-v1",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0630285
+  },
+  {
+   "id": "L-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0595455
+  },
+  {
+   "id": "L-02",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0614685
+  },
+  {
+   "id": "L-04",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.062748
+  },
+  {
+   "id": "L-05",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0621975
+  },
+  {
+   "id": "L-07",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.058317
+  },
+  {
+   "id": "L-08",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.061185
+  },
+  {
+   "id": "L-09",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0636975
+  },
+  {
+   "id": "M-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.058221
+  },
+  {
+   "id": "M-02",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0623835
+  },
+  {
+   "id": "M-05",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.058716
+  },
+  {
+   "id": "T-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.054723
+  },
+  {
+   "id": "T-02",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0547635
+  },
+  {
+   "id": "T-03",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0549525
+  },
+  {
+   "id": "T-04",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.05631
+  },
+  {
+   "id": "T-05",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.054738
+  },
+  {
+   "id": "TF-04-v1",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0551265
+  },
+  {
+   "id": "TF-04",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.054921
+  },
+  {
+   "id": "TF-05-v1",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.054882
+  },
+  {
+   "id": "TF-05",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.055254
+  },
+  {
+   "id": "TH-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.059496
+  },
+  {
+   "id": "TH-02",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0557205
+  },
+  {
+   "id": "TH-03",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.054579
+  },
+  {
+   "id": "TH-04",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.054801
+  },
+  {
+   "id": "TH-05",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.054945
+  },
+  {
+   "id": "U-FR-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.061239
+  },
+  {
+   "id": "U-FR-02",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.061695
+  },
+  {
+   "id": "U-FR-03",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0613545
+  },
+  {
+   "id": "U-FR-04",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.057804
+  },
+  {
+   "id": "U-FR-05",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.063402
+  },
+  {
+   "id": "U-HD-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.061986
+  },
+  {
+   "id": "U-HD-02",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0621225
+  },
+  {
+   "id": "U-HD-03",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0627675
+  },
+  {
+   "id": "U-HD-04",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0619575
+  },
+  {
+   "id": "U-HD-05",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.062757
+  },
+  {
+   "id": "T-06",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.054744
+  },
+  {
+   "id": "M-03",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0615855
+  },
+  {
+   "id": "T-07",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.054912
+  },
+  {
+   "id": "T-08",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0569025
+  },
+  {
+   "id": "M-04",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.060426
+  },
+  {
+   "id": "L-10",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0581385
+  },
+  {
+   "id": "L-06",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0596115
+  },
+  {
+   "id": "L-03",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.059763
+  },
+  {
+   "id": "TI-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.056904
+  },
+  {
+   "id": "B-03",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.055356
+  },
+  {
+   "id": "B-04",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.06153
+  },
+  {
+   "id": "B-07",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.058821
+  },
+  {
+   "id": "B-08",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0609135
+  },
+  {
+   "id": "B-05",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0572595
+  },
+  {
+   "id": "I-05",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.057969
+  },
+  {
+   "id": "U-NE-02",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.060222
+  },
+  {
+   "id": "K-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.060408
+  },
+  {
+   "id": "U-NE-03",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.061932
+  },
+  {
+   "id": "U-NE-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.062331
+  },
+  {
+   "id": "K-03",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.062175
+  },
+  {
+   "id": "I-04",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.058122
+  },
+  {
+   "id": "I-09",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.056577
+  },
+  {
+   "id": "I-10",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0552
+  },
+  {
+   "id": "H-NE-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0571695
+  },
+  {
+   "id": "K-04",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0604065
+  },
+  {
+   "id": "K-02",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.057561
+  },
+  {
+   "id": "K-05",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0585645
+  },
+  {
+   "id": "K-06",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0561945
+  },
+  {
+   "id": "TE-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0561045
+  },
+  {
+   "id": "K-07",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0597915
+  },
+  {
+   "id": "U-EN-02",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.062013
+  },
+  {
+   "id": "U-EN-01",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.064947
+  },
+  {
+   "id": "I-05",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.064557
+  }
+ ]
+}

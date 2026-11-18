@@ -1,0 +1,842 @@
+[
+ {
+  "id": "S-01",
+  "name": "Style anchor (corrected)",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "R1, R2",
+  "note": "Fixes the uniforms and canoes from the mood board. Becomes reference A0 for every later prompt.",
+  "prompt": "Create an updated style reference sheet for a turn-based strategy game called Rivers & Crowns. Match the attached reference sheet's look exactly, but use these subjects, arranged in a tidy grid of 4 columns and 3 rows with even spacing.\nRow 1, terrain: a small patch of meadow grass with two stones; two autumn sugar maples, one red and one gold; a cluster of three eastern white pines; a short bend of river with rounded stones on its banks.\nRow 2, people: a French Troupes de la Marine soldier with a shouldered musket; a French voyageur holding a carved paddle; a Haudenosaunee man in a trade shirt, red wool leggings, a wool matchcoat and a gustoweh cap, holding a trade musket; a Haudenosaunee woman in a calico overblouse, wrap skirt and leggings, carrying a basket of corn.\nRow 3, objects: an elm-bark canoe (bark sewn over a wooden frame, darker and heavier-looking than birchbark); a small timber trading cabin; a stack of four logs; a small wooden chest of coins.\nAll people face right, at the same scale.\nFrench colonial dress around 1700: Troupes de la Marine soldiers wear grey-white justaucorps coats with deep blue cuffs and lining, blue waistcoats and breeches, black tricorne hats with plain trim and white cross-belts. Habitants and voyageurs wear hooded wool capotes, red or blue tuques, woven ceinture fléchée sashes, leggings and moccasins.\nHaudenosaunee look: linen or calico trade shirts, wool trade-cloth leggings and breechcloths, wool matchcoats or blankets, soft moccasins, finger-woven sashes, trade-silver brooches and armbands. Men may wear the gustoweh, a fitted cap with feathers. Women wear overblouses, wrap skirts and leggings. Give them varied, realistic faces, ages and builds, and a confident, capable bearing. Keep the look Northeastern Woodlands: no Plains-style feathered war bonnets or tipis.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "T-01",
+  "name": "Meadow grass",
+  "priority": "P0",
+  "size": "1024×1024 square",
+  "background": "Seamless",
+  "refs": "A0",
+  "note": "",
+  "prompt": "A seamless, tileable, top-down terrain texture for a 2D strategy-game map: late-summer meadow grass in yellow-greens with patches of clover, tiny white and yellow wildflowers and a few pebbles. Viewed straight down (orthographic) with even, soft lighting, no strong shadows, no horizon and no perspective. Avoid any single dominant feature, so the texture repeats without visible seams: the left edge must continue into the right edge, and the top edge into the bottom. Pixel-art illustration with painterly shading, in the palette of the attached reference. No object larger than a small stone. No text, no border."
+ },
+ {
+  "id": "T-02",
+  "name": "Forest floor",
+  "priority": "P0",
+  "size": "1024×1024 square",
+  "background": "Seamless",
+  "refs": "A0",
+  "note": "",
+  "prompt": "A seamless, tileable, top-down terrain texture for a 2D strategy-game map: a shaded forest floor of brown pine needles, fallen red and gold maple leaves, moss and small ferns. Viewed straight down (orthographic) with even, soft lighting, no strong shadows, no horizon and no perspective. Avoid any single dominant feature, so the texture repeats without visible seams: the left edge must continue into the right edge, and the top edge into the bottom. Pixel-art illustration with painterly shading, in the palette of the attached reference. No object larger than a small stone. No text, no border."
+ },
+ {
+  "id": "T-03",
+  "name": "Dirt road",
+  "priority": "P0",
+  "size": "1024×1024 square",
+  "background": "Seamless",
+  "refs": "A0",
+  "note": "",
+  "prompt": "A seamless, tileable, top-down terrain texture for a 2D strategy-game map: a packed dirt cart track in warm tan earth, with two faint wheel ruts running from top to bottom, small stones, and tufts of grass at the left and right edges. Viewed straight down (orthographic) with even, soft lighting, no strong shadows, no horizon and no perspective. Avoid any single dominant feature, so the texture repeats without visible seams: the left edge must continue into the right edge, and the top edge into the bottom. Pixel-art illustration with painterly shading, in the palette of the attached reference. No object larger than a small stone. No text, no border."
+ },
+ {
+  "id": "T-04",
+  "name": "Deep river water",
+  "priority": "P0",
+  "size": "1024×1024 square",
+  "background": "Seamless",
+  "refs": "A0, R5",
+  "note": "",
+  "prompt": "A seamless, tileable, top-down terrain texture for a 2D strategy-game map: deep river water in rich blues, with gentle current ripples and small light glints flowing from top to bottom. Viewed straight down (orthographic) with even, soft lighting, no strong shadows, no horizon and no perspective. Avoid any single dominant feature, so the texture repeats without visible seams: the left edge must continue into the right edge, and the top edge into the bottom. Pixel-art illustration with painterly shading, in the palette of the attached reference. No object larger than a small stone. No text, no border."
+ },
+ {
+  "id": "T-05",
+  "name": "Shallows and ford",
+  "priority": "P0",
+  "size": "1024×1024 square",
+  "background": "Seamless",
+  "refs": "A0",
+  "note": "",
+  "prompt": "A seamless, tileable, top-down terrain texture for a 2D strategy-game map: clear, light blue-green shallow water over rounded brown and grey pebbles, with small ripples. Viewed straight down (orthographic) with even, soft lighting, no strong shadows, no horizon and no perspective. Avoid any single dominant feature, so the texture repeats without visible seams: the left edge must continue into the right edge, and the top edge into the bottom. Pixel-art illustration with painterly shading, in the palette of the attached reference. No object larger than a small stone. No text, no border."
+ },
+ {
+  "id": "T-06",
+  "name": "Sand and gravel bank",
+  "priority": "P1",
+  "size": "1024×1024 square",
+  "background": "Seamless",
+  "refs": "A0",
+  "note": "",
+  "prompt": "A seamless, tileable, top-down terrain texture for a 2D strategy-game map: a river bank of pale sand and fine grey gravel, with a few small driftwood twigs and water-smoothed stones. Viewed straight down (orthographic) with even, soft lighting, no strong shadows, no horizon and no perspective. Avoid any single dominant feature, so the texture repeats without visible seams: the left edge must continue into the right edge, and the top edge into the bottom. Pixel-art illustration with painterly shading, in the palette of the attached reference. No object larger than a small stone. No text, no border."
+ },
+ {
+  "id": "T-07",
+  "name": "Marsh",
+  "priority": "P1",
+  "size": "1024×1024 square",
+  "background": "Seamless",
+  "refs": "A0",
+  "note": "",
+  "prompt": "A seamless, tileable, top-down terrain texture for a 2D strategy-game map: wet marsh ground: dark mud, small pools of standing water reflecting the sky, short sedges and clumps of cattails. Viewed straight down (orthographic) with even, soft lighting, no strong shadows, no horizon and no perspective. Avoid any single dominant feature, so the texture repeats without visible seams: the left edge must continue into the right edge, and the top edge into the bottom. Pixel-art illustration with painterly shading, in the palette of the attached reference. No object larger than a small stone. No text, no border."
+ },
+ {
+  "id": "T-08",
+  "name": "Rocky upland",
+  "priority": "P1",
+  "size": "1024×1024 square",
+  "background": "Seamless",
+  "refs": "A0",
+  "note": "",
+  "prompt": "A seamless, tileable, top-down terrain texture for a 2D strategy-game map: rocky upland ground of grey granite slabs with lichen, thin grass and loose scree. Viewed straight down (orthographic) with even, soft lighting, no strong shadows, no horizon and no perspective. Avoid any single dominant feature, so the texture repeats without visible seams: the left edge must continue into the right edge, and the top edge into the bottom. Pixel-art illustration with painterly shading, in the palette of the attached reference. No object larger than a small stone. No text, no border."
+ },
+ {
+  "id": "M-01",
+  "name": "Tree clusters (8)",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R5",
+  "note": "",
+  "prompt": "A sprite sheet of 8 separate tree clusters for a strategy-game adventure map, arranged in 2 rows of 4: (1) three eastern white pines; (2) a dense stand of five pines; (3) two red sugar maples; (4) two golden birches and a yellow maple; (5) a mixed stand of pine, red maple and oak; (6) a single tall white pine; (7) a single red maple; (8) a low thicket of red sumac and young saplings. Each cluster is a separate object about one to two map tiles wide.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "M-02",
+  "name": "Rocks and hills (8)",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1",
+  "note": "",
+  "prompt": "A sprite sheet of 8 separate rock and hill objects for a strategy-game adventure map, in 2 rows of 4: (1) a pair of small boulders; (2) one large granite boulder; (3) a grassy rocky knoll; (4) a rock outcrop with a small pine growing from it; (5) three low flat rocks; (6) a rounded grassy hill; (7) a rocky hill with an exposed granite ledge; (8) a small scree pile. Grey granite with moss and lichen.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "M-03",
+  "name": "Impassable ridge pieces (6)",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1",
+  "note": "",
+  "prompt": "A sprite sheet of 6 pieces of a rugged, impassable mountain ridge for a strategy-game adventure map. The pieces are designed to sit side by side and form one continuous ridge: two straight middle segments, a left end cap, a right end cap, a tall peak segment and a short spur. Grey granite cliffs with pines on the lower slopes and autumn colour in the gullies. No snow, since this is a lowland river region. All pieces share the same height and baseline.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "M-04",
+  "name": "Riverbank details (8)",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0",
+  "note": "",
+  "prompt": "A sprite sheet of 8 small riverbank details for a strategy-game adventure map, in 2 rows of 4: (1) a cluster of rounded bank stones; (2) a longer strip of bank stones; (3) a piece of bleached driftwood; (4) a clump of cattails; (5) a patch of lily pads on water; (6) a reed bed; (7) a beaver lodge of sticks and mud; (8) a small sand spit.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "M-05",
+  "name": "River crossings (5)",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R5",
+  "note": "",
+  "prompt": "A sprite sheet of 5 river-crossing objects for a strategy-game adventure map, each drawn to span a river about two map tiles wide, oriented left to right: (1) a simple log bridge with rail posts; (2) a small fieldstone arch bridge; (3) a ford of stepping stones with a carved wooden marker post on the bank; (4) a portage landing: a cleared bank with a wooden canoe rack, a trail post and a worn footpath leading away; (5) a small rope ferry: a timber raft with a guide rope strung between two posts. Show only the structures. No water underneath, because water is drawn separately.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "L-01",
+  "name": "French town (map icon)",
+  "priority": "P0",
+  "size": "1024×1024 square",
+  "background": "Cut-out",
+  "refs": "A0, R4, R1",
+  "note": "",
+  "prompt": "A single adventure-map landmark of a fortified French trading town, about three by three map tiles in size: a square log palisade with small corner bastions; a stone Governor's House with a steep grey slate roof and a small bell cupola; a few timber-framed houses with steep roofs; and on the right side a riverside wharf with a moored bateau, ending at the edge of the object. No flags or banners, because ownership is shown in code.\nFrench colonial dress around 1700: Troupes de la Marine soldiers wear grey-white justaucorps coats with deep blue cuffs and lining, blue waistcoats and breeches, black tricorne hats with plain trim and white cross-belts. Habitants and voyageurs wear hooded wool capotes, red or blue tuques, woven ceinture fléchée sashes, leggings and moccasins.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "L-02",
+  "name": "Haudenosaunee town (map icon)",
+  "priority": "P0",
+  "size": "1024×1024 square",
+  "background": "Cut-out",
+  "refs": "A0, R3",
+  "note": "",
+  "prompt": "A single adventure-map landmark of a palisaded Haudenosaunee town, about three by three map tiles in size: a double ring of tall sharpened-log palisade with an overlapping, offset entrance; inside, four long bark-covered longhouses with rounded roofs and smoke holes along the ridge; a raised corn storage platform; and just outside the walls, Three Sisters fields of tall corn, climbing beans and squash. No flags or banners.\nHaudenosaunee look: linen or calico trade shirts, wool trade-cloth leggings and breechcloths, wool matchcoats or blankets, soft moccasins, finger-woven sashes, trade-silver brooches and armbands. Men may wear the gustoweh, a fitted cap with feathers. Women wear overblouses, wrap skirts and leggings. Give them varied, realistic faces, ages and builds, and a confident, capable bearing. Keep the look Northeastern Woodlands: no Plains-style feathered war bonnets or tipis.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "L-03",
+  "name": "Independent community (map icon)",
+  "priority": "P1",
+  "size": "1024×1024 square",
+  "background": "Cut-out",
+  "refs": "A0",
+  "note": "",
+  "prompt": "A single adventure-map landmark of an independent riverside village, about two by two map tiles in size: five dome-shaped houses covered in bark and woven mats, wooden drying racks hung with fish, three birchbark canoes pulled up on a gravel bank, a small cleared field, and a light pole fence.\nRiverside village look, Northeastern Woodlands style: dome-shaped houses (wigwams) covered with bark and woven mats, birchbark canoes, wool trade cloth, linen shirts, leggings, moccasins, woven sashes. Give them varied, realistic faces and ages. No tipis or Plains-style war bonnets.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "L-04",
+  "name": "Resource sites (4)",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1",
+  "note": "",
+  "prompt": "A sprite sheet of 4 resource-producing sites for a strategy-game adventure map, in one row, each about two map tiles wide: (1) a timber sawmill with a wooden waterwheel on a small stream and stacked planks; (2) an iron mine: a timber-framed adit into a rocky hillside, with a wheelbarrow of dark ore and a small charcoal bloomery furnace beside it; (3) a farmstead with a log barn, a split-rail fence and a field of ripe wheat; (4) a fishing weir: a line of wooden stakes and woven fences across a narrow stream, with woven fish baskets. No flags.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "L-05",
+  "name": "Trade and defence sites (4)",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1",
+  "note": "",
+  "prompt": "A sprite sheet of 4 adventure-map sites, in one row, each about two map tiles wide: (1) a log trading post with pelts hung on a rack, barrels and crates by the door; (2) a wooden lookout tower on a rocky knoll, with a ladder and a small roofed platform; (3) a river trade landing with a short plank dock, stacked crates and a moored bateau; (4) a small square stockade blockhouse with an overhanging upper storey. No flags.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "L-06",
+  "name": "Places to visit (5)",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0",
+  "note": "Visiting these gives heroes skills or bonuses.",
+  "prompt": "A sprite sheet of 5 points of interest for a strategy-game adventure map, in one row, each about one to two map tiles wide: (1) a surveyor's camp: a canvas tent, a brass surveying instrument on a tripod, a measuring chain coiled on a stump, and a small campfire; (2) a ruined, half-burnt log stockade overgrown with saplings; (3) a lonely trapper's cabin with snowshoes hanging on the wall and stretched pelts; (4) a stone cairn lookout on a high granite ledge; (5) an old battlefield: a broken supply cart, a half-buried cannon barrel and a weathered wooden marker in long grass, with no bodies.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "L-07",
+  "name": "Pickups (8)",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1",
+  "note": "",
+  "prompt": "A sprite sheet of 8 small pickup objects lying on the ground of a strategy-game adventure map, in 2 rows of 4, each about half a map tile wide: (1) a wooden supply crate; (2) a neat stack of cut logs; (3) a bundle of iron bars tied with rope; (4) a woven basket of corn beside a grain sack; (5) a small iron-bound chest of silver and gold coins; (6) a leather dispatch satchel with a sealed letter; (7) a rolled map tied with a ribbon; (8) an abandoned campfire with a copper kettle.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "L-08",
+  "name": "Map guards (4)",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1",
+  "note": "Neutral stacks that guard mines and pickups.",
+  "prompt": "A sprite sheet of 4 neutral guards for a strategy-game adventure map, in one row, each about one map tile wide and facing left: (1) a pack of three grey wolves; (2) a large black bear standing on all fours; (3) a band of three deserters in ragged, mismatched soldiers' coats with muskets; (4) two wild river toughs in a battered dugout canoe. Menacing but not gory.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "L-09",
+  "name": "Hero map figures (4)",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1, R5",
+  "note": "Each hero has a land figure and a river figure.",
+  "prompt": "A sprite sheet of 4 hero figures for a strategy-game adventure map, in one row, each facing right and about one map tile wide: (1) a mounted French officer on a brown horse, in a grey-white coat with blue cuffs and a tricorne; (2) a French expedition bateau, a flat-bottomed wooden boat with four rowers and an officer standing at the bow; (3) a Haudenosaunee leader on foot with two companions, carrying muskets and travel packs; (4) an elm-bark canoe with three Haudenosaunee paddlers.\nFrench colonial dress around 1700: Troupes de la Marine soldiers wear grey-white justaucorps coats with deep blue cuffs and lining, blue waistcoats and breeches, black tricorne hats with plain trim and white cross-belts. Habitants and voyageurs wear hooded wool capotes, red or blue tuques, woven ceinture fléchée sashes, leggings and moccasins.\nHaudenosaunee look: linen or calico trade shirts, wool trade-cloth leggings and breechcloths, wool matchcoats or blankets, soft moccasins, finger-woven sashes, trade-silver brooches and armbands. Men may wear the gustoweh, a fitted cap with feathers. Women wear overblouses, wrap skirts and leggings. Give them varied, realistic faces, ages and builds, and a confident, capable bearing. Keep the look Northeastern Woodlands: no Plains-style feathered war bonnets or tipis.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "L-10",
+  "name": "Prototype river map (painted base)",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0, R5",
+  "note": "Optional. An alternative to building the map from textures: one painting of the ground only, with all objects placed on top in code.",
+  "prompt": "A top-down 3/4 adventure-map painting of a river basin, terrain only, for a turn-based strategy game. A broad river enters at the top centre and splits around a long wooded island in the middle. A shallow ford crosses the western branch near the centre, and a narrow rocky gorge with rapids sits on the eastern branch, where a footpath portage runs beside it. The left third is open meadow with small woods. The right third is dense mixed pine and autumn maple forest with a granite ridge. Dirt tracks link the left edge, the ford and the right edge. Leave clear, open ground at the far left and far right for two towns. No buildings, no people, no animals, no objects except trees and rocks.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "TF-01",
+  "name": "French town, fully built",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0, R4",
+  "note": "The most important town image. Get the layout right before making TF-02 to TF-05.",
+  "prompt": "An illustrated town screen for a strategy game: a fully built French colonial river town in New France around 1700, on a bright autumn day, seen from an elevated 3/4 view. The river runs along the right side and the far background has autumn hills. Place each building in its own clear spot so none overlap:\n- Back centre: the Governor's House, a two-storey fieldstone house with a steep grey slate roof, dormer windows, a small bell cupola and stone front steps.\n- Back left: a wooden watchtower on a granite outcrop.\n- Middle left: the Marine Barracks, a long two-storey fieldstone barracks with a drill yard.\n- Centre left: the Artillery Park, a fenced gravel yard with two small bronze cannon and pyramids of cannonballs.\n- Front left: the Warehouse, a fieldstone storehouse with a timber hoist beam over a loft door, and barrels and crates outside.\n- Middle right: a timber Sawmill with a waterwheel on a stream that flows into the river, beside piles of planks.\n- Front right: the Voyageur Lodge, a long log house with canoes racked on its side wall.\n- On the river at the right edge: the Trading Wharf, a timber wharf with one moored bateau.\n- Along the back and left edges: a sharpened log palisade wall.\nDirt paths link all the buildings across an open grassy green. A few small townspeople and soldiers. No flags, banners or signs.\nFrench colonial dress around 1700: Troupes de la Marine soldiers wear grey-white justaucorps coats with deep blue cuffs and lining, blue waistcoats and breeches, black tricorne hats with plain trim and white cross-belts. Habitants and voyageurs wear hooded wool capotes, red or blue tuques, woven ceinture fléchée sashes, leggings and moccasins.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "TF-02",
+  "name": "French town, empty plots",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Edit of TF-01",
+  "refs": "Your TF-01 image",
+  "note": "",
+  "prompt": "Edit the attached town image. Remove the watchtower, Marine Barracks, Artillery Park, Warehouse, Sawmill, Voyageur Lodge, Trading Wharf and the palisade. Leave only the Governor's House, the river, the stream, the hills and the trees. Where each building stood, show an empty patch of trampled grass and bare earth with a few survey stakes, as building plots. Remove the people too. Keep everything else exactly the same: the camera, lighting, colours, the other buildings, the people, the river and the trees. Do not move, restyle or redraw anything outside the area being changed."
+ },
+ {
+  "id": "TF-03",
+  "name": "Upgrade: Stone Bastion",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Edit of TF-01",
+  "refs": "Your TF-01 image",
+  "note": "",
+  "prompt": "Edit the attached town image. Replace the log palisade along the back and left edges with a low fieldstone rampart in the same position, with an angled corner bastion at the back-left corner and two small cannon in embrasures. Keep everything else exactly the same: the camera, lighting, colours, the other buildings, the people, the river and the trees. Do not move, restyle or redraw anything outside the area being changed."
+ },
+ {
+  "id": "TF-04",
+  "name": "Upgrade: Commercial Harbor",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Edit of TF-01",
+  "refs": "Your TF-01 image",
+  "note": "",
+  "prompt": "Edit the attached town image. Expand the Trading Wharf on the river into a busy commercial harbor in the same place: a longer timber wharf, a small timber warehouse on the wharf, a wooden crane, stacked barrels and bales of furs, and two moored bateaux. Keep everything else exactly the same: the camera, lighting, colours, the other buildings, the people, the river and the trees. Do not move, restyle or redraw anything outside the area being changed."
+ },
+ {
+  "id": "TF-05",
+  "name": "Upgrade: Military Dock",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Edit of TF-01",
+  "refs": "Your TF-01 image",
+  "note": "",
+  "prompt": "Edit the attached town image. Turn the Trading Wharf on the river into a military dock in the same place: a sturdier timber pier with a small guardhouse, a rack of oars, three bateaux lined up for troops, and a small swivel gun mounted at the end of the pier. Keep everything else exactly the same: the camera, lighting, colours, the other buildings, the people, the river and the trees. Do not move, restyle or redraw anything outside the area being changed."
+ },
+ {
+  "id": "TH-01",
+  "name": "Haudenosaunee town, fully built",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0, R3",
+  "note": "",
+  "prompt": "An illustrated town screen for a strategy game: a fully built, prosperous Haudenosaunee town around 1700 on a bright autumn day, seen from an elevated 3/4 view. A river runs along the right side, and maple and pine forest covers the background hills. Place each structure in its own clear spot so none overlap:\n- Centre back: the Council House, the largest longhouse, bark-covered with a rounded roof and smoke holes, with a cleared gathering ground in front of it.\n- Middle left: two family longhouses, bark-covered, with firewood stacked at the doors.\n- Front left: Three Sisters fields of tall corn, climbing beans and spreading squash in mounded rows.\n- Centre: a corn storehouse raised on posts.\n- Middle right: the Trade House, a bark-and-timber house with bolts of wool cloth, brass kettles and crates outside.\n- Back right, at the forest edge: the Hunting Camp, with drying racks of hides and a smoking rack.\n- On the river at the right edge: the Canoe Landing, a gravel bank with elm-bark canoes and a paddle rack.\n- Along the back: a tall double palisade of sharpened logs with an offset entrance.\nFootpaths link everything across open grass. A few people at work: women tending the fields and storehouse, men returning from the hunt, children playing.\nHaudenosaunee look: linen or calico trade shirts, wool trade-cloth leggings and breechcloths, wool matchcoats or blankets, soft moccasins, finger-woven sashes, trade-silver brooches and armbands. Men may wear the gustoweh, a fitted cap with feathers. Women wear overblouses, wrap skirts and leggings. Give them varied, realistic faces, ages and builds, and a confident, capable bearing. Keep the look Northeastern Woodlands: no Plains-style feathered war bonnets or tipis.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "TH-02",
+  "name": "Haudenosaunee town, empty plots",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Edit of TH-01",
+  "refs": "Your TH-01 image",
+  "note": "",
+  "prompt": "Edit the attached town image. Remove the family longhouses, Three Sisters fields, corn storehouse, Trade House, Hunting Camp, Canoe Landing and the palisade. Keep only the Council House, the river, the forest and the hills. Where each structure stood, show cleared grass and bare earth as building plots. Remove the people too. Keep everything else exactly the same: the camera, lighting, colours, the other buildings, the people, the river and the trees. Do not move, restyle or redraw anything outside the area being changed."
+ },
+ {
+  "id": "TH-03",
+  "name": "Upgrade: Fortified palisade",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Edit of TH-01",
+  "refs": "Your TH-01 image",
+  "note": "",
+  "prompt": "Edit the attached town image. Make the palisade along the back taller and stronger, with a third row of posts, raised wooden fighting platforms with ladders behind the wall, and a small bark-roofed watch platform beside the entrance. Keep everything else exactly the same: the camera, lighting, colours, the other buildings, the people, the river and the trees. Do not move, restyle or redraw anything outside the area being changed."
+ },
+ {
+  "id": "TH-04",
+  "name": "Upgrade: Great Trade House",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Edit of TH-01",
+  "refs": "Your TH-01 image",
+  "note": "",
+  "prompt": "Edit the attached town image. Expand the Trade House into a large Great Trade House in the same spot: twice as long, with an open-sided bark shelter beside it piled with bolts of cloth, kettles, bales of furs and casks, and two visiting traders unloading a canoe at the nearby bank. Keep everything else exactly the same: the camera, lighting, colours, the other buildings, the people, the river and the trees. Do not move, restyle or redraw anything outside the area being changed."
+ },
+ {
+  "id": "TH-05",
+  "name": "Upgrade: Gunsmith's Forge",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Edit of TH-01",
+  "refs": "Your TH-01 image",
+  "note": "The alternative upgrade branch to TH-04.",
+  "prompt": "Edit the attached town image. Add a small log gunsmith's forge beside the Trade House in the same area: a stone chimney with a little smoke, an anvil and workbench under a lean-to roof, and a rack of muskets being repaired. Keep everything else exactly the same: the camera, lighting, colours, the other buildings, the people, the river and the trees. Do not move, restyle or redraw anything outside the area being changed."
+ },
+ {
+  "id": "TI-01",
+  "name": "Independent village scene",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0",
+  "note": "",
+  "prompt": "An illustrated scene of an independent riverside village of around 1700 on an autumn afternoon, seen from an elevated 3/4 view: several dome-shaped bark- and mat-covered houses around an open central ground with a fire ring and log benches, fish-drying racks, birchbark canoes on a gravel bank, a small field, and people at work and talking. Peaceful and welcoming, a place where visitors come to trade and negotiate.\nRiverside village look, Northeastern Woodlands style: dome-shaped houses (wigwams) covered with bark and woven mats, birchbark canoes, wool trade cloth, linen shirts, leggings, moccasins, woven sashes. Give them varied, realistic faces and ages. No tipis or Plains-style war bonnets.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "B-01",
+  "name": "Battlefield: meadow at forest edge",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0",
+  "note": "",
+  "prompt": "An empty battlefield background for a turn-based hex battle, seen from a 3/4 overhead angle: an autumn meadow, with the edge of a mixed pine and red-maple forest along the top and a dirt track crossing the lower third. The centre is open, flat and evenly lit, so a hex grid and troops can be placed on top. Scattered wildflowers and a few small stones only. No people, no animals, no large objects in the middle.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "B-02",
+  "name": "Battlefield: river ford",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0",
+  "note": "",
+  "prompt": "An empty battlefield background for a turn-based hex battle, seen from a 3/4 overhead angle: a shallow river ford running from top to bottom through the centre, with pebbly shallows that troops can wade, grassy banks on both sides, a few willows, and pine forest at the top edge. Keep the land on both sides flat and open for troops. No people, no animals, no boats.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "B-03",
+  "name": "Battlefield: forest clearing",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0",
+  "note": "",
+  "prompt": "An empty battlefield background for a turn-based hex battle, seen from a 3/4 overhead angle: a clearing in deep autumn woods, with dappled light, leaf litter, ferns and a few stumps, and tall pines and maples crowding all four edges. The middle is open for troops. No people, no animals.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "B-04",
+  "name": "Siege field: French town",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0, TF-01",
+  "note": "",
+  "prompt": "An empty battlefield background for a siege in a turn-based hex battle, seen from a 3/4 overhead angle: open trampled ground in front of a French colonial town. Leave the right quarter of the image as plain ground, because the wall pieces are placed there separately. Rooftops of fieldstone houses and a bell cupola are visible beyond, at the top right. No people, no wall.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "B-05",
+  "name": "Siege field: Haudenosaunee town",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0, TH-01",
+  "note": "",
+  "prompt": "An empty battlefield background for a siege in a turn-based hex battle, seen from a 3/4 overhead angle: cleared ground and corn stubble in front of a Haudenosaunee town. Leave the right quarter of the image as plain ground, because the palisade pieces are placed there separately. The rounded roofs of bark longhouses are visible beyond, at the top right. No people, no wall.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "B-06",
+  "name": "Hex obstacles (8)",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1",
+  "note": "Each one sits on a single battle hex.",
+  "prompt": "A sprite sheet of 8 battlefield obstacles for a turn-based hex battle, in 2 rows of 4. Each is drawn to fit inside a single hexagon tile: (1) a clump of two red maples; (2) a clump of three pines; (3) a dense thicket; (4) a large granite boulder; (5) two smaller boulders; (6) a fallen tree trunk; (7) a short section of split-rail fence; (8) a brush pile with stumps.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "B-07",
+  "name": "Siege walls: French",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, TF-01",
+  "note": "",
+  "prompt": "A sprite sheet of siege wall pieces for a turn-based hex battle, all running vertically (top to bottom) as seen from a 3/4 overhead angle, and all the same height, so they stack into one wall: (1) a sharpened log palisade segment, intact; (2) the same segment breached, with splintered and fallen logs; (3) a palisade gate with heavy timber doors; (4) a fieldstone rampart segment, intact; (5) the same rampart breached, with rubble; (6) a fieldstone bastion corner with a cannon embrasure.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "B-08",
+  "name": "Siege walls: Haudenosaunee",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, TH-01",
+  "note": "",
+  "prompt": "A sprite sheet of siege wall pieces for a turn-based hex battle, all running vertically (top to bottom) as seen from a 3/4 overhead angle, and all the same height, so they stack into one wall: (1) a double sharpened-log palisade segment, intact; (2) the same segment breached, with fallen posts; (3) an offset overlapping palisade entrance; (4) a palisade segment with a raised wooden fighting platform behind it; (5) the platform segment, damaged.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "B-09",
+  "name": "Battle effects (10)",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0",
+  "note": "",
+  "prompt": "A sprite sheet of 10 battle effects for a turn-based strategy game, in 2 rows of 5: (1) a small white musket-smoke puff; (2) a medium puff; (3) a large rolling bank of musket smoke; (4) a musket muzzle flash; (5) a cannon blast of flash and thick smoke; (6) a dust cloud kicked up by running feet; (7) a spray of dirt from a cannonball impact; (8) flying wood splinters; (9) a small fire on grass; (10) a cannonball in flight with a faint trail. Bright and readable, and not gory.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "U-FR-01",
+  "name": "Habitant Militia",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1",
+  "note": "Job: cheap line holders.",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: two French-Canadian habitant militiamen in hooded grey-brown wool capotes, red tuques, woven sashes, leggings and moccasins, carrying long hunting fusils. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: firing their fusils from the shoulder with a puff of smoke; (3) reloading, one pulling out a ramrod; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nFrench colonial dress around 1700: Troupes de la Marine soldiers wear grey-white justaucorps coats with deep blue cuffs and lining, blue waistcoats and breeches, black tricorne hats with plain trim and white cross-belts. Habitants and voyageurs wear hooded wool capotes, red or blue tuques, woven ceinture fléchée sashes, leggings and moccasins.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "U-FR-02",
+  "name": "Voyageurs",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1",
+  "note": "Job: scouts and skirmishers that fight from cover.",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: two voyageur skirmishers in short capotes or linen shirts, one blue and one red tuque, ceinture fléchée sashes, leggings, moccasins and powder horns, carrying light muskets. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: kneeling and firing; (3) crouched low and reloading; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nFrench colonial dress around 1700: Troupes de la Marine soldiers wear grey-white justaucorps coats with deep blue cuffs and lining, blue waistcoats and breeches, black tricorne hats with plain trim and white cross-belts. Habitants and voyageurs wear hooded wool capotes, red or blue tuques, woven ceinture fléchée sashes, leggings and moccasins.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "U-FR-03",
+  "name": "Troupes de la Marine",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1",
+  "note": "Job: steady line infantry that hold ground.",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: two Troupes de la Marine regular soldiers in grey-white justaucorps coats with deep blue cuffs and lining, blue waistcoats, black tricorne hats with plain trim and white cross-belts, carrying flintlock muskets with bayonets. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: firing a volley side by side, with smoke at the muzzles; (3) reloading in drill order, ramrods out; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nFrench colonial dress around 1700: Troupes de la Marine soldiers wear grey-white justaucorps coats with deep blue cuffs and lining, blue waistcoats and breeches, black tricorne hats with plain trim and white cross-belts. Habitants and voyageurs wear hooded wool capotes, red or blue tuques, woven ceinture fléchée sashes, leggings and moccasins.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "U-FR-04",
+  "name": "Colour Party",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1",
+  "note": "Job: support. Rallies morale for nearby units.",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: a French ensign carrying a large plain white regimental colour on a tall pole, with no emblems on it, and a young drummer in a blue coat with red cuffs carrying a rope-tensioned drum. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: the ensign raising the colour high and the drummer beating the drum to rally the troops; (3) standing firm, with the colour planted upright; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nFrench colonial dress around 1700: Troupes de la Marine soldiers wear grey-white justaucorps coats with deep blue cuffs and lining, blue waistcoats and breeches, black tricorne hats with plain trim and white cross-belts. Habitants and voyageurs wear hooded wool capotes, red or blue tuques, woven ceinture fléchée sashes, leggings and moccasins.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "U-FR-05",
+  "name": "Field Gun",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1",
+  "note": "Job: breaches walls.",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: a small bronze field cannon on a wooden carriage with two gunners in grey-white coats and tricornes. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: the cannon firing, with a burst of flame and smoke as the carriage recoils; (3) the gunners swabbing and ramming the barrel; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nFrench colonial dress around 1700: Troupes de la Marine soldiers wear grey-white justaucorps coats with deep blue cuffs and lining, blue waistcoats and breeches, black tricorne hats with plain trim and white cross-belts. Habitants and voyageurs wear hooded wool capotes, red or blue tuques, woven ceinture fléchée sashes, leggings and moccasins.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "U-HD-01",
+  "name": "Scouts",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R3",
+  "note": "Job: fast scouts, see further.",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: two Haudenosaunee scouts in light kit: linen trade shirts, breechcloths, leggings, moccasins and shot pouches, carrying light trade muskets. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: firing from a crouch; (3) moving low and fast in a running stride; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nHaudenosaunee look: linen or calico trade shirts, wool trade-cloth leggings and breechcloths, wool matchcoats or blankets, soft moccasins, finger-woven sashes, trade-silver brooches and armbands. Men may wear the gustoweh, a fitted cap with feathers. Women wear overblouses, wrap skirts and leggings. Give them varied, realistic faces, ages and builds, and a confident, capable bearing. Keep the look Northeastern Woodlands: no Plains-style feathered war bonnets or tipis.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "U-HD-02",
+  "name": "Bowmen",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R3",
+  "note": "Job: skirmishers that shoot every turn with no reload.",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: two Haudenosaunee archers with hunting bows and quivers, wearing trade shirts, leggings, moccasins and woven sashes. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: drawing and loosing arrows; (3) nocking a new arrow; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nHaudenosaunee look: linen or calico trade shirts, wool trade-cloth leggings and breechcloths, wool matchcoats or blankets, soft moccasins, finger-woven sashes, trade-silver brooches and armbands. Men may wear the gustoweh, a fitted cap with feathers. Women wear overblouses, wrap skirts and leggings. Give them varied, realistic faces, ages and builds, and a confident, capable bearing. Keep the look Northeastern Woodlands: no Plains-style feathered war bonnets or tipis.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "U-HD-03",
+  "name": "Musket Warriors",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R3",
+  "note": "Job: hold ground, strongest in cover.",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: two Haudenosaunee musket warriors in trade shirts, wool matchcoats, leggings and gustoweh caps, with trade muskets, powder horns and finger-woven sashes. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: firing their muskets with smoke at the muzzles; (3) reloading from their powder horns; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nHaudenosaunee look: linen or calico trade shirts, wool trade-cloth leggings and breechcloths, wool matchcoats or blankets, soft moccasins, finger-woven sashes, trade-silver brooches and armbands. Men may wear the gustoweh, a fitted cap with feathers. Women wear overblouses, wrap skirts and leggings. Give them varied, realistic faces, ages and builds, and a confident, capable bearing. Keep the look Northeastern Woodlands: no Plains-style feathered war bonnets or tipis.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "U-HD-04",
+  "name": "Club Warriors",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R3",
+  "note": "Job: close assault and flanking.",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: two Haudenosaunee close-assault warriors with carved wooden ball-headed war clubs and small belt axes, lightly dressed for speed in trade shirts, leggings and moccasins. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: charging and swinging their clubs; (3) braced and ready to strike; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nHaudenosaunee look: linen or calico trade shirts, wool trade-cloth leggings and breechcloths, wool matchcoats or blankets, soft moccasins, finger-woven sashes, trade-silver brooches and armbands. Men may wear the gustoweh, a fitted cap with feathers. Women wear overblouses, wrap skirts and leggings. Give them varied, realistic faces, ages and builds, and a confident, capable bearing. Keep the look Northeastern Woodlands: no Plains-style feathered war bonnets or tipis.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "U-HD-05",
+  "name": "War Captain's Band",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R3",
+  "note": "Job: elite support. Boosts nearby units.",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: a Haudenosaunee war captain with two veteran warriors; the captain wears a silver gorget, trade-silver brooches, a red wool matchcoat over one shoulder and a gustoweh with feathers, and all three carry muskets. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: the captain pointing forward as the two warriors fire; (3) the captain calling out with a raised arm, rallying the others; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nHaudenosaunee look: linen or calico trade shirts, wool trade-cloth leggings and breechcloths, wool matchcoats or blankets, soft moccasins, finger-woven sashes, trade-silver brooches and armbands. Men may wear the gustoweh, a fitted cap with feathers. Women wear overblouses, wrap skirts and leggings. Give them varied, realistic faces, ages and builds, and a confident, capable bearing. Keep the look Northeastern Woodlands: no Plains-style feathered war bonnets or tipis.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "U-NE-01",
+  "name": "Wolves",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, L-08",
+  "note": "",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: two grey timber wolves. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: lunging and snapping; (3) snarling with hackles raised; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "U-NE-02",
+  "name": "Black bear",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, L-08",
+  "note": "",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: one large black bear. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: reared up on its hind legs and swiping; (3) on all fours and roaring; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "U-NE-03",
+  "name": "Deserters",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, L-08",
+  "note": "",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: two deserters in ragged, mismatched soldiers' coats, stubbled and hungry-looking, with old muskets. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: firing wildly; (3) fumbling to reload; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "H-FR-01",
+  "name": "Élise Marchand · River Captain",
+  "priority": "P0",
+  "size": "1024×1536 portrait",
+  "background": "Navy, for cut-out",
+  "refs": "R2, A0",
+  "note": "Specialty: navigator. Same character as R2, with the corrected coat.",
+  "prompt": "A half-length character portrait for the hero screen of a strategy game: Élise Marchand, a French river captain in her thirties, the same woman as in the attached hero-screen reference: brown hair tied back with a blue ribbon and a warm, determined expression. She wears a grey-white officer's coat with deep blue cuffs and lining and brass buttons over a linen shirt with a lace cravat, and a leather baldric, and she holds a black tricorne under one arm. Three-quarter view, natural and confident expression, realistic proportions. Plain, flat dark navy background (#13213D) so the figure can be cut out. Painterly pixel-art illustration that matches the attached hero-screen reference: crisp pixel detail, warm light from the upper left, rich fabric texture, period-accurate around 1700. No text, no frame, no border, no logo."
+ },
+ {
+  "id": "H-FR-02",
+  "name": "Antoine Lefèvre · Engineer",
+  "priority": "P0",
+  "size": "1024×1536 portrait",
+  "background": "Navy, for cut-out",
+  "refs": "R2, A0",
+  "note": "Specialty: engineer.",
+  "prompt": "A half-length character portrait for the hero screen of a strategy game: Antoine Lefèvre, a French military engineer in his fifties: a grey wig tied back in a queue, spectacles pushed up on his forehead, a practical brown wool coat and waistcoat. He holds a rolled fortification plan and a pair of brass dividers, with a leather instrument case on a strap. Three-quarter view, natural and confident expression, realistic proportions. Plain, flat dark navy background (#13213D) so the figure can be cut out. Painterly pixel-art illustration that matches the attached hero-screen reference: crisp pixel detail, warm light from the upper left, rich fabric texture, period-accurate around 1700. No text, no frame, no border, no logo."
+ },
+ {
+  "id": "H-FR-03",
+  "name": "Jean-Baptiste Roy · Voyageur Guide",
+  "priority": "P0",
+  "size": "1024×1536 portrait",
+  "background": "Navy, for cut-out",
+  "refs": "R2, A0",
+  "note": "Specialty: quartermaster.",
+  "prompt": "A half-length character portrait for the hero screen of a strategy game: Jean-Baptiste Roy, a weathered French-Canadian voyageur in his forties: a short dark beard, laugh lines, a red tuque, and a hooded blue capote with a bright ceinture fléchée sash. He has a powder horn and holds a carved canoe paddle over his shoulder. Three-quarter view, natural and confident expression, realistic proportions. Plain, flat dark navy background (#13213D) so the figure can be cut out. Painterly pixel-art illustration that matches the attached hero-screen reference: crisp pixel detail, warm light from the upper left, rich fabric texture, period-accurate around 1700. No text, no frame, no border, no logo."
+ },
+ {
+  "id": "H-HD-01",
+  "name": "Clan Mother · Diplomat",
+  "priority": "P0",
+  "size": "1024×1536 portrait",
+  "background": "Navy, for cut-out",
+  "refs": "R2, A0, R3",
+  "note": "Specialty: diplomat.",
+  "prompt": "A half-length character portrait for the hero screen of a strategy game: a Haudenosaunee clan mother in her sixties with a wise, steady, authoritative gaze and long grey-streaked hair worn in a single braid. She wears a dark wool overdress with silk-ribbon edging over a calico blouse, many trade-silver brooches, and a wool blanket draped over her shoulders. Her hands are folded calmly. Haudenosaunee look: linen or calico trade shirts, wool trade-cloth leggings and breechcloths, wool matchcoats or blankets, soft moccasins, finger-woven sashes, trade-silver brooches and armbands. Men may wear the gustoweh, a fitted cap with feathers. Women wear overblouses, wrap skirts and leggings. Give them varied, realistic faces, ages and builds, and a confident, capable bearing. Keep the look Northeastern Woodlands: no Plains-style feathered war bonnets or tipis.. Three-quarter view, natural and confident expression, realistic proportions. Plain, flat dark navy background (#13213D) so the figure can be cut out. Painterly pixel-art illustration that matches the attached hero-screen reference: crisp pixel detail, warm light from the upper left, rich fabric texture, period-accurate around 1700. No text, no frame, no border, no logo."
+ },
+ {
+  "id": "H-HD-02",
+  "name": "War Captain · Commander",
+  "priority": "P0",
+  "size": "1024×1536 portrait",
+  "background": "Navy, for cut-out",
+  "refs": "R2, A0, R3",
+  "note": "Specialty: commander.",
+  "prompt": "A half-length character portrait for the hero screen of a strategy game: a Haudenosaunee war captain in his thirties with a strong, composed face and a small scar on one cheek. He wears a silver gorget, a linen shirt, a red wool matchcoat over one shoulder, a finger-woven sash and a gustoweh with feathers, and holds a trade musket upright. Haudenosaunee look: linen or calico trade shirts, wool trade-cloth leggings and breechcloths, wool matchcoats or blankets, soft moccasins, finger-woven sashes, trade-silver brooches and armbands. Men may wear the gustoweh, a fitted cap with feathers. Women wear overblouses, wrap skirts and leggings. Give them varied, realistic faces, ages and builds, and a confident, capable bearing. Keep the look Northeastern Woodlands: no Plains-style feathered war bonnets or tipis.. Three-quarter view, natural and confident expression, realistic proportions. Plain, flat dark navy background (#13213D) so the figure can be cut out. Painterly pixel-art illustration that matches the attached hero-screen reference: crisp pixel detail, warm light from the upper left, rich fabric texture, period-accurate around 1700. No text, no frame, no border, no logo."
+ },
+ {
+  "id": "H-HD-03",
+  "name": "Pathfinder · Navigator",
+  "priority": "P0",
+  "size": "1024×1536 portrait",
+  "background": "Navy, for cut-out",
+  "refs": "R2, A0, R3",
+  "note": "Specialty: navigator.",
+  "prompt": "A half-length character portrait for the hero screen of a strategy game: a young Haudenosaunee pathfinder in his twenties with an alert, curious expression. He wears a linen trade shirt, a blue wool matchcoat, a shot pouch and powder horn, and holds a carved elm canoe paddle. Haudenosaunee look: linen or calico trade shirts, wool trade-cloth leggings and breechcloths, wool matchcoats or blankets, soft moccasins, finger-woven sashes, trade-silver brooches and armbands. Men may wear the gustoweh, a fitted cap with feathers. Women wear overblouses, wrap skirts and leggings. Give them varied, realistic faces, ages and builds, and a confident, capable bearing. Keep the look Northeastern Woodlands: no Plains-style feathered war bonnets or tipis.. Three-quarter view, natural and confident expression, realistic proportions. Plain, flat dark navy background (#13213D) so the figure can be cut out. Painterly pixel-art illustration that matches the attached hero-screen reference: crisp pixel detail, warm light from the upper left, rich fabric texture, period-accurate around 1700. No text, no frame, no border, no logo."
+ },
+ {
+  "id": "H-NE-01",
+  "name": "Independent community leader",
+  "priority": "P1",
+  "size": "1024×1536 portrait",
+  "background": "Navy, for cut-out",
+  "refs": "R2, A0",
+  "note": "Appears on the diplomacy screen.",
+  "prompt": "A half-length character portrait for the hero screen of a strategy game: the respected leader of an independent riverside village, a man in his fifties with a calm, shrewd expression, wearing a wool matchcoat with ribbon edging over a linen shirt and trade-silver armbands. Riverside village look, Northeastern Woodlands style: dome-shaped houses (wigwams) covered with bark and woven mats, birchbark canoes, wool trade cloth, linen shirts, leggings, moccasins, woven sashes. Give them varied, realistic faces and ages. No tipis or Plains-style war bonnets.. Three-quarter view, natural and confident expression, realistic proportions. Plain, flat dark navy background (#13213D) so the figure can be cut out. Painterly pixel-art illustration that matches the attached hero-screen reference: crisp pixel detail, warm light from the upper left, rich fabric texture, period-accurate around 1700. No text, no frame, no border, no logo."
+ },
+ {
+  "id": "I-01",
+  "name": "Resource icons (5)",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "R1, A0",
+  "note": "",
+  "prompt": "A sheet of 5 large, clean game resource icons in one row, each centred with plenty of space around it: (1) Coin: a small stack of silver and gold coins; (2) Timber: three cut logs; (3) Provisions: a woven basket of corn, beans and squash; (4) Iron: three bars of wrought iron; (5) Trade goods: a folded bolt of red wool cloth with a brass kettle and a string of glass beads. Each icon must read clearly at a small size.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "I-02",
+  "name": "Command ability medallions (5)",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "R2, A0",
+  "note": "Like the round icons in R2. I add the gold rims in code.",
+  "prompt": "A sheet of 5 circular painted vignettes for hero command abilities in a strategy game, in one row, each a perfect circle with no rim or frame: (1) Rally: an officer raising a colour while wavering soldiers turn back toward him; (2) Coordinated Volley: two lines of soldiers firing together in a long bank of smoke; (3) Forced March: a column of troops striding fast along a forest road at dusk; (4) Fieldworks: a log breastwork with a spade and freshly turned earth; (5) Feigned Retreat: troops falling back into the trees, one looking back over his shoulder. Painterly pixel art, rich colour.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "I-03",
+  "name": "Equipment set A (8)",
+  "priority": "P0",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "R2, A0",
+  "note": "",
+  "prompt": "A sheet of 8 hero equipment items for a strategy game, in 2 rows of 4, each centred with space around it: (1) a brass pocket compass with its lid open; (2) a hand-drawn river chart, unfolded; (3) a brass and leather spyglass; (4) a pair of sturdy leather boots; (5) a leather dispatch case with a red-sealed letter; (6) a surveyor's measuring chain, coiled; (7) a fine flintlock fusil with a carved stock; (8) an officer's crescent-shaped brass gorget on a ribbon.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "I-04",
+  "name": "Equipment set B (8)",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "R2, A0",
+  "note": "",
+  "prompt": "A sheet of 8 hero equipment items for a strategy game, in 2 rows of 4, each centred with space around it: (1) a small sword in its scabbard; (2) an engraved powder horn; (3) a pierced tin lantern; (4) a pair of snowshoes; (5) a rolled wool blanket with a strap; (6) a steel trade axe; (7) a surgeon's leather roll of instruments; (8) a portable writing box with a quill and inkwell.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "I-05",
+  "name": "Specialty and status icons (9)",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0",
+  "note": "",
+  "prompt": "A sheet of 9 simple, bold emblem icons for a strategy-game interface, in one row, each drawn in gold and cream with a dark outline and very little detail so it reads at a tiny size: (1) commander: crossed sabres; (2) navigator: a compass rose; (3) diplomat: two clasped hands; (4) engineer: dividers over a plan; (5) quartermaster: a barrel and a ledger; (6) in cover: a maple leaf; (7) reloading: a ramrod and a powder horn; (8) wavering: a torn, drooping banner; (9) rallied: a raised banner.\nPixel-art style. Background: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale. No text."
+ },
+ {
+  "id": "I-06",
+  "name": "Parchment texture",
+  "priority": "P0",
+  "size": "1024×1024 square",
+  "background": "Seamless",
+  "refs": "R2",
+  "note": "",
+  "prompt": "A seamless, tileable texture of warm aged parchment paper (around #EFE2C2) with subtle fibres, faint mottling and very soft stains. Low contrast, so text placed on top stays easy to read. Even lighting with no vignette, no folds, no torn edges, no text. Every edge must tile seamlessly."
+ },
+ {
+  "id": "I-07",
+  "name": "Navy panel texture",
+  "priority": "P0",
+  "size": "1024×1024 square",
+  "background": "Seamless",
+  "refs": "R2",
+  "note": "",
+  "prompt": "A seamless, tileable texture of deep navy wool broadcloth (around #13213D) with a fine woven grain and very subtle variation. Low contrast, even lighting, no vignette, no text. Every edge must tile seamlessly."
+ },
+ {
+  "id": "I-08",
+  "name": "Wood button texture",
+  "priority": "P0",
+  "size": "1024×1024 square",
+  "background": "Seamless",
+  "refs": "R5",
+  "note": "",
+  "prompt": "A seamless, tileable texture of warm oiled oak planks running horizontally, with a rich amber-brown grain like the \"End Turn\" button in the attached reference. Even lighting, no nails, no text. Every edge must tile seamlessly."
+ },
+ {
+  "id": "I-09",
+  "name": "Gold frame corner",
+  "priority": "P1",
+  "size": "1024×1024 square",
+  "background": "Cut-out",
+  "refs": "R2, R5",
+  "note": "",
+  "prompt": "A single ornamental corner piece for a game interface frame: restrained gilded scrollwork in an early-18th-century French style, filling the top-left corner of the image, with two straight gilded moulding arms extending along the top and left edges so it can be mirrored to make all four corners. Gold with warm highlights and dark brown shadows. Background: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale. No text."
+ },
+ {
+  "id": "I-10",
+  "name": "Crown emblem",
+  "priority": "P1",
+  "size": "1024×1024 square",
+  "background": "Cut-out",
+  "refs": "R5",
+  "note": "I set the \"Rivers & Crowns\" wordmark in type, so this prompt has no text.",
+  "prompt": "A small heraldic emblem for a game logo: a simple gold crown sitting above a single flowing river wave in deep blue, elegant and symmetric, with a thin dark outline, readable at small size. Background: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale. No text or letters."
+ },
+ {
+  "id": "K-01",
+  "name": "Title screen",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0, R4, R3",
+  "note": "Leave the top third calm for the logo.",
+  "prompt": "Key art for the title screen of a strategy game: dawn over a broad river where two branches meet, in autumn, seen from a high bank. On the left, a French expedition's bateau with soldiers and voyageurs. On the right, an elm-bark canoe of Haudenosaunee travellers. Both pause on the water, watching each other across the confluence. The mood is tense, wary curiosity rather than battle. Mist on the water, golden light breaking over forested hills. Keep the top third of the image as calm sky and hills with nothing important in it, because a logo goes there.\nFrench colonial dress around 1700: Troupes de la Marine soldiers wear grey-white justaucorps coats with deep blue cuffs and lining, blue waistcoats and breeches, black tricorne hats with plain trim and white cross-belts. Habitants and voyageurs wear hooded wool capotes, red or blue tuques, woven ceinture fléchée sashes, leggings and moccasins.\nHaudenosaunee look: linen or calico trade shirts, wool trade-cloth leggings and breechcloths, wool matchcoats or blankets, soft moccasins, finger-woven sashes, trade-silver brooches and armbands. Men may wear the gustoweh, a fitted cap with feathers. Women wear overblouses, wrap skirts and leggings. Give them varied, realistic faces, ages and builds, and a confident, capable bearing. Keep the look Northeastern Woodlands: no Plains-style feathered war bonnets or tipis.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "K-02",
+  "name": "Diplomacy backdrop",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0, TI-01",
+  "note": "",
+  "prompt": "A backdrop for a diplomacy screen in a strategy game: an open meeting ground beside a river confluence in autumn, with a fire ring, log benches set in a circle, a bark-covered shelter behind, and canoes on the bank. Late afternoon light. Nobody is seated yet. Leave the centre slightly soft and uncluttered so dialogue panels can sit over it.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "K-03",
+  "name": "Scenario map (parchment style)",
+  "priority": "P1",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0",
+  "note": "For choosing a scenario. This uses an antique-map look on purpose.",
+  "prompt": "An illustrated map of a fictional river basin in the style of a hand-drawn early-18th-century explorer's chart, on aged parchment: a broad river and its tributaries, lakes, portage trails marked as dotted lines, small pictorial forests, hills and rapids, tiny drawings of a fortified town on the west bank and a palisaded longhouse town on the east bank, a compass rose, and a decorative border of oak and maple leaves. Use ink and watercolour washes in browns, greens and blues. No readable text: draw any labels as faint scribbled lines."
+ },
+ {
+  "id": "K-04",
+  "name": "Loading screen: the portage",
+  "priority": "P2",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0",
+  "note": "",
+  "prompt": "A loading-screen illustration for a strategy game: voyageurs carrying an upturned canoe and heavy packs along a steep forest portage trail beside roaring rapids in autumn. Golden late light, spray in the air, steady effort.\nFrench colonial dress around 1700: Troupes de la Marine soldiers wear grey-white justaucorps coats with deep blue cuffs and lining, blue waistcoats and breeches, black tricorne hats with plain trim and white cross-belts. Habitants and voyageurs wear hooded wool capotes, red or blue tuques, woven ceinture fléchée sashes, leggings and moccasins.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "K-05",
+  "name": "Loading screen: harvest",
+  "priority": "P2",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0, R3",
+  "note": "",
+  "prompt": "A loading-screen illustration for a strategy game: a Haudenosaunee town at harvest time, with women and children gathering corn and squash from Three Sisters fields, longhouses and a palisade behind, and a warm late-afternoon autumn glow.\nHaudenosaunee look: linen or calico trade shirts, wool trade-cloth leggings and breechcloths, wool matchcoats or blankets, soft moccasins, finger-woven sashes, trade-silver brooches and armbands. Men may wear the gustoweh, a fitted cap with feathers. Women wear overblouses, wrap skirts and leggings. Give them varied, realistic faces, ages and builds, and a confident, capable bearing. Keep the look Northeastern Woodlands: no Plains-style feathered war bonnets or tipis.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "K-06",
+  "name": "Victory",
+  "priority": "P2",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0",
+  "note": "",
+  "prompt": "A victory illustration for a strategy game: morning sun over a quiet river crossing after a hard-won campaign. A small fort on the bank with its gate open, bateaux and canoes drawn up together at the landing, and people trading and talking. Hopeful and warm. No visible flags, so it works for every faction.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "K-07",
+  "name": "Defeat",
+  "priority": "P2",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0",
+  "note": "",
+  "prompt": "A defeat illustration for a strategy game: a grey, rainy dusk over an abandoned riverside outpost. A broken canoe on the bank, a smouldering palisade, and a lone figure walking away along the shore. Sombre but not gory. No visible flags.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "TE-01",
+  "name": "English town, fully built",
+  "priority": "P2",
+  "size": "1536×1024 landscape",
+  "background": "Full scene",
+  "refs": "A0",
+  "note": "",
+  "prompt": "An illustrated town screen for a strategy game: a fully built English colonial port town around 1700 on an autumn day, seen from an elevated 3/4 view, with a harbor on the right side. Clapboard houses with steep shingled roofs, a brick meetinghouse with a white steeple at the back centre, a market square with stalls, a timber shipyard with a sloop on the slipway, a blacksmith and iron foundry with smoke, fenced farm fields at the front left, and an earthwork fort with cannon at the back left. Each building in its own clear spot. No flags or signs.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nComposition: a full-bleed illustrated scene that fills the whole frame edge to edge, with no vignette or border."
+ },
+ {
+  "id": "U-EN-01",
+  "name": "English Line Infantry",
+  "priority": "P2",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1",
+  "note": "",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: two English regular soldiers of around 1700 in red coats with blue cuffs, broad-brimmed hats turned up into tricornes, buff belts and flintlock muskets with plug bayonets. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: firing a volley side by side; (3) reloading in drill order; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ },
+ {
+  "id": "U-EN-02",
+  "name": "English Colonial Militia",
+  "priority": "P2",
+  "size": "1536×1024 landscape",
+  "background": "Cut-out sheet",
+  "refs": "A0, R1",
+  "note": "",
+  "prompt": "A battle sprite sheet for one unit type in a turn-based hex strategy game. The unit: two New England militiamen of around 1700 in plain brown and grey civilian coats, felt hats and buckled shoes, carrying a mix of fowling pieces and muskets. Show the same figures four times in a single row from left to right, evenly spaced, as four poses: (1) ready and standing; (2) attacking: firing raggedly; (3) reloading; (4) defeated, lying or kneeling on the ground with no blood or gore. Every pose faces right. Keep the scale, costume and faces identical across all four poses, with the feet resting on the same baseline. Figures are full-body and fill most of the image height.\nArt style: hand-crafted pixel-art illustration that matches the attached Rivers & Crowns references: crisp visible pixels with painterly shading, clean dark outlines, a warm autumn palette (maple reds, ambers, golden yellows, deep pine greens, clear river blues, warm earth browns). Soft daylight from the upper left, with shadows falling to the lower right. Camera: a 3/4 overhead view looking down at about 45 degrees, the same angle for every asset in the game. The setting is a historically grounded northeastern North America around the year 1700, with no fantasy elements. Do not include any text, letters, numbers, logos, watermarks, UI elements, frames or borders.\nBackground: fully transparent PNG. If you can't make it transparent, use one flat, even parchment colour (#F0E2C0) with no texture, gradient or vignette. Give each object only a soft contact shadow directly beneath it. Leave generous empty space between objects so each one can be cut out cleanly, and keep every object at a consistent scale."
+ }
+]

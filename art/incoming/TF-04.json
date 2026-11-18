@@ -1,0 +1,13 @@
+{
+ "id": "TF-04",
+ "model": "google/gemini-nano-banana-2.1",
+ "aspect_ratio": "16:9",
+ "refs": "Your TF-01 image",
+ "cost": 0.054921,
+ "seconds": 20,
+ "size": [
+  2752,
+  1536
+ ],
+ "extra_prompt": "Important: change ONLY the wharf on the riverbank at the far right. The long log Voyageur Lodge with canoes in the bottom centre of the image must stay exactly as it is, and nothing may be built on top of it or in front of it."
+}

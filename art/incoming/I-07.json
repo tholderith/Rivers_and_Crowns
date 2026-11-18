@@ -1,0 +1,13 @@
+{
+ "id": "I-07",
+ "model": "openai/gpt-image-2.6-flare",
+ "aspect_ratio": "1:1",
+ "refs": "R2",
+ "cost": 0.057668,
+ "seconds": 10,
+ "size": [
+  1024,
+  1024
+ ],
+ "extra_prompt": ""
+}

@@ -1,0 +1,88 @@
+{
+ "base": "base.webp",
+ "size": [
+  1920,
+  1072
+ ],
+ "draw_order": [
+  "palisade",
+  "hunting_camp",
+  "family_longhouses",
+  "trade_house",
+  "storehouse",
+  "three_sisters_fields",
+  "canoe_landing",
+  "townsfolk"
+ ],
+ "layers": {
+  "family_longhouses": {
+   "left": 0.04324,
+   "top": 0.29818,
+   "width": 0.39971,
+   "height": 0.30469
+  },
+  "storehouse": {
+   "left": 0.43641,
+   "top": 0.48372,
+   "width": 0.14026,
+   "height": 0.24479
+  },
+  "trade_house": {
+   "left": 0.6032,
+   "top": 0.35221,
+   "width": 0.23001,
+   "height": 0.2806
+  },
+  "hunting_camp": {
+   "left": 0.69295,
+   "top": 0.23372,
+   "width": 0.26999,
+   "height": 0.26693
+  },
+  "canoe_landing": {
+   "left": 0.71984,
+   "top": 0.6224,
+   "width": 0.25945,
+   "height": 0.37695
+  },
+  "three_sisters_fields": {
+   "left": 0.00036,
+   "top": 0.55729,
+   "width": 0.46621,
+   "height": 0.44206
+  },
+  "palisade": {
+   "left": 0.00036,
+   "top": 0.10156,
+   "width": 0.72129,
+   "height": 0.25065
+  },
+  "townsfolk": {
+   "left": 0.02798,
+   "top": 0.06771,
+   "width": 0.69731,
+   "height": 0.85938
+  },
+  "fortified_palisade": {
+   "left": 0.00036,
+   "top": 0.03516,
+   "width": 0.72311,
+   "height": 0.33464,
+   "replaces": "palisade"
+  },
+  "great_trade_house": {
+   "left": 0.57994,
+   "top": 0.33398,
+   "width": 0.31977,
+   "height": 0.33594,
+   "replaces": "trade_house"
+  },
+  "gunsmith_forge": {
+   "left": 0.57994,
+   "top": 0.33398,
+   "width": 0.18278,
+   "height": 0.38281,
+   "adds_to": "trade_house"
+  }
+ }
+}

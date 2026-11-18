@@ -1,0 +1,95 @@
+{
+ "base": "base.webp",
+ "size": [
+  1920,
+  1072
+ ],
+ "draw_order": [
+  "palisade",
+  "watchtower",
+  "barracks",
+  "sawmill",
+  "artillery",
+  "wharf",
+  "warehouse",
+  "lodge",
+  "townsfolk"
+ ],
+ "layers": {
+  "watchtower": {
+   "left": 0.09993,
+   "top": 0.01823,
+   "width": 0.07994,
+   "height": 0.24414
+  },
+  "barracks": {
+   "left": 0.06977,
+   "top": 0.26823,
+   "width": 0.1835,
+   "height": 0.32878
+  },
+  "artillery": {
+   "left": 0.24637,
+   "top": 0.45378,
+   "width": 0.26672,
+   "height": 0.26888
+  },
+  "warehouse": {
+   "left": 0.11991,
+   "top": 0.61849,
+   "width": 0.19658,
+   "height": 0.29492
+  },
+  "sawmill": {
+   "left": 0.56286,
+   "top": 0.31315,
+   "width": 0.26635,
+   "height": 0.33789
+  },
+  "lodge": {
+   "left": 0.47965,
+   "top": 0.64518,
+   "width": 0.21003,
+   "height": 0.29818
+  },
+  "wharf": {
+   "left": 0.75654,
+   "top": 0.53646,
+   "width": 0.21185,
+   "height": 0.27539
+  },
+  "palisade": {
+   "left": 0.00036,
+   "top": 0.11719,
+   "width": 0.71584,
+   "height": 0.78646
+  },
+  "townsfolk": {
+   "left": 0.08648,
+   "top": 0.25651,
+   "width": 0.80596,
+   "height": 0.74284
+  },
+  "stone_rampart": {
+   "left": 0.00036,
+   "top": 0.11589,
+   "width": 0.72674,
+   "height": 0.7832,
+   "replaces": "palisade"
+  },
+  "commercial_harbor": {
+   "left": 0.73328,
+   "top": 0.40625,
+   "width": 0.25763,
+   "height": 0.48047,
+   "replaces": "wharf"
+  },
+  "military_dock": {
+   "left": 0.73328,
+   "top": 0.42383,
+   "width": 0.2351,
+   "height": 0.5319,
+   "replaces": "wharf"
+  }
+ }
+}
