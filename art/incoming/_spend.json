@@ -467,6 +467,46 @@
    "id": "L-09-walk-haudenosaunee",
    "model": "google/gemini-nano-banana-2.1",
    "cost": 0.063351
+  },
+  {
+   "id": "hero-idle-sheet",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0722655
+  },
+  {
+   "id": "walk-sheet-fr-antoine",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0606705
+  },
+  {
+   "id": "walk-sheet-hd-clanmother",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0647925
+  },
+  {
+   "id": "walk-sheet-hd-clanmother-r2",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.065343
+  },
+  {
+   "id": "walk-sheet-fr-jb",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0638175
+  },
+  {
+   "id": "walk-sheet-fr-jb-r2",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0650775
+  },
+  {
+   "id": "walk-sheet-hd-pathfinder",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.060756
+  },
+  {
+   "id": "skill-icons-sheet",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.057987
   }
  ]
 }
