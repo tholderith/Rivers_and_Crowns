@@ -153,7 +153,22 @@ export function stepCost(st: WorldState, faction: string, to: Tile, diagonal: bo
   return c;
 }
 
-export const objectAt = (st: WorldState, t: Tile) => st.objects.find(o => !o.gone && sameTile(o.tile, t));
+/** The tiles a town covers: 6 wide x 4 tall, the entrance (the town's own tile) at the bottom centre, excluded. */
+export function townFootprint(o: WObject): Tile[] {
+  const out: Tile[] = [];
+  for (let r = o.tile[1] - 3; r <= o.tile[1]; r++) for (let c = o.tile[0] - 3; c <= o.tile[0] + 2; c++) {
+    if (c !== o.tile[0] || r !== o.tile[1]) out.push([c, r]);
+  }
+  return out;
+}
+const inFootprint = (o: WObject, t: Tile) => t[0] >= o.tile[0] - 3 && t[0] <= o.tile[0] + 2 && t[1] >= o.tile[1] - 3 && t[1] <= o.tile[1] && !sameTile(o.tile, t);
+const towns = (st: WorldState) => st.objects.filter(o => o.type === 'town' && !o.gone);
+/** The town whose footprint (not entrance) covers this tile. */
+const footprintTown = (st: WorldState, t: Tile) => towns(st).find(o => inFootprint(o, t));
+/** The object standing exactly on this tile (a town's entrance counts, its footprint does not). */
+const objectOn = (st: WorldState, t: Tile) => st.objects.find(o => !o.gone && sameTile(o.tile, t));
+/** The object at a tile; any tile of a town's footprint returns the town (for tooltips). */
+export const objectAt = (st: WorldState, t: Tile) => objectOn(st, t) ?? footprintTown(st, t);
 const heroAt = (st: WorldState, t: Tile, except?: number) => st.players.findIndex((p, i) => i !== except && !p.hero.defeated && sameTile(p.hero.tile, t));
 /** Guards standing next to this tile; stepping here starts a fight. */
 export const guardsNear = (st: WorldState, t: Tile) => st.objects.filter(o => o.type === 'guard' && !o.gone && cheb(o.tile, t) <= 1);
@@ -161,7 +176,10 @@ export const guardsNear = (st: WorldState, t: Tile) => st.objects.filter(o => o.
 /** Cheapest path for a player's hero to a tile, or null. Objects and guard zones can only be the last step. */
 export function findPath(st: WorldState, p: number, goal: Tile): { path: Tile[]; cost: number[] } | null {
   const hero = st.players[p].hero;
-  if (!inMap(goal) || sameTile(goal, hero.tile)) return null;
+  if (!inMap(goal)) return null;
+  const fpTown = footprintTown(st, goal);
+  if (fpTown) goal = fpTown.tile; // aiming at the body of a town means heading for its gate
+  if (sameTile(goal, hero.tile)) return null;
   const faction = st.players[p].faction;
   const dist = new Map<string, number>([[k(hero.tile), 0]]);
   const prev = new Map<string, Tile>();
@@ -172,14 +190,14 @@ export function findPath(st: WorldState, p: number, goal: Tile): { path: Tile[];
     const cur = open.splice(bi, 1)[0];
     if (sameTile(cur, goal)) break;
     const start = sameTile(cur, hero.tile);
-    if (!start && (objectAt(st, cur) || heroAt(st, cur, p) >= 0)) continue;
+    if (!start && (objectOn(st, cur) || heroAt(st, cur, p) >= 0)) continue;
     // inside a guard's zone you can only step onto the guard itself (to attack it)
     const zone = !start && guardsNear(st, cur).length > 0;
     for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
       if (!dx && !dy) continue;
       const n: Tile = [cur[0] + dx, cur[1] + dy];
-      if (!inMap(n)) continue;
-      if (zone && !(sameTile(n, goal) && objectAt(st, n)?.type === 'guard')) continue;
+      if (!inMap(n) || footprintTown(st, n)) continue;
+      if (zone && !(sameTile(n, goal) && objectOn(st, n)?.type === 'guard')) continue;
       const c = stepCost(st, faction, n, !!(dx && dy));
       if (!isFinite(c)) continue;
       const nd = dist.get(k(cur))! + c;
@@ -226,8 +244,8 @@ export function moveHero(st: WorldState, path: Tile[]): WorldEvent[] {
   for (const t of path) {
     const diag = Math.abs(t[0] - hero.tile[0]) + Math.abs(t[1] - hero.tile[1]) === 2;
     const c = stepCost(st, pl.faction, t, diag);
-    if (c > hero.mp) break;
-    const obj = objectAt(st, t);
+    if (c > hero.mp || footprintTown(st, t)) break;
+    const obj = objectOn(st, t);
     const other = heroAt(st, t, p);
     if (other >= 0) { hero.mp -= c; st.encounter = { kind: 'hero', player: other }; events.push({ type: 'encounter', player: p, encounter: st.encounter }); break; }
     if (obj && obj.type === 'guard') { hero.mp -= c; st.encounter = { kind: 'guard', object: obj.id }; events.push({ type: 'encounter', player: p, encounter: st.encounter }); break; }
@@ -279,7 +297,7 @@ export function encounterArmies(st: WorldState): { defenderName: string; defende
   }
   const o = st.objects.find(x => x.id === e.object)!;
   if (e.kind === 'town') {
-    const army = (o.army ?? GARRISON[o.faction!]).map(a => ({ ...a }));
+    const army = garrisonOf(o).map(a => ({ ...a }));
     if (o.built?.includes('artillery') && !army.some(a => a.unit === 'U-FR-05')) army.push({ unit: 'U-FR-05', count: 1 });
     return { defenderName: o.name!, defenderFaction: o.faction!, army, terrain: '.' };
   }
@@ -307,7 +325,7 @@ export function resolveBattle(st: WorldState, attackerWon: boolean, attackerSurv
       st.log.push(`${pl.name} capture ${o.name}!`);
       st.winner = p;
       events.push({ type: 'win', player: p });
-    } else { o.army = (o.army ?? GARRISON[o.faction!]).map((a, i) => ({ ...a, count: defenderSurvivors[i] ?? a.count })).filter(a => a.count > 0); }
+    } else { o.army = garrisonOf(o).map((a, i) => ({ ...a, count: defenderSurvivors[i] ?? a.count })).filter(a => a.count > 0); }
   } else {
     const d = st.players[e.player];
     if (attackerWon) defeatHero(st, e.player);
@@ -390,23 +408,54 @@ export function moveBonus(st: WorldState, p: number): number {
   return st.objects.filter(o => o.type === 'town' && o.owner === p).reduce((n, o) => n + townDefs(o).reduce((m, b) => m + (b.move ?? 0), 0), 0);
 }
 
-/** The town a player's hero is standing next to, if it is theirs. */
+/** The town garrison, initialised from the starting garrison the first time it is touched. */
+export function garrisonOf(o: WObject): ArmyStack[] {
+  if (!o.army) o.army = GARRISON[o.faction!].map(a => ({ ...a }));
+  return o.army;
+}
+export const MAX_STACKS = 7;
+
+/** The town of this player whose gate their hero is standing on or next to, if any. */
 export function townHere(st: WorldState, p: number): WObject | undefined {
   const h = st.players[p].hero;
+  if (h.defeated) return undefined;
   return st.objects.find(o => o.type === 'town' && o.owner === p && cheb(o.tile, h.tile) <= 1);
 }
 
-export function recruit(st: WorldState, unit: string, n: number): boolean {
-  const p = st.turn, pl = st.players[p], town = townHere(st, p);
-  if (!town || !town.stock || n <= 0) return false;
+/** Buy units from a town's weekly stock into its garrison. The hero need not be there. */
+export function recruit(st: WorldState, townId: string, unit: string, n: number): boolean {
+  const p = st.turn, pl = st.players[p];
+  const town = st.objects.find(o => o.id === townId);
+  if (!town || town.type !== 'town' || town.owner !== p || !town.stock || !Number.isInteger(n) || n <= 0) return false;
   const have = town.stock[unit] ?? 0, cost = unitCost(unit) * n;
   if (n > have || cost > pl.resources.coin) return false;
-  const slot = pl.hero.army.find(a => a.unit === unit);
-  if (!slot && pl.hero.army.length >= 7) return false;
+  const garrison = garrisonOf(town);
+  const slot = garrison.find(a => a.unit === unit);
+  if (!slot && garrison.length >= MAX_STACKS) return false;
   town.stock[unit] = have - n;
   pl.resources.coin -= cost;
-  if (slot) slot.count += n; else pl.hero.army.push({ unit, count: n });
-  st.log.push(`${pl.name} recruit ${n} ${UNITS[unit].name}.`);
+  if (slot) slot.count += n; else garrison.push({ unit, count: n });
+  st.log.push(`${pl.name} recruit ${n} ${UNITS[unit].name} at ${town.name}.`);
+  return true;
+}
+
+/** Move troops between a town's garrison and the hero's army. Needs the hero at the gate. */
+export function transfer(st: WorldState, townId: string, from: 'garrison' | 'hero', index: number, count: number): boolean {
+  const p = st.turn;
+  const town = st.objects.find(o => o.id === townId);
+  if (!town || town.type !== 'town' || town.owner !== p || townHere(st, p) !== town) return false;
+  const hero = st.players[p].hero;
+  const garrison = garrisonOf(town);
+  const src = from === 'garrison' ? garrison : hero.army;
+  const dst = from === 'garrison' ? hero.army : garrison;
+  const stack = src[index];
+  if (!stack || !Number.isInteger(count) || count <= 0 || count > stack.count) return false;
+  const slot = dst.find(a => a.unit === stack.unit);
+  if (!slot && dst.length >= MAX_STACKS) return false;
+  if (from === 'hero' && src.reduce((n, a) => n + a.count, 0) - count <= 0) return false; // the hero keeps an army
+  if (slot) slot.count += count; else dst.push({ unit: stack.unit, count });
+  stack.count -= count;
+  if (stack.count === 0) src.splice(index, 1);
   return true;
 }
 
@@ -428,9 +477,6 @@ export function endTurn(st: WorldState): WorldEvent[] {
     });
     events.push({ type: 'day', day: st.day, income });
     if (dayOfWeek(st.day) === 1) {
-      for (const o of st.objects) if (o.type === 'town') {
-        o.army = (o.army ?? GARRISON[o.faction!]).map(a => ({ ...a, count: Math.ceil(a.count * 1.15) }));
-      }
       for (const o of st.objects) if (o.type === 'town' && o.stock) {
         const bonus = 1 + townDefs(o).reduce((n, b) => n + (b.growth ?? 0), 0);
         for (const u of available(o)) o.stock[u] = (o.stock[u] ?? 0) + Math.round(GROWTH[o.faction!][u] * bonus);
@@ -482,16 +528,16 @@ export function aiTarget(st: WorldState): Tile | null {
     else if (o.type === 'mine' && o.owner !== p) consider(o.tile, o.kind === 'coin' ? 70 : 45);
     else if (o.type === 'tower' && !isExplored(st, p, [o.tile[0] + 6, o.tile[1]])) consider(o.tile, 12);
     else if (o.type === 'guard' && power > armyPower(o.army!) * 1.6) consider(o.tile, 25);
-    else if (o.type === 'town' && o.owner !== p && power > armyPower(o.army ?? GARRISON[o.faction!]) * 1.4) consider(o.tile, 400);
+    else if (o.type === 'town' && o.owner !== p && power > armyPower(garrisonOf(o)) * 1.4) consider(o.tile, 400);
   }
   st.players.forEach((other, i) => {
     if (i !== p && !other.hero.defeated && power > armyPower(other.hero.army) * 1.4) consider(other.hero.tile, 120);
   });
-  // go home to spend money on recruits
-  const home = st.objects.find(o => o.type === 'town' && o.owner === p && o.stock);
+  // go home to collect troops when the garrison holds a meaningful army
+  const home = st.objects.find(o => o.type === 'town' && o.owner === p);
   if (home && cheb(home.tile, hero.tile) > 1) {
-    const buyable = Object.entries(home.stock!).reduce((n, [u, c]) => n + Math.min(c, Math.floor(pl.resources.coin / unitCost(u))) * UNITS[u].hp, 0);
-    if (buyable > 60) consider(hero.home, Math.min(200, buyable / 3));
+    const spare = armyPower(garrisonToCollect(home));
+    if (spare > 0 && spare >= power * 0.25) consider(home.tile, Math.min(250, 60 + (100 * spare) / Math.max(1, power)));
   }
   return best ? (best as { t: Tile }).t : null;
 }
@@ -503,20 +549,50 @@ const AI_BUILD_ORDER: Record<string, string[]> = {
   haudenosaunee: ['three_sisters_fields', 'family_longhouses', 'trade_house', 'gunsmith_forge', 'storehouse', 'canoe_landing', 'fortified_palisade'],
 };
 
-/** The AI builds the first thing it can afford from its plan, then recruits if its hero is home. */
+/** Garrison stacks the AI would hand to its hero: everything but the weakest stack. */
+function garrisonToCollect(o: WObject): ArmyStack[] {
+  const g = garrisonOf(o);
+  if (g.length < 2) return [];
+  const weakest = weakestIndex(g);
+  return g.filter((_, i) => i !== weakest);
+}
+const stackPower = (a: ArmyStack) => armyPower([a]);
+function weakestIndex(g: ArmyStack[]): number {
+  let w = 0;
+  for (let i = 1; i < g.length; i++) if (stackPower(g[i]) < stackPower(g[w])) w = i;
+  return w;
+}
+
+/** The AI builds what it can from its plan, recruits into each garrison, and arms its hero if it is at the gate. */
 export function aiManageTowns(st: WorldState) {
   const p = st.turn;
   for (const o of st.objects) {
     if (o.type !== 'town' || o.owner !== p) continue;
     const next = (AI_BUILD_ORDER[o.faction!] ?? []).find(id => !cannotBuild(st, o.id, id));
     if (next) build(st, o.id, next);
+    if (o.stock) {
+      const units = Object.keys(o.stock).sort((a, b) => UNITS[b].tier - UNITS[a].tier);
+      for (const u of units) {
+        const n = Math.min(o.stock[u], Math.floor(st.players[p].resources.coin / unitCost(u)));
+        if (n > 0) recruit(st, o.id, u, n);
+      }
+    }
   }
   const town = townHere(st, p);
-  if (town?.stock) {
-    const units = Object.keys(town.stock).sort((a, b) => UNITS[b].tier - UNITS[a].tier);
-    for (const u of units) {
-      const n = Math.min(town.stock[u], Math.floor(st.players[p].resources.coin / unitCost(u)));
-      if (n > 0) recruit(st, u, n);
+  if (town) {
+    const g = garrisonOf(town);
+    const skip = new Set<string>();
+    // strongest first, always leaving the weakest stack behind
+    for (let guard = 0; guard < 2 * MAX_STACKS && g.length > 1; guard++) {
+      const weakest = weakestIndex(g);
+      let best = -1;
+      for (let i = 0; i < g.length; i++) {
+        if (i === weakest || skip.has(g[i].unit)) continue;
+        if (best < 0 || stackPower(g[i]) > stackPower(g[best])) best = i;
+      }
+      if (best < 0) break;
+      const unit = g[best].unit;
+      if (!transfer(st, town.id, 'garrison', best, g[best].count)) skip.add(unit);
     }
   }
 }

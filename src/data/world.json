@@ -37,7 +37,7 @@
    "faction": "french",
    "name": "Fort Saint-Laurent",
    "tile": [
-    4,
+    5,
     12
    ],
    "sprite": "L-01/L-01-01",
@@ -64,8 +64,8 @@
     "timber": 2
    },
    "tile": [
-    6,
-    9
+    11,
+    10
    ],
    "sprite": "L-04/L-04-01"
   },
@@ -327,7 +327,7 @@
     "sprite": "L-09/L-09-01",
     "tile": [
      5,
-     12
+     13
     ],
     "attack": 1,
     "defense": 1,
@@ -367,8 +367,8 @@
     "portrait": "H-HD-02",
     "sprite": "L-09/L-09-03",
     "tile": [
-     35,
-     13
+     36,
+     14
     ],
     "attack": 1,
     "defense": 1,

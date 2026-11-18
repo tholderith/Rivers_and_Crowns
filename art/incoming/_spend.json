@@ -447,6 +447,26 @@
    "id": "I-05",
    "model": "google/gemini-nano-banana-2.1",
    "cost": 0.064557
+  },
+  {
+   "id": "L-09-walk-french",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.06276
+  },
+  {
+   "id": "L-09-walk-haudenosaunee",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.0628215
+  },
+  {
+   "id": "L-09-walk-french",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.063288
+  },
+  {
+   "id": "L-09-walk-haudenosaunee",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.063351
   }
  ]
 }

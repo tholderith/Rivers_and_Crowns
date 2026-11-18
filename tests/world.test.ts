@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  aiTarget, build, cannotBuild, createWorld, endTurn, findPath, guardsNear, moveHero, recruit, resolveBattle, terrainAt, townHere, type Tile, type WorldState,
+  aiTarget, build, cannotBuild, createWorld, endTurn, findPath, guardsNear, moveHero, objectAt, recruit, resolveBattle, terrainAt, townFootprint, townHere, transfer, type Tile, type WorldState,
 } from '../src/sim/world';
 
 const teleport = (st: WorldState, p: number, t: Tile) => { st.players[p].hero.tile = t; };
@@ -53,15 +53,63 @@ describe('adventure map', () => {
     expect(st.players[0].resources.coin).toBe(coin + 500); // the town
   });
 
-  it('recruiting needs the hero at home and enough coin', () => {
+  it('recruiting goes into the garrison and needs coin and stock', () => {
     const st = createWorld();
-    expect(townHere(st, 0)).toBeDefined();
+    const town = st.objects.find(o => o.id === 'town-fr')!;
     const coin = st.players[0].resources.coin;
-    expect(recruit(st, 'U-FR-01', 5)).toBe(true);
+    expect(recruit(st, 'town-fr', 'U-FR-01', 5)).toBe(true);
     expect(st.players[0].resources.coin).toBe(coin - 150);
-    expect(recruit(st, 'U-FR-05', 99)).toBe(false);
-    teleport(st, 0, [20, 2]);
-    expect(recruit(st, 'U-FR-01', 1)).toBe(false);
+    expect(town.army!.find(a => a.unit === 'U-FR-01')!.count).toBe(35);
+    expect(recruit(st, 'town-fr', 'U-FR-05', 99)).toBe(false);
+  });
+
+  it('town footprints block movement; only the entrance can be entered', () => {
+    const st = createWorld();
+    st.objects = st.objects.filter(o => o.type === 'town');
+    const town = st.objects.find(o => o.id === 'town-fr')!;
+    const fp = townFootprint(town);
+    expect(fp.length).toBe(23);
+    expect(fp.some(t => t[0] === town.tile[0] && t[1] === town.tile[1])).toBe(false);
+    for (const t of fp) expect(objectAt(st, t)).toBe(town);
+    expect(objectAt(st, town.tile)).toBe(town);
+    st.players[0].hero.mp = 99999;
+    const around = findPath(st, 0, [town.tile[0], town.tile[1] - 5])!;
+    expect(around).not.toBeNull();
+    expect(around.path.some(t => fp.some(f => f[0] === t[0] && f[1] === t[1]))).toBe(false);
+    // aiming at the body of the town heads for the gate instead
+    expect(findPath(st, 0, fp[0])!.path.at(-1)).toEqual(town.tile);
+    // a hand-made path through the footprint is refused
+    teleport(st, 0, [town.tile[0], town.tile[1] + 1]);
+    const hero = st.players[0].hero;
+    moveHero(st, [[town.tile[0], town.tile[1] - 1]]);
+    expect(hero.tile).toEqual([town.tile[0], town.tile[1] + 1]);
+    // the entrance is enterable: visiting an own town; attacking an enemy one
+    expect(moveHero(st, [town.tile]).some(e => e.type === 'town')).toBe(true);
+    town.owner = 1;
+    expect(moveHero(st, [town.tile]).some(e => e.type === 'encounter')).toBe(true);
+    expect(st.encounter).toEqual({ kind: 'town', object: 'town-fr' });
+  });
+
+  it('towns and hero starts sit on clear land', () => {
+    const st = createWorld();
+    for (const town of st.objects.filter(o => o.type === 'town')) {
+      for (const t of [town.tile, ...townFootprint(town)]) {
+        expect('.f').toContain(terrainAt(st, t));
+        expect(st.objects.filter(o => o !== town && o.tile[0] === t[0] && o.tile[1] === t[1])).toEqual([]);
+      }
+    }
+    st.players.forEach((p, i) => {
+      const gate = st.objects.find(o => o.type === 'town' && o.owner === i)!;
+      expect(townHere(st, i)).toBe(gate);
+      expect(townFootprint(gate).some(t => t[0] === p.hero.tile[0] && t[1] === p.hero.tile[1])).toBe(false);
+    });
+  });
+
+  it('both gates can be reached from the other side of the map', () => {
+    const st = createWorld();
+    st.objects = st.objects.filter(o => o.type !== 'guard');
+    st.players[0].hero.mp = 99999;
+    expect(findPath(st, 0, st.objects.find(o => o.id === 'town-hd')!.tile)).not.toBeNull();
   });
 
   it('the map AI makes the same choices from the same position', () => {
@@ -107,9 +155,9 @@ describe('towns', () => {
 
   it('dwellings unlock recruits and buildings pay income', () => {
     const st = createWorld(); rich(st);
-    expect(recruit(st, 'U-FR-03', 1)).toBe(false);
+    expect(recruit(st, 'town-fr', 'U-FR-03', 1)).toBe(false);
     build(st, 'town-fr', 'barracks');
-    expect(recruit(st, 'U-FR-03', 1)).toBe(true);
+    expect(recruit(st, 'town-fr', 'U-FR-03', 1)).toBe(true);
     endTurn(st); endTurn(st);
     build(st, 'town-fr', 'sawmill');
     const timber = st.players[0].resources.timber;
@@ -122,5 +170,67 @@ describe('towns', () => {
     build(st, 'town-fr', 'wharf'); endTurn(st); endTurn(st);
     build(st, 'town-fr', 'military_dock'); endTurn(st); endTurn(st);
     expect(st.players[0].hero.mp).toBe(st.players[0].hero.mpMax + 50);
+  });
+});
+
+describe('garrisons', () => {
+  const rich = (st: WorldState) => { st.players[0].resources = { coin: 99999, timber: 999, iron: 999, provisions: 999 }; };
+
+  it('building works with the hero far away', () => {
+    const st = createWorld(); rich(st);
+    teleport(st, 0, [20, 2]);
+    expect(townHere(st, 0)).toBeUndefined();
+    expect(cannotBuild(st, 'town-fr', 'barracks')).toBe('');
+    expect(build(st, 'town-fr', 'barracks')).toBe(true);
+  });
+
+  it('recruiting with the hero far away fills the garrison, not the hero', () => {
+    const st = createWorld(); rich(st);
+    teleport(st, 0, [20, 2]);
+    const heroArmy = JSON.stringify(st.players[0].hero.army);
+    expect(recruit(st, 'town-fr', 'U-FR-01', 3)).toBe(true);
+    expect(JSON.stringify(st.players[0].hero.army)).toBe(heroArmy);
+    expect(st.objects.find(o => o.id === 'town-fr')!.army!.find(a => a.unit === 'U-FR-01')!.count).toBe(33);
+    expect(recruit(st, 'town-hd', 'U-HD-01', 1)).toBe(false); // not your town
+  });
+
+  it('transfer needs the hero at the gate', () => {
+    const st = createWorld();
+    const town = st.objects.find(o => o.id === 'town-fr')!;
+    teleport(st, 0, [20, 2]);
+    expect(transfer(st, 'town-fr', 'garrison', 0, 5)).toBe(false);
+    teleport(st, 0, [town.tile[0] + 1, town.tile[1] + 1]);
+    const heroBefore = st.players[0].hero.army.find(a => a.unit === 'U-FR-01')!.count;
+    expect(transfer(st, 'town-fr', 'garrison', 0, 5)).toBe(true); // merges into the hero's U-FR-01
+    expect(st.players[0].hero.army.find(a => a.unit === 'U-FR-01')!.count).toBe(heroBefore + 5);
+    expect(town.army![0].count).toBe(25);
+    expect(transfer(st, 'town-fr', 'garrison', 0, 999)).toBe(false);
+    expect(transfer(st, 'town-fr', 'hero', 0, 5)).toBe(true);
+    expect(town.army![0].count).toBe(30);
+  });
+
+  it('stack limits and the hero keeping an army', () => {
+    const st = createWorld(); rich(st);
+    const town = st.objects.find(o => o.id === 'town-fr')!, hero = st.players[0].hero;
+    teleport(st, 0, [town.tile[0], town.tile[1] + 1]);
+    town.army = ['U-FR-01', 'U-FR-02', 'U-FR-03', 'U-FR-04', 'U-FR-05', 'U-HD-01', 'U-HD-02'].map(unit => ({ unit, count: 3 }));
+    expect(recruit(st, 'town-fr', 'U-FR-01', 1)).toBe(true); // merges even when full
+    expect(town.army.length).toBe(7);
+    town.stock!['U-NE-01'] = 5;
+    expect(recruit(st, 'town-fr', 'U-NE-01', 1)).toBe(false); // an eighth stack
+    hero.army = ['U-FR-01', 'U-FR-02', 'U-FR-03', 'U-FR-04', 'U-FR-05', 'U-HD-03', 'U-HD-04'].map(unit => ({ unit, count: 2 }));
+    expect(transfer(st, 'town-fr', 'garrison', 5, 1)).toBe(false); // hero is full, new unit
+    expect(transfer(st, 'town-fr', 'garrison', 0, 1)).toBe(true); // merge is fine
+    hero.army = [{ unit: 'U-FR-01', count: 4 }];
+    expect(transfer(st, 'town-fr', 'hero', 0, 4)).toBe(false); // the hero must keep an army
+    expect(transfer(st, 'town-fr', 'hero', 0, 3)).toBe(true);
+    expect(hero.army).toEqual([{ unit: 'U-FR-01', count: 1 }]);
+  });
+
+  it('garrisons no longer grow by themselves', () => {
+    const st = createWorld();
+    for (let i = 0; i < 16; i++) endTurn(st);
+    const town = st.objects.find(o => o.id === 'town-fr')!;
+    expect(town.army).toBeUndefined();
   });
 });

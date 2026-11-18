@@ -219,9 +219,10 @@ function onHover(h: Hex | null, x: number, y: number) {
   const it = h && isHumanTurn() && !busy ? intent(h, x, y) : null;
   if (it) {
     const rect = (view.app.canvas as HTMLCanvasElement).getBoundingClientRect();
+    const field = tip.parentElement!.getBoundingClientRect();
     const k = rect.width / 1600;
-    tip.style.left = `${x * k}px`;
-    tip.style.top = `${y * k}px`;
+    tip.style.left = `${rect.left - field.left + x * k}px`;
+    tip.style.top = `${rect.top - field.top + y * k}px`;
     tip.innerHTML = `${it.label}${it.detail ? `<small>${it.detail}</small>` : ''}`;
     tip.hidden = false;
   } else tip.hidden = true;

@@ -4,6 +4,7 @@
 import {
   type Tile, type WorldEvent, type WorldState, RESOURCES, aiTarget, createWorld, dayOfWeek, encounterArmies, endTurn,
   findPath, guardsNear, isExplored, moveHero, objectAt, recruit, resolveBattle, terrainAt, townHere, unitCost, weekOf, armyPower,
+  garrisonOf, transfer, MAX_STACKS,
   BUILDINGS, aiManageTowns, build, cannotBuild, wallsOf, type WObject,
 } from '../sim/world';
 import { type ArmySetup, type BattleState, UNITS, act, begin, createCustomBattle } from '../sim/battle';
@@ -58,6 +59,8 @@ export async function startCampaign(ctrl: [Ctrl, Ctrl], play: PlayBattle, onExit
   await view.init($('mapstage'), world, await loadMapTextures(world));
   view.onHover = onHover;
   view.onClick = onClick;
+  view.attachMinimap($('minimap') as HTMLCanvasElement);
+  view.centerOn(world.players[viewer()].hero.tile, true);
   render();
   if (!humanTurn()) await aiTurn();
 }
@@ -75,19 +78,18 @@ function render() {
   $('mapres').innerHTML = RESOURCES.map(r => `<span title="${r}"><img src="${asset(`sprites/${RES_ICON[r]}.webp`)}" alt="${r}">${me.resources[r].toLocaleString('en-US')}</span>`).join('');
   $('mapday').innerHTML = `<b>Week ${weekOf(world.day)} · Day ${dayOfWeek(world.day)}</b>${pl.name} to move`;
   const h = pl.hero;
-  const town = townHere(world, world.turn);
   $('side').innerHTML = `
     <div class="sidehero"><img src="${asset(`portraits/${h.portrait}/${h.portrait}-01.webp`)}" alt=""><div><b>${h.name}</b><span>${pl.name} · ${control[world.turn] === 'human' ? 'You' : 'AI'}</span></div></div>
     <div class="mpbar" title="Movement left today"><i style="width:${Math.round((h.mp / h.mpMax) * 100)}%"></i><span>Movement ${Math.floor(h.mp / 10)} / ${h.mpMax / 10}</span></div>
     <div class="army">${h.defeated ? '<p class="muted">Beaten. A new band musters at home next turn.</p>' : h.army.map(a => `<div class="slot" title="${UNITS[a.unit].name}"><img src="${poseUrl(a.unit, 'ready')}" alt="${UNITS[a.unit].name}"><b>${a.count}</b></div>`).join('')}</div>
     <div class="sidebtns">
-      <button class="btn" id="btnRecruit" ${humanTurn() && town && !busy ? '' : 'disabled'}>${town ? `Enter ${town.name}` : 'Town (walk home to enter)'}</button>
+      ${world.objects.filter(o => o.type === 'town' && o.owner === world.turn && !o.gone).map(o => `<button class="btn" data-town="${o.id}" ${humanTurn() && !busy ? '' : 'disabled'}>${o.name}${townHere(world, world.turn)?.id === o.id ? ' (hero at the gate)' : ''}</button>`).join('')}
       <button class="btn cmd" id="btnEnd" ${humanTurn() && !busy ? '' : 'disabled'}>End turn</button>
       <button class="btn" id="btnMenu">Main menu</button>
     </div>
     <ol class="log">${world.log.slice(-7).reverse().map(l => `<li>${l}</li>`).join('')}</ol>`;
   $('btnEnd').onclick = () => void nextTurn();
-  $('btnRecruit').onclick = () => void openRecruit();
+  $('side').querySelectorAll<HTMLButtonElement>('[data-town]').forEach(b => b.onclick = () => void openTown(b.dataset.town!));
   $('btnMenu').onclick = () => { $('map').hidden = true; exitToMenu(); };
 }
 
@@ -111,10 +113,9 @@ function onHover(t: Tile | null) {
     if (r) lines.push(`<small>${Math.ceil(r.cost[r.cost.length - 1] / 10)} movement · ${r.cost[r.cost.length - 1] <= world.players[world.turn].hero.mp ? 'reachable today' : 'more than one day'}</small>`);
   }
   tip.innerHTML = lines.join('');
-  const rect = (view.app.canvas as HTMLCanvasElement).getBoundingClientRect();
-  const k = rect.width / (40 * 48);
-  tip.style.left = `${(t[0] * 48 + 24) * k}px`;
-  tip.style.top = `${t[1] * 48 * k}px`;
+  const sp = view.tileToScreen(t);
+  tip.style.left = `${sp.x}px`;
+  tip.style.top = `${sp.y}px`;
   tip.hidden = false;
 }
 
@@ -152,7 +153,8 @@ async function walk(path: Tile[]) {
   render();
   if (world.winner !== null) return finish();
   const town = events.find(e => e.type === 'town');
-  if (town && humanTurn()) void openRecruit();
+  const here = townHere(world, world.turn);
+  if (town && here && humanTurn()) { townTab = 'army'; void openTown(here.id); }
 }
 
 async function animate(p: number, from: Tile, events: WorldEvent[]) {
@@ -172,6 +174,11 @@ async function fight() {
   const p = world.turn, att = world.players[p];
   const e = world.encounter!;
   const d = encounterArmies(world);
+  if (!d.army.some(a => a.count > 0)) { // nobody home: walk in unopposed
+    resolveBattle(world, true, att.hero.army.map(a => a.count), []);
+    view.float('Taken unopposed!', att.hero.tile, 0x8fd07a);
+    return;
+  }
   const left: ArmySetup = { faction: att.faction, name: att.name, hero: { name: att.hero.name, portrait: att.hero.portrait, attack: att.hero.attack, defense: att.hero.defense, command: att.hero.command }, army: att.hero.army };
   let rightHero = { name: d.defenderName, portrait: d.army[0]?.unit ?? '', attack: 0, defense: 0, command: 0 };
   let defenderPlayer: number | null = null;
@@ -248,6 +255,7 @@ async function nextTurn() {
   const hot = control[0] === 'human' && control[1] === 'human';
   render();
   if (hot) await passScreen();
+  if (humanTurn()) view.centerOn(world.players[world.turn].hero.tile);
   if (!humanTurn()) await aiTurn();
 }
 
@@ -274,7 +282,7 @@ function finish() {
 
 // ------------------------------------------------------------------ town screen
 
-let townTab: 'build' | 'recruit' = 'build';
+let townTab: 'build' | 'recruit' | 'army' = 'build';
 const layerCache: Record<string, { size: [number, number]; draw_order: string[]; layers: Record<string, { left: number; top: number; width: number; replaces?: string; adds_to?: string }> }> = {};
 
 async function townLayers(faction: string) {
@@ -309,11 +317,13 @@ async function townPicture(o: WObject): Promise<string> {
   return `<div class="townpic" style="aspect-ratio:${L.size[0]}/${L.size[1]}"><img class="base" src="${asset(`towns/${o.faction}/base.webp`)}" alt="${o.name}">${imgs.join('')}</div>`;
 }
 
-async function openRecruit() {
-  const town = townHere(world, world.turn);
-  if (!town || !town.stock) return;
+
+async function openTown(townId: string) {
+  const town = world.objects.find(o => o.id === townId);
+  if (!town || !town.stock || town.owner !== world.turn) return;
   music.play(town.faction === 'french' ? 'town-french' : 'town-haudenosaunee');
   const pl = world.players[world.turn];
+  const heroHere = townHere(world, world.turn)?.id === townId;
   const el = $('recruit');
   const defs = BUILDINGS[town.faction!].buildings;
   const cost = (c: Partial<Record<string, number>>) => Object.entries(c).map(([r, n]) => `<span class="cost"><img src="${asset(`sprites/${RES_ICON[r]}.webp`)}" alt="${r}">${n}</span>`).join('');
@@ -328,18 +338,33 @@ async function openRecruit() {
     const afford = Math.min(n, Math.floor(pl.resources.coin / c));
     return `<div class="rrow"><img src="${poseUrl(u, 'ready')}" alt=""><div><b>${UNITS[u].name}</b><span>${UNITS[u].job} · ${c} coin each · ${n} available</span></div>
       <button class="btn" data-u="${u}" data-n="1" ${afford >= 1 ? '' : 'disabled'}>+1</button><button class="btn" data-u="${u}" data-n="${afford}" ${afford >= 1 ? '' : 'disabled'}>All (${afford})</button></div>`;
-  }).join('');
+  }).join('') + '<p class="muted">Recruits join the town garrison. Your hero collects them at the gate (Army tab).</p>';
+  const garrison = garrisonOf(town), heroArmy = pl.hero.army;
+  const stackRow = (army: { unit: string; count: number }[], side: 'garrison' | 'hero') => {
+    const slots = army.map((a, i) => {
+      const can = heroHere && !(side === 'hero' && heroArmy.length === 1);
+      return `<div class="aslot"><img src="${poseUrl(a.unit, 'ready')}" alt=""><b>${a.count}</b><span>${UNITS[a.unit].name}</span>
+        <button class="btn" data-x="${side}" data-i="${i}" data-c="${a.count}" ${can ? '' : 'disabled'}>${side === 'garrison' ? 'To hero ↓' : 'To garrison ↑'}</button>
+        ${a.count > 1 ? `<button class="btn" data-x="${side}" data-i="${i}" data-c="${Math.floor(a.count / 2)}" ${heroHere ? '' : 'disabled'}>Half</button>` : ''}</div>`;
+    }).join('');
+    return slots + Array.from({ length: Math.max(0, MAX_STACKS - army.length) }, () => '<div class="aslot empty"></div>').join('');
+  };
+  const armyTab = `<div class="armyrow"><h3>Garrison of ${town.name}</h3><div class="aslots">${stackRow(garrison, 'garrison')}</div></div>
+    <div class="armyrow"><h3>${pl.hero.name}${heroHere ? '' : ' (away)'}</h3><div class="aslots">${pl.hero.defeated ? '' : stackRow(heroArmy, 'hero')}</div></div>
+    <p class="muted">${heroHere ? 'Move troops between the garrison and your hero. The garrison defends the town if it is attacked; an empty town is taken without a fight.' : 'Your hero must be at the town gate to exchange troops.'}</p>`;
   el.innerHTML = `<div class="towncard">
     <div class="townhead"><h2>${town.name}</h2><div class="mapres">${RESOURCES.map(r => `<span><img src="${asset(`sprites/${RES_ICON[r]}.webp`)}" alt="${r}">${pl.resources[r].toLocaleString('en-US')}</span>`).join('')}</div>
       <button class="btn" id="rClose">Back to the map</button></div>
     ${await townPicture(town)}
-    <div class="tabs"><button class="btn${townTab === 'build' ? ' armed' : ''}" data-tab="build">Build</button><button class="btn${townTab === 'recruit' ? ' armed' : ''}" data-tab="recruit">Recruit</button>
+    <div class="tabs">${(['build', 'recruit', 'army'] as const).map(t => `<button class="btn${townTab === t ? ' armed' : ''}" data-tab="${t}">${t === 'build' ? 'Build' : t === 'recruit' ? 'Recruit' : 'Army'}</button>`).join('')}
       <span class="muted">One building a day. New recruits gather each week.</span></div>
-    <div class="tabbody">${townTab === 'build' ? `<div class="bgrid">${buildList}</div>` : recruitList}</div></div>`;
+    <div class="tabbody">${townTab === 'build' ? `<div class="bgrid">${buildList}</div>` : townTab === 'recruit' ? recruitList : armyTab}</div></div>`;
   el.hidden = false;
-  el.querySelectorAll<HTMLButtonElement>('[data-u]').forEach(b => b.onclick = () => { recruit(world, b.dataset.u!, Number(b.dataset.n)); render(); void openRecruit(); });
-  el.querySelectorAll<HTMLButtonElement>('[data-b]').forEach(b => b.onclick = () => { build(world, town.id, b.dataset.b!); render(); void openRecruit(); });
-  el.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach(b => b.onclick = () => { townTab = b.dataset.tab as 'build' | 'recruit'; void openRecruit(); });
+  const again = () => { render(); void openTown(townId); };
+  el.querySelectorAll<HTMLButtonElement>('[data-u]').forEach(b => b.onclick = () => { recruit(world, townId, b.dataset.u!, Number(b.dataset.n)); again(); });
+  el.querySelectorAll<HTMLButtonElement>('[data-b]').forEach(b => b.onclick = () => { build(world, townId, b.dataset.b!); again(); });
+  el.querySelectorAll<HTMLButtonElement>('[data-x]').forEach(b => b.onclick = () => { transfer(world, townId, b.dataset.x as 'garrison' | 'hero', Number(b.dataset.i), Number(b.dataset.c)); again(); });
+  el.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach(b => b.onclick = () => { townTab = b.dataset.tab as typeof townTab; void openTown(townId); });
   $('rClose').onclick = closeRecruit;
 }
 
