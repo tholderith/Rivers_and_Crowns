@@ -74,7 +74,16 @@ TypeScript (seeded dice, no DOM), so a battle replays exactly from its seed and 
 
 ## Status
 
-**M1 combat slice: playable.** A hex battle between New France and the Haudenosaunee, played against
-the AI, hotseat, or AI vs AI. It has fire / reload / maneuver, woods as cover, morale (wavering,
-faltering, inspired), strike-backs, and three hero Command abilities (Rally, Coordinated Volley,
-Fieldworks). In 300 AI-vs-AI battles the sides win 145–155, and a battle lasts about 11 rounds.
+Playable prototype: [play it in the browser](https://claude.ai/artifact/FueUfCZq7Kuejc8hN91gi8).
+
+| Milestone | State |
+|---|---|
+| M1 Combat slice | Done. Hex battles with fire / reload / maneuver, woods as cover, morale, strike-backs, hero Command abilities, a scoring AI. 145–155 over 300 AI-vs-AI battles. |
+| M2 River map | Done. The painted basin as a tile map, where the ford and the portage are the only river crossings. Heroes with movement and pathing, guards, mines with daily income, pickups, lookouts, fog of war, a map AI. |
+| M3 Settlements | Done. Ten buildings per faction drawn onto the town painting as they are built: dwellings, income, movement, sight and walls, plus either/or upgrades. Weekly recruits. |
+| M4 Playable scenario | Mostly done. Capture-the-town victory, hotseat, AI rival. Not yet done: agreements with the independent community, the route-control victory, and multiple heroes per side. |
+
+Known issues: AI-vs-AI campaigns favour New France 45–14, because games hinge on one decisive clash between the heroes. The battle AI doesn't use Fieldworks. Siege walls are drawn as cover, not as wall art.
+
+Test reports: `BALANCE=1 npx vitest run tests/balance.test.ts --reporter=verbose` (battles) and
+`CAMPAIGN=1 GAMES=30 npx vitest run tests/campaign.test.ts --reporter=verbose` (whole campaigns).
