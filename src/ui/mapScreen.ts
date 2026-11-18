@@ -50,7 +50,7 @@ export async function startCampaign(ctrl: [Ctrl, Ctrl], play: PlayBattle, onExit
   control = ctrl;
   playBattle = play;
   exitToMenu = onExit;
-  world = createWorld();
+  world = createWorld(Date.now() % 100000);
   $('map').hidden = false;
   $('mapstage').innerHTML = '';
   view = new MapView();

@@ -77,6 +77,7 @@ export interface PlayerState {
 export type Encounter = { kind: 'guard'; object: string } | { kind: 'town'; object: string } | { kind: 'hero'; player: number };
 
 export interface WorldState {
+  seed: number; // varies the AI's choices between games
   day: number;
   turn: number; // whose turn: player index
   players: PlayerState[];
@@ -106,17 +107,17 @@ const sameTile = (a: Tile, b: Tile) => a[0] === b[0] && a[1] === b[1];
 const cheb = (a: Tile, b: Tile) => Math.max(Math.abs(a[0] - b[0]), Math.abs(a[1] - b[1]));
 
 export const GARRISON: Record<string, ArmyStack[]> = {
-  french: [{ unit: 'U-FR-01', count: 16 }, { unit: 'U-FR-03', count: 6 }, { unit: 'U-FR-04', count: 3 }],
-  haudenosaunee: [{ unit: 'U-HD-01', count: 10 }, { unit: 'U-HD-03', count: 7 }, { unit: 'U-HD-02', count: 8 }],
+  french: [{ unit: 'U-FR-01', count: 30 }, { unit: 'U-FR-03', count: 10 }, { unit: 'U-FR-04', count: 4 }],
+  haudenosaunee: [{ unit: 'U-HD-01', count: 16 }, { unit: 'U-HD-03', count: 10 }, { unit: 'U-HD-02', count: 16 }],
 };
 const TOWN_INCOME: Partial<Record<Res, number>> = { coin: 500 };
 
 // ------------------------------------------------------------------ setup
 
-export function createWorld(): WorldState {
+export function createWorld(seed = 1): WorldState {
   const wj = worldJson as unknown as { terrain: string[]; objects: WObject[]; players: { faction: string; name: string; hero: Omit<HeroState, 'mp' | 'mpMax' | 'army' | 'home' | 'defeated' | 'tile'> & { tile: Tile; move: number }; army: ArmyStack[]; resources: Record<Res, number> }[] };
   const st: WorldState = {
-    day: 1, turn: 0, terrain: [...wj.terrain], encounter: null, winner: null, log: [],
+    seed, day: 1, turn: 0, terrain: [...wj.terrain], encounter: null, winner: null, log: [],
     objects: wj.objects.map(o => {
       const obj: WObject = { ...o, tile: [...o.tile] as Tile, owner: o.owner ?? null, army: o.army?.map(a => ({ ...a })) };
       if (o.type === 'town') {
@@ -170,12 +171,15 @@ export function findPath(st: WorldState, p: number, goal: Tile): { path: Tile[];
     for (let i = 1; i < open.length; i++) if (dist.get(k(open[i]))! < dist.get(k(open[bi]))!) bi = i;
     const cur = open.splice(bi, 1)[0];
     if (sameTile(cur, goal)) break;
-    const blocked = !sameTile(cur, hero.tile) && (objectAt(st, cur) || heroAt(st, cur, p) >= 0 || guardsNear(st, cur).length);
-    if (blocked) continue;
+    const start = sameTile(cur, hero.tile);
+    if (!start && (objectAt(st, cur) || heroAt(st, cur, p) >= 0)) continue;
+    // inside a guard's zone you can only step onto the guard itself (to attack it)
+    const zone = !start && guardsNear(st, cur).length > 0;
     for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
       if (!dx && !dy) continue;
       const n: Tile = [cur[0] + dx, cur[1] + dy];
       if (!inMap(n)) continue;
+      if (zone && !(sameTile(n, goal) && objectAt(st, n)?.type === 'guard')) continue;
       const c = stepCost(st, faction, n, !!(dx && dy));
       if (!isFinite(c)) continue;
       const nd = dist.get(k(cur))! + c;
@@ -424,6 +428,9 @@ export function endTurn(st: WorldState): WorldEvent[] {
     });
     events.push({ type: 'day', day: st.day, income });
     if (dayOfWeek(st.day) === 1) {
+      for (const o of st.objects) if (o.type === 'town') {
+        o.army = (o.army ?? GARRISON[o.faction!]).map(a => ({ ...a, count: Math.ceil(a.count * 1.15) }));
+      }
       for (const o of st.objects) if (o.type === 'town' && o.stock) {
         const bonus = 1 + townDefs(o).reduce((n, b) => n + (b.growth ?? 0), 0);
         for (const u of available(o)) o.stock[u] = (o.stock[u] ?? 0) + Math.round(GROWTH[o.faction!][u] * bonus);
@@ -463,7 +470,10 @@ export function aiTarget(st: WorldState): Tile | null {
   const consider = (t: Tile, value: number) => {
     const r = findPath(st, p, t);
     if (!r) return;
-    const v = value / (r.cost[r.cost.length - 1] / 10 + 8);
+    // a stable per-game, per-target nudge so AI games don't all play out the same way
+    let h = Math.imul(st.seed ^ (t[0] * 73856093) ^ (t[1] * 19349663) ^ (p * 83492791), 2654435761) >>> 0;
+    h = (h ^ (h >>> 15)) >>> 0;
+    const v = value * (0.75 + 0.5 * (h / 4294967296)) / (r.cost[r.cost.length - 1] / 10 + 8);
     if (!best || v > best.v) best = { t, v };
   };
   for (const o of st.objects) {
@@ -477,6 +487,12 @@ export function aiTarget(st: WorldState): Tile | null {
   st.players.forEach((other, i) => {
     if (i !== p && !other.hero.defeated && power > armyPower(other.hero.army) * 1.4) consider(other.hero.tile, 120);
   });
+  // go home to spend money on recruits
+  const home = st.objects.find(o => o.type === 'town' && o.owner === p && o.stock);
+  if (home && cheb(home.tile, hero.tile) > 1) {
+    const buyable = Object.entries(home.stock!).reduce((n, [u, c]) => n + Math.min(c, Math.floor(pl.resources.coin / unitCost(u))) * UNITS[u].hp, 0);
+    if (buyable > 60) consider(hero.home, Math.min(200, buyable / 3));
+  }
   return best ? (best as { t: Tile }).t : null;
 }
 
