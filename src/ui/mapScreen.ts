@@ -16,6 +16,8 @@ import { asset, poseUrl } from '../render/assets';
 import battlesJson from '../data/battles.json';
 import { music } from '../audio/music';
 import { sfx } from '../audio/sfx';
+import { type MapAction, cursorFor, ACTION_COLOR, ACTION_LABEL } from './cursors';
+import { townFootprint } from '../sim/world';
 
 type Ctrl = 'human' | 'ai';
 type PlayBattle = (st: BattleState, ctrl: [Ctrl, Ctrl]) => Promise<BattleState>;
@@ -183,9 +185,43 @@ function pickHero(id: string) {
   render();
 }
 
+const near = (a: Tile, b: Tile) => Math.max(Math.abs(a[0] - b[0]), Math.abs(a[1] - b[1])) <= 1;
+
+/** What a click on this tile would do for the selected hero, and which tiles to outline. */
+function actionAt(t: Tile): { act: MapAction; mark: Tile[]; focus?: Tile; path: { path: Tile[]; cost: number[] } | null } {
+  const h = hero(), p = world.turn;
+  if (!h || !humanTurn()) return { act: 'none', mark: [], path: null };
+  const other = world.players.flatMap((pl, i) => pl.heroes.map(x => ({ x, i }))).find(e => e.x.tile[0] === t[0] && e.x.tile[1] === t[1]);
+  if (other?.i === p) return { act: other.x === h ? 'select' : near(other.x.tile, h.tile) ? 'exchange' : 'select', mark: [other.x.tile], path: null };
+  const o = objectAt(world, t);
+  if (o?.type === 'town' && o.owner === p && townHere(world, p, h)?.id === o.id) return { act: 'enter', mark: townFootprint(o), focus: o.tile, path: null };
+  if (o?.type === 'village' && near(o.tile, h.tile)) return { act: 'talk', mark: [o.tile], path: null };
+  const r = findPath(world, p, t);
+  if (!r) return { act: 'none', mark: [], path: null };
+  const end = r.path[r.path.length - 1];
+  const g = guardsNear(world, end)[0];
+  let act: MapAction = r.cost[r.cost.length - 1] <= h.mp ? 'move' : 'far';
+  let mark: Tile[] = [end], focus: Tile | undefined;
+  if (other) act = 'attack';
+  else if (o?.type === 'town') { act = o.owner === p ? 'enter' : 'attack'; mark = townFootprint(o); focus = o.tile; }
+  else if (o?.type === 'guard') { act = 'attack'; mark = [o.tile]; }
+  else if (o?.type === 'mine') act = o.owner === p ? 'visit' : 'capture';
+  else if (o?.type === 'pickup') act = 'pickup';
+  else if (o?.type === 'village') act = 'talk';
+  else if (o?.type === 'tower') act = 'visit';
+  else if (g) { act = 'attack'; mark = [g.tile]; } // stepping next to a guard starts a fight
+  // too far for today: keep the action's icon only if it happens today, else show the travel icon
+  if (act !== 'move' && act !== 'far' && r.cost[r.cost.length - 1] > h.mp) act = 'far';
+  return { act, mark, focus, path: r };
+}
+
 function onHover(t: Tile | null) {
   const tip = $('maptip');
-  if (!t || busy || !isExplored(world, viewer(), t)) { tip.hidden = true; return; }
+  const stage = $('mapstage');
+  if (!t || busy || !isExplored(world, viewer(), t)) { tip.hidden = true; view.markTarget(null); stage.style.cursor = busy ? 'wait' : ''; return; }
+  const action = actionAt(t);
+  stage.style.cursor = humanTurn() ? cursorFor(action.act) : '';
+  view.markTarget(action.mark, ACTION_COLOR[action.act], action.focus);
   const o = objectAt(world, t);
   const g = guardsNear(world, t)[0];
   const lines: string[] = [];
@@ -203,10 +239,10 @@ function onHover(t: Tile | null) {
   } else {
     lines.push(`<b>${TERRAIN_NAME[terrainAt(world, t)] ?? ''}</b>${g ? `Guarded by the ${g.name}` : ''}`);
   }
-  const h = hero();
-  if (humanTurn() && h && !(other && other.i === world.turn)) {
-    const r = findPath(world, world.turn, t);
-    if (r) lines.push(`<small>${Math.ceil(r.cost[r.cost.length - 1] / 10)} movement · ${r.cost[r.cost.length - 1] <= h.mp ? 'reachable today' : 'more than one day'}</small>`);
+  if (humanTurn()) {
+    const r = action.path;
+    lines.unshift(`<em class="act act-${action.act}">${ACTION_LABEL[action.act]}</em>`);
+    if (r) lines.push(`<small>${Math.ceil(r.cost[r.cost.length - 1] / 10)} movement · ${r.cost[r.cost.length - 1] <= (hero()?.mp ?? 0) ? 'reachable today' : 'more than one day'}</small>`);
   }
   tip.innerHTML = lines.join('');
   const sp = view.tileToScreen(t);
@@ -232,18 +268,23 @@ async function onClick(t: Tile) {
     return;
   }
   if (!h) return;
-  // a village next to the hero opens straight away
+  const action = actionAt(t);
   const o = objectAt(world, t);
-  if (o?.type === 'village' && Math.max(Math.abs(o.tile[0] - h.tile[0]), Math.abs(o.tile[1] - h.tile[1])) <= 1) { openVillage(o.id); return; }
-  if (planned && planned.to[0] === t[0] && planned.to[1] === t[1]) {
+  // already there: a village next to the hero, or your town with the hero at its gate, opens straight away
+  if (action.act === 'talk' && !action.path && o) { openVillage(o.id); return; }
+  if (action.act === 'enter' && !action.path && o) { sfx.click(); void openTown(o.id); return; }
+  const r = action.path;
+  if (!r) { planned = null; view.showPath(null, null, 0); return; }
+  const end = r.path[r.path.length - 1];
+  // second click on the same destination (any tile of a town counts as its gate) marches
+  if (planned && planned.path.length && planned.path[planned.path.length - 1][0] === end[0] && planned.path[planned.path.length - 1][1] === end[1]) {
     const path = planned.path;
     planned = null;
     view.showPath(null, null, 0);
+    view.markTarget(null);
     await walk(path);
     return;
   }
-  const r = findPath(world, world.turn, t);
-  if (!r) { planned = null; view.showPath(null, null, 0); return; }
   planned = { to: t, ...r };
   view.showPath(r.path, r.cost, h.mp);
 }
@@ -611,5 +652,6 @@ function closeRecruit() { $('recruit').hidden = true; if (world && !$('map').hid
   openTown: (id: string) => openTown(id),
   openVillage: (id: string) => openVillage(id),
   save: () => save(true),
+  screenOf: (t: Tile) => { const r = $('mapstage').getBoundingClientRect(), p = view.tileToScreen(t); return { x: r.left + p.x, y: r.top + p.y + 24 }; },
   nextTurn: () => nextTurn(),
 };

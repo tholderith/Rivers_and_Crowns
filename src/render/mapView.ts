@@ -52,6 +52,7 @@ export class MapView {
   private objLayer = new Container();
   private flags = new Graphics();
   private pathG = new Graphics();
+  private markG = new Graphics();
   private fog = new Graphics();
   private fx = new Container();
   private ring = new Graphics();
@@ -77,7 +78,7 @@ export class MapView {
     const bg = new Sprite(this.tex[asset(BG)]);
     bg.scale.set(MW / bg.texture.width);
     this.objLayer.sortableChildren = true;
-    this.worldLayer.addChild(bg, this.flags, this.pathG, this.objLayer, this.ring, this.fog, this.fx);
+    this.worldLayer.addChild(bg, this.flags, this.pathG, this.objLayer, this.markG, this.ring, this.fog, this.fx);
     this.app.stage.addChild(this.worldLayer);
 
     for (const o of world.objects) {
@@ -351,6 +352,21 @@ export class MapView {
       g.rect(x * TILE, y * TILE, TILE, TILE).fill({ color: 0x05080f, alpha: edge ? 0.72 : 0.97 });
     }
     this.drawMinimap();
+  }
+
+  /** Outline what a click will act on: a tile, or a whole area such as a town's footprint. */
+  markTarget(tiles: Tile[] | null, color = 0xf2d68c, focus?: Tile) {
+    const g = this.markG;
+    g.clear();
+    if (!tiles || !tiles.length) return;
+    const xs = tiles.map(t => t[0]), ys = tiles.map(t => t[1]);
+    const x0 = Math.min(...xs) * TILE, y0 = Math.min(...ys) * TILE;
+    const w = (Math.max(...xs) + 1) * TILE - x0, h = (Math.max(...ys) + 1) * TILE - y0;
+    if (tiles.length > 1) g.roundRect(x0 + 2, y0 + 2, w - 4, h - 4, 12).stroke({ width: 2, color, alpha: 0.7 });
+    // the spot itself: a ring on the ground (for a town, its gate)
+    const f = focus ?? tiles[0], c = tileCenter(f);
+    g.ellipse(c.x, c.y + TILE * 0.3, TILE * 0.62, TILE * 0.3).fill({ color, alpha: 0.22 }).stroke({ width: 5, color: 0x0b1428, alpha: 0.6 })
+      .ellipse(c.x, c.y + TILE * 0.3, TILE * 0.62, TILE * 0.3).stroke({ width: 3, color, alpha: 1 });
   }
 
   /** Path preview: green steps within today's movement, red beyond. */
