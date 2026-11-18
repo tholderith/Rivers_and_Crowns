@@ -122,3 +122,22 @@ button { font: inherit; color: inherit; }
 .rrow span { font-size: 12px; color: var(--muted); }
 #recruit .card, #pass .card { max-width: 640px; }
 #recruit, #pass { background: rgba(5, 8, 15, .75); }
+/* town screen */
+#recruit { align-items: start; overflow: auto; }
+.towncard { background: rgba(11,20,40,.95); border: 2px solid var(--gold); border-radius: 10px; padding: 14px; width: min(1280px, 100%); display: flex; flex-direction: column; gap: 10px; }
+.townhead { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+.townhead h2 { margin: 0; font: italic 600 30px/1 var(--display); color: var(--gold-hi); margin-right: auto; }
+.townpic { position: relative; width: 100%; border-radius: 6px; overflow: hidden; box-shadow: 0 0 0 1px var(--gold); }
+.townpic img { position: absolute; display: block; height: auto; }
+.townpic img.base { position: static; width: 100%; }
+.tabs { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.bgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 8px; }
+.bcard { display: flex; gap: 8px; align-items: center; justify-content: space-between; border: 1px solid var(--line); border-radius: 6px; padding: 8px 10px; background: var(--navy-2); }
+.bcard.built { opacity: .6; }
+.bcard b { display: block; font: 700 15px/1.2 var(--ui); }
+.bcard span { display: block; font-size: 12px; color: var(--muted); }
+.bcard .btn { flex-shrink: 0; max-width: 150px; white-space: normal; text-align: center; font-size: 12px; }
+.costs { display: flex; gap: 8px; margin-top: 4px; }
+.costs em { font-style: normal; color: var(--good); font-size: 12px; }
+.cost { display: inline-flex; align-items: center; gap: 3px; font: 700 13px/1 var(--ui); }
+.cost img { width: 20px; height: 16px; object-fit: contain; }

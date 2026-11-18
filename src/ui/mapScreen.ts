@@ -4,6 +4,7 @@
 import {
   type Tile, type WorldEvent, type WorldState, RESOURCES, aiTarget, createWorld, dayOfWeek, encounterArmies, endTurn,
   findPath, guardsNear, isExplored, moveHero, objectAt, recruit, resolveBattle, terrainAt, townHere, unitCost, weekOf, armyPower,
+  BUILDINGS, aiManageTowns, build, cannotBuild, wallsOf, type WObject,
 } from '../sim/world';
 import { type ArmySetup, type BattleState, UNITS, act, begin, createCustomBattle } from '../sim/battle';
 import { chooseAbility, chooseAction } from '../sim/ai';
@@ -75,13 +76,13 @@ function render() {
     <div class="mpbar" title="Movement left today"><i style="width:${Math.round((h.mp / h.mpMax) * 100)}%"></i><span>Movement ${Math.floor(h.mp / 10)} / ${h.mpMax / 10}</span></div>
     <div class="army">${h.defeated ? '<p class="muted">Beaten. A new band musters at home next turn.</p>' : h.army.map(a => `<div class="slot" title="${UNITS[a.unit].name}"><img src="${poseUrl(a.unit, 'ready')}" alt="${UNITS[a.unit].name}"><b>${a.count}</b></div>`).join('')}</div>
     <div class="sidebtns">
-      <button class="btn" id="btnRecruit" ${humanTurn() && town && !busy ? '' : 'disabled'}>Recruit${town ? ` at ${town.name}` : ''}</button>
+      <button class="btn" id="btnRecruit" ${humanTurn() && town && !busy ? '' : 'disabled'}>${town ? `Enter ${town.name}` : 'Town (walk home to enter)'}</button>
       <button class="btn cmd" id="btnEnd" ${humanTurn() && !busy ? '' : 'disabled'}>End turn</button>
       <button class="btn" id="btnMenu">Main menu</button>
     </div>
     <ol class="log">${world.log.slice(-7).reverse().map(l => `<li>${l}</li>`).join('')}</ol>`;
   $('btnEnd').onclick = () => void nextTurn();
-  $('btnRecruit').onclick = () => openRecruit();
+  $('btnRecruit').onclick = () => void openRecruit();
   $('btnMenu').onclick = () => { $('map').hidden = true; exitToMenu(); };
 }
 
@@ -146,7 +147,7 @@ async function walk(path: Tile[]) {
   render();
   if (world.winner !== null) return finish();
   const town = events.find(e => e.type === 'town');
-  if (town && humanTurn()) openRecruit();
+  if (town && humanTurn()) void openRecruit();
 }
 
 async function animate(p: number, from: Tile, events: WorldEvent[]) {
@@ -181,7 +182,10 @@ async function fight() {
   const bg = e.kind === 'town' ? (d.defenderFaction === 'french' ? 'B-04' : 'B-05') : d.terrain === 'f' ? 'B-03' : d.terrain === 'F' || d.terrain === 'P' ? 'B-02' : 'B-01';
   const right: ArmySetup = { faction: d.defenderFaction, name: d.defenderName, hero: rightHero, army: d.army };
   const bst = createCustomBattle(`map-${battleSeed}`, world.day * 1000 + battleSeed++, left, right, bg, PRESETS[bg].woods, PRESETS[bg].rocks);
-  if (e.kind === 'town') bst.works = ['8,1', '8,3', '8,5'];
+  if (e.kind === 'town') {
+    const walls = wallsOf(world.objects.find(x => x.id === (e as { object: string }).object)!);
+    bst.works = walls >= 2 ? ['8,0', '8,1', '8,2', '8,4', '8,5', '8,6'] : walls === 1 ? ['8,1', '8,3', '8,5'] : [];
+  }
   const ctrl: [Ctrl, Ctrl] = [control[p], defenderPlayer != null ? control[defenderPlayer] : 'ai'];
   let result: BattleState;
   if (ctrl[0] === 'ai' && ctrl[1] === 'ai') {
@@ -209,6 +213,7 @@ function autoResolve(bst: BattleState): BattleState {
 
 async function aiTurn() {
   busy = true;
+  aiManageTowns(world);
   render();
   for (let i = 0; i < 10 && world.winner === null; i++) {
     const t = aiTarget(world);
@@ -223,6 +228,7 @@ async function aiTurn() {
     render();
     await new Promise(res => setTimeout(res, 150));
   }
+  aiManageTowns(world);
   busy = false;
   if (world.winner !== null) return finish();
   await nextTurn();
@@ -259,23 +265,73 @@ function finish() {
   $('endMenu').onclick = () => { el.hidden = true; $('map').hidden = true; exitToMenu(); };
 }
 
-// ------------------------------------------------------------------ recruiting
+// ------------------------------------------------------------------ town screen
 
-function openRecruit() {
+let townTab: 'build' | 'recruit' = 'build';
+const layerCache: Record<string, { size: [number, number]; draw_order: string[]; layers: Record<string, { left: number; top: number; width: number; replaces?: string; adds_to?: string }> }> = {};
+
+async function townLayers(faction: string) {
+  if (!layerCache[faction]) layerCache[faction] = await (await fetch(asset(`towns/${faction}/layers.json`))).json();
+  return layerCache[faction];
+}
+
+/** The town painting with every standing building drawn on the empty base. */
+async function townPicture(o: WObject): Promise<string> {
+  const L = await townLayers(o.faction!);
+  const defs = BUILDINGS[o.faction!].buildings;
+  const built = new Set(o.built ?? []);
+  const show = new Set<string>();
+  for (const id of built) {
+    const d = defs[id];
+    if (!d) continue;
+    if (d.replaces) { show.delete(defs[d.replaces].layer); show.add(d.layer); }
+    else if (!(defs[id] && [...built].some(b => defs[b]?.replaces === id))) show.add(d.layer);
+    if (d.adds) show.add(defs[d.adds].layer);
+  }
+  if (built.size >= 4) show.add('townsfolk');
+  const order = [...L.draw_order];
+  for (const k of Object.keys(L.layers)) if (!order.includes(k)) {
+    const lay = L.layers[k];
+    const anchor = lay.replaces ?? lay.adds_to;
+    order.splice(anchor ? order.indexOf(anchor) + (lay.adds_to ? 1 : 0) : order.length, 0, k);
+  }
+  const imgs = order.filter(k => show.has(k) && L.layers[k]).map(k => {
+    const v = L.layers[k];
+    return `<img src="${asset(`towns/${o.faction}/${k}.webp`)}" alt="" style="left:${v.left * 100}%;top:${v.top * 100}%;width:${v.width * 100}%">`;
+  });
+  return `<div class="townpic" style="aspect-ratio:${L.size[0]}/${L.size[1]}"><img class="base" src="${asset(`towns/${o.faction}/base.webp`)}" alt="${o.name}">${imgs.join('')}</div>`;
+}
+
+async function openRecruit() {
   const town = townHere(world, world.turn);
   if (!town || !town.stock) return;
   const pl = world.players[world.turn];
   const el = $('recruit');
-  const rows = Object.keys(town.stock).map(u => {
-    const n = town.stock![u], cost = unitCost(u);
-    const afford = Math.min(n, Math.floor(pl.resources.coin / cost));
-    return `<div class="rrow"><img src="${poseUrl(u, 'ready')}" alt=""><div><b>${UNITS[u].name}</b><span>${UNITS[u].job} · ${cost} coin each · ${n} available</span></div>
+  const defs = BUILDINGS[town.faction!].buildings;
+  const cost = (c: Partial<Record<string, number>>) => Object.entries(c).map(([r, n]) => `<span class="cost"><img src="${asset(`sprites/${RES_ICON[r]}.webp`)}" alt="${r}">${n}</span>`).join('');
+  const buildList = Object.entries(defs).map(([id, d]) => {
+    const why = cannotBuild(world, town.id, id);
+    const built = why === 'Built';
+    return `<div class="bcard${built ? ' built' : ''}"><div><b>${d.name}</b><span>${d.text}</span><div class="costs">${built ? '<em>Built</em>' : cost(d.cost)}</div></div>
+      ${built ? '' : `<button class="btn${why ? '' : ' cmd'}" data-b="${id}" ${why ? 'disabled' : ''} title="${why}">${why || 'Build'}</button>`}</div>`;
+  }).join('');
+  const recruitList = Object.keys(town.stock).map(u => {
+    const n = town.stock![u], c = unitCost(u);
+    const afford = Math.min(n, Math.floor(pl.resources.coin / c));
+    return `<div class="rrow"><img src="${poseUrl(u, 'ready')}" alt=""><div><b>${UNITS[u].name}</b><span>${UNITS[u].job} · ${c} coin each · ${n} available</span></div>
       <button class="btn" data-u="${u}" data-n="1" ${afford >= 1 ? '' : 'disabled'}>+1</button><button class="btn" data-u="${u}" data-n="${afford}" ${afford >= 1 ? '' : 'disabled'}>All (${afford})</button></div>`;
   }).join('');
-  el.innerHTML = `<div class="card"><h2>${town.name}</h2><p>Coin: ${pl.resources.coin.toLocaleString('en-US')}. New recruits gather each week.</p>${rows}
-    <div class="choices"><button class="choice" id="rClose"><b>Done</b><span>Back to the map</span></button></div></div>`;
+  el.innerHTML = `<div class="towncard">
+    <div class="townhead"><h2>${town.name}</h2><div class="mapres">${RESOURCES.map(r => `<span><img src="${asset(`sprites/${RES_ICON[r]}.webp`)}" alt="${r}">${pl.resources[r].toLocaleString('en-US')}</span>`).join('')}</div>
+      <button class="btn" id="rClose">Back to the map</button></div>
+    ${await townPicture(town)}
+    <div class="tabs"><button class="btn${townTab === 'build' ? ' armed' : ''}" data-tab="build">Build</button><button class="btn${townTab === 'recruit' ? ' armed' : ''}" data-tab="recruit">Recruit</button>
+      <span class="muted">One building a day. New recruits gather each week.</span></div>
+    <div class="tabbody">${townTab === 'build' ? `<div class="bgrid">${buildList}</div>` : recruitList}</div></div>`;
   el.hidden = false;
-  el.querySelectorAll<HTMLButtonElement>('[data-u]').forEach(b => b.onclick = () => { recruit(world, b.dataset.u!, Number(b.dataset.n)); render(); openRecruit(); });
+  el.querySelectorAll<HTMLButtonElement>('[data-u]').forEach(b => b.onclick = () => { recruit(world, b.dataset.u!, Number(b.dataset.n)); render(); void openRecruit(); });
+  el.querySelectorAll<HTMLButtonElement>('[data-b]').forEach(b => b.onclick = () => { build(world, town.id, b.dataset.b!); render(); void openRecruit(); });
+  el.querySelectorAll<HTMLButtonElement>('[data-tab]').forEach(b => b.onclick = () => { townTab = b.dataset.tab as 'build' | 'recruit'; void openRecruit(); });
   $('rClose').onclick = closeRecruit;
 }
 

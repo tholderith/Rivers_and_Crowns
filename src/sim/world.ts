@@ -4,7 +4,27 @@
 // game plays it with the battle rules and reports the result back with `resolveBattle`.
 
 import worldJson from '../data/world.json';
+import buildingsJson from '../data/buildings.json';
 import { UNITS } from './battle';
+
+export interface BuildingDef {
+  name: string;
+  layer: string;
+  cost: Partial<Record<Res, number>>;
+  text: string;
+  dwelling?: string[];
+  income?: Partial<Record<Res, number>>;
+  needs?: string[];
+  branch?: string;
+  replaces?: string;
+  adds?: string;
+  walls?: number;
+  move?: number;
+  reveal?: number;
+  growth?: number;
+  built?: boolean;
+}
+export const BUILDINGS = buildingsJson as unknown as Record<string, { town: string; base: string[]; buildings: Record<string, BuildingDef> }>;
 
 export type Res = 'coin' | 'timber' | 'iron' | 'provisions';
 export const RESOURCES: Res[] = ['coin', 'timber', 'iron', 'provisions'];
@@ -26,6 +46,8 @@ export interface WObject {
   radius?: number;
   army?: ArmyStack[];
   stock?: Record<string, number>; // towns: units available to recruit this week
+  built?: string[]; // towns: buildings standing
+  builtDay?: number; // towns: the day something was last built (one per day)
   gone?: boolean;
 }
 
@@ -95,8 +117,15 @@ export function createWorld(): WorldState {
   const wj = worldJson as unknown as { terrain: string[]; objects: WObject[]; players: { faction: string; name: string; hero: Omit<HeroState, 'mp' | 'mpMax' | 'army' | 'home' | 'defeated' | 'tile'> & { tile: Tile; move: number }; army: ArmyStack[]; resources: Record<Res, number> }[] };
   const st: WorldState = {
     day: 1, turn: 0, terrain: [...wj.terrain], encounter: null, winner: null, log: [],
-    objects: wj.objects.map(o => ({ ...o, tile: [...o.tile] as Tile, owner: o.owner ?? null, army: o.army?.map(a => ({ ...a })),
-      stock: o.type === 'town' ? { ...GROWTH[o.faction!] } : undefined })),
+    objects: wj.objects.map(o => {
+      const obj: WObject = { ...o, tile: [...o.tile] as Tile, owner: o.owner ?? null, army: o.army?.map(a => ({ ...a })) };
+      if (o.type === 'town') {
+        obj.built = Object.entries(BUILDINGS[o.faction!].buildings).filter(([, b]) => b.built).map(([id]) => id);
+        obj.builtDay = 0;
+        obj.stock = Object.fromEntries(available(obj).map(u => [u, GROWTH[o.faction!][u]]));
+      }
+      return obj;
+    }),
     players: wj.players.map(p => ({
       faction: p.faction, name: p.name, resources: { ...p.resources }, explored: [],
       hero: {
@@ -166,7 +195,7 @@ function revealAround(st: WorldState, p: number, radius = 8, center?: Tile) {
   const set = new Set(pl.explored);
   const points: { c: Tile; r: number }[] = center ? [{ c: center, r: radius }] : [
     { c: pl.hero.tile, r: radius },
-    ...st.objects.filter(o => o.owner === p).map(o => ({ c: o.tile, r: o.type === "town" ? 9 : 4 })),
+    ...st.objects.filter(o => o.owner === p).map(o => ({ c: o.tile, r: o.type === 'town' ? Math.max(9, ...townDefs(o).map(b => b.reveal ?? 0)) : 4 })),
   ];
   for (const { c, r } of points) {
     for (let y = c[1] - r; y <= c[1] + r; y++) for (let x = c[0] - r; x <= c[0] + r; x++) {
@@ -245,7 +274,11 @@ export function encounterArmies(st: WorldState): { defenderName: string; defende
     return { defenderName: d.name, defenderFaction: d.faction, army: d.hero.army, heroDefender: e.player, terrain: terrainAt(st, d.hero.tile) };
   }
   const o = st.objects.find(x => x.id === e.object)!;
-  if (e.kind === 'town') return { defenderName: o.name!, defenderFaction: o.faction!, army: o.army ?? GARRISON[o.faction!], terrain: '.' };
+  if (e.kind === 'town') {
+    const army = (o.army ?? GARRISON[o.faction!]).map(a => ({ ...a }));
+    if (o.built?.includes('artillery') && !army.some(a => a.unit === 'U-FR-05')) army.push({ unit: 'U-FR-05', count: 1 });
+    return { defenderName: o.name!, defenderFaction: o.faction!, army, terrain: '.' };
+  }
   return { defenderName: o.name!, defenderFaction: 'neutral', army: o.army!, terrain: terrainAt(st, o.tile) || terrainAt(st, hero.tile) };
 }
 
@@ -298,6 +331,61 @@ const GROWTH: Record<string, Record<string, number>> = {
 const TIER_COST = [0, 30, 60, 110, 200, 500];
 export const unitCost = (unit: string) => TIER_COST[UNITS[unit].tier];
 
+/** Building definitions standing in a town. */
+export function townDefs(o: WObject): BuildingDef[] {
+  const defs = BUILDINGS[o.faction ?? '']?.buildings ?? {};
+  return (o.built ?? []).map(id => defs[id]).filter(Boolean);
+}
+
+/** Units a town can raise: its base unit plus whatever its dwellings allow. */
+export function available(o: WObject): string[] {
+  const set = new Set(BUILDINGS[o.faction!].base);
+  for (const b of townDefs(o)) for (const u of b.dwelling ?? []) set.add(u);
+  return [...set];
+}
+
+export function wallsOf(o: WObject): number {
+  return Math.max(0, ...townDefs(o).map(b => b.walls ?? 0));
+}
+
+/** Why a building can't be built right now ('' if it can). */
+export function cannotBuild(st: WorldState, townId: string, id: string): string {
+  const o = st.objects.find(x => x.id === townId)!;
+  const def = BUILDINGS[o.faction!].buildings[id];
+  const pl = st.players[st.turn];
+  if (o.owner !== st.turn) return 'Not your town';
+  if (o.built!.includes(id)) return 'Built';
+  const missing = (def.needs ?? []).filter(n => !o.built!.includes(n));
+  if (missing.length) return `Needs ${missing.map(n => BUILDINGS[o.faction!].buildings[n].name).join(', ')}`;
+  if (def.branch) {
+    const rival = o.built!.find(b => b !== id && BUILDINGS[o.faction!].buildings[b].branch === def.branch);
+    if (rival) return `${BUILDINGS[o.faction!].buildings[rival].name} was chosen instead`;
+  }
+  if (o.builtDay === st.day) return 'Already built today';
+  const short = RESOURCES.filter(r => (def.cost[r] ?? 0) > pl.resources[r]);
+  if (short.length) return `Not enough ${short.join(', ')}`;
+  return '';
+}
+
+export function build(st: WorldState, townId: string, id: string): boolean {
+  if (cannotBuild(st, townId, id)) return false;
+  const o = st.objects.find(x => x.id === townId)!;
+  const def = BUILDINGS[o.faction!].buildings[id];
+  const pl = st.players[st.turn];
+  for (const r of RESOURCES) pl.resources[r] -= def.cost[r] ?? 0;
+  o.built!.push(id);
+  o.builtDay = st.day;
+  for (const u of def.dwelling ?? []) if (!(u in o.stock!)) o.stock![u] = GROWTH[o.faction!][u];
+  if (def.reveal) revealAround(st, st.turn);
+  st.log.push(`${pl.name} build the ${def.name} at ${o.name}.`);
+  return true;
+}
+
+/** Extra hero movement a player gets from buildings in their towns. */
+export function moveBonus(st: WorldState, p: number): number {
+  return st.objects.filter(o => o.type === 'town' && o.owner === p).reduce((n, o) => n + townDefs(o).reduce((m, b) => m + (b.move ?? 0), 0), 0);
+}
+
 /** The town a player's hero is standing next to, if it is theirs. */
 export function townHere(st: WorldState, p: number): WObject | undefined {
   const h = st.players[p].hero;
@@ -327,7 +415,8 @@ export function endTurn(st: WorldState): WorldEvent[] {
     const income = st.players.map((pl, i) => {
       const got: Partial<Record<Res, number>> = {};
       for (const o of st.objects) if (o.owner === i) for (const r of RESOURCES) {
-        const v = (o.type === 'town' ? TOWN_INCOME[r] : o.income?.[r]) ?? 0;
+        let v = (o.type === 'town' ? TOWN_INCOME[r] : o.income?.[r]) ?? 0;
+        if (o.type === 'town') v += townDefs(o).reduce((n, b) => n + (b.income?.[r] ?? 0), 0);
         if (v) got[r] = (got[r] ?? 0) + v;
       }
       addRes(pl, got);
@@ -335,7 +424,10 @@ export function endTurn(st: WorldState): WorldEvent[] {
     });
     events.push({ type: 'day', day: st.day, income });
     if (dayOfWeek(st.day) === 1) {
-      for (const o of st.objects) if (o.type === 'town' && o.stock) for (const [u, g] of Object.entries(GROWTH[o.faction!])) o.stock[u] = (o.stock[u] ?? 0) + g;
+      for (const o of st.objects) if (o.type === 'town' && o.stock) {
+        const bonus = 1 + townDefs(o).reduce((n, b) => n + (b.growth ?? 0), 0);
+        for (const u of available(o)) o.stock[u] = (o.stock[u] ?? 0) + Math.round(GROWTH[o.faction!][u] * bonus);
+      }
       st.log.push(`Week ${weekOf(st.day)} begins: new recruits gather in the towns.`);
     }
   }
@@ -347,7 +439,7 @@ export function endTurn(st: WorldState): WorldEvent[] {
     h.army = pl.faction === 'french' ? [{ unit: 'U-FR-01', count: 12 }, { unit: 'U-FR-02', count: 4 }] : [{ unit: 'U-HD-01', count: 8 }, { unit: 'U-HD-02', count: 6 }];
     st.log.push(`${h.name} musters a new band at home.`);
   }
-  h.mp = h.mpMax;
+  h.mp = h.mpMax + moveBonus(st, st.turn);
   revealAround(st, st.turn);
   events.push({ type: 'turn', player: st.turn });
   return events;
@@ -386,4 +478,29 @@ export function aiTarget(st: WorldState): Tile | null {
     if (i !== p && !other.hero.defeated && power > armyPower(other.hero.army) * 1.4) consider(other.hero.tile, 120);
   });
   return best ? (best as { t: Tile }).t : null;
+}
+
+// ------------------------------------------------------------------ AI town management
+
+const AI_BUILD_ORDER: Record<string, string[]> = {
+  french: ['barracks', 'sawmill', 'wharf', 'artillery', 'commercial_harbor', 'warehouse', 'stone_rampart', 'watchtower'],
+  haudenosaunee: ['three_sisters_fields', 'family_longhouses', 'trade_house', 'gunsmith_forge', 'storehouse', 'canoe_landing', 'fortified_palisade'],
+};
+
+/** The AI builds the first thing it can afford from its plan, then recruits if its hero is home. */
+export function aiManageTowns(st: WorldState) {
+  const p = st.turn;
+  for (const o of st.objects) {
+    if (o.type !== 'town' || o.owner !== p) continue;
+    const next = (AI_BUILD_ORDER[o.faction!] ?? []).find(id => !cannotBuild(st, o.id, id));
+    if (next) build(st, o.id, next);
+  }
+  const town = townHere(st, p);
+  if (town?.stock) {
+    const units = Object.keys(town.stock).sort((a, b) => UNITS[b].tier - UNITS[a].tier);
+    for (const u of units) {
+      const n = Math.min(town.stock[u], Math.floor(st.players[p].resources.coin / unitCost(u)));
+      if (n > 0) recruit(st, u, n);
+    }
+  }
 }

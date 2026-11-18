@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
-  aiTarget, createWorld, endTurn, findPath, guardsNear, moveHero, recruit, resolveBattle, terrainAt, townHere, type Tile, type WorldState,
+  aiTarget, build, cannotBuild, createWorld, endTurn, findPath, guardsNear, moveHero, recruit, resolveBattle, terrainAt, townHere, type Tile, type WorldState,
 } from '../src/sim/world';
 
 const teleport = (st: WorldState, p: number, t: Tile) => { st.players[p].hero.tile = t; };
@@ -83,5 +83,44 @@ describe('adventure map', () => {
       return tiles.join(';');
     };
     expect(run()).toBe(run());
+  });
+});
+
+describe('towns', () => {
+  const rich = (st: WorldState) => { st.players[0].resources = { coin: 99999, timber: 999, iron: 999, provisions: 999 }; };
+
+  it('one building per day, and prerequisites first', () => {
+    const st = createWorld(); rich(st);
+    expect(cannotBuild(st, 'town-fr', 'artillery')).toMatch(/Needs Marine Barracks/);
+    expect(build(st, 'town-fr', 'barracks')).toBe(true);
+    expect(cannotBuild(st, 'town-fr', 'sawmill')).toBe('Already built today');
+    endTurn(st); endTurn(st);
+    expect(build(st, 'town-fr', 'artillery')).toBe(true);
+  });
+
+  it('a branch closes the other choice', () => {
+    const st = createWorld(); rich(st);
+    build(st, 'town-fr', 'wharf'); endTurn(st); endTurn(st);
+    expect(build(st, 'town-fr', 'military_dock')).toBe(true); endTurn(st); endTurn(st);
+    expect(cannotBuild(st, 'town-fr', 'commercial_harbor')).toMatch(/Military Dock was chosen instead/);
+  });
+
+  it('dwellings unlock recruits and buildings pay income', () => {
+    const st = createWorld(); rich(st);
+    expect(recruit(st, 'U-FR-03', 1)).toBe(false);
+    build(st, 'town-fr', 'barracks');
+    expect(recruit(st, 'U-FR-03', 1)).toBe(true);
+    endTurn(st); endTurn(st);
+    build(st, 'town-fr', 'sawmill');
+    const timber = st.players[0].resources.timber;
+    endTurn(st); endTurn(st);
+    expect(st.players[0].resources.timber).toBe(timber + 2);
+  });
+
+  it('a movement building speeds up the hero', () => {
+    const st = createWorld(); rich(st);
+    build(st, 'town-fr', 'wharf'); endTurn(st); endTurn(st);
+    build(st, 'town-fr', 'military_dock'); endTurn(st); endTurn(st);
+    expect(st.players[0].hero.mp).toBe(st.players[0].hero.mpMax + 50);
   });
 });
