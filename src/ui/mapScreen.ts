@@ -85,14 +85,26 @@ function render() {
     <div class="sidehero"><img src="${asset(`portraits/${h.portrait}/${h.portrait}-01.webp`)}" alt=""><div><b>${h.name}</b><span>${pl.name} · ${control[world.turn] === 'human' ? 'You' : 'AI'}</span></div></div>
     <div class="mpbar" title="Movement left today"><i style="width:${Math.round((h.mp / h.mpMax) * 100)}%"></i><span>Movement ${Math.floor(h.mp / 10)} / ${h.mpMax / 10}</span></div>
     <div class="army">${h.defeated ? '<p class="muted">Beaten. A new band musters at home next turn.</p>' : h.army.map(a => `<div class="slot" title="${UNITS[a.unit].name}"><img src="${poseUrl(a.unit, 'ready')}" alt="${UNITS[a.unit].name}"><b>${a.count}</b></div>`).join('')}</div>
+    <h3 class="sidehead">Towns</h3>
+    <div class="towns">${world.objects.filter(o => o.type === 'town' && o.owner === world.turn && !o.gone).map(o => {
+      const g = garrisonOf(o).reduce((n, a) => n + a.count, 0);
+      const here = townHere(world, world.turn)?.id === o.id;
+      const canBuild = o.builtDay !== world.day;
+      const ok = humanTurn() && !busy;
+      return `<div class="towncardside">
+        <button class="townthumb" data-town="${o.id}" ${ok ? '' : 'disabled'} title="Open ${o.name}"><img src="${asset(`sprites/${o.sprite}.webp`)}" alt=""></button>
+        <div class="towninfo"><b>${o.name}</b><span>Garrison ${g}${here ? ' · hero at the gate' : ''}</span><span class="${canBuild ? 'ok' : 'muted'}">${canBuild ? 'Can build today' : 'Built today'}</span>
+          <div class="tbtns"><button class="btn" data-town="${o.id}" ${ok ? '' : 'disabled'}>Open</button><button class="btn" data-locate="${o.id}">Show</button></div></div>
+      </div>`;
+    }).join('') || '<p class="muted">You hold no towns.</p>'}</div>
     <div class="sidebtns">
-      ${world.objects.filter(o => o.type === 'town' && o.owner === world.turn && !o.gone).map(o => `<button class="btn" data-town="${o.id}" ${humanTurn() && !busy ? '' : 'disabled'}>${o.name}${townHere(world, world.turn)?.id === o.id ? ' (hero at the gate)' : ''}</button>`).join('')}
       <button class="btn cmd" id="btnEnd" ${humanTurn() && !busy ? '' : 'disabled'}>End turn</button>
       <button class="btn" id="btnMenu">Main menu</button>
     </div>
     <ol class="log">${world.log.slice(-7).reverse().map(l => `<li>${l}</li>`).join('')}</ol>`;
   $('btnEnd').onclick = () => void nextTurn();
   $('side').querySelectorAll<HTMLButtonElement>('[data-town]').forEach(b => b.onclick = () => void openTown(b.dataset.town!));
+  $('side').querySelectorAll<HTMLButtonElement>('[data-locate]').forEach(b => b.onclick = () => { const o = world.objects.find(x => x.id === b.dataset.locate)!; view.centerOn([o.tile[0], o.tile[1] - 2]); });
   $('btnMenu').onclick = () => { $('map').hidden = true; exitToMenu(); };
 }
 
