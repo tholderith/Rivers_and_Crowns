@@ -4,6 +4,7 @@
 Sprite sheets  -> public/assets/sprites/<ID>/<ID>-NN.webp (half the generated size)
 Hero portraits -> public/assets/portraits/<ID>/<ID>-01.webp
 Textures       -> public/assets/textures/<ID>.webp (made seamless, 512 px)
+Scenes         -> public/assets/scenes/<ID>.webp (battlefields and key art, 1920 px wide)
 
     python3 tools/cut_all.py            # everything that has been generated
     python3 tools/cut_all.py U-FR-01    # just these cards
@@ -39,8 +40,13 @@ def main():
         elif bg.startswith("Cut-out"):
             args = ["tools/cut_sprites.py", str(src), f"public/assets/sprites/{cid}", "--min-area", "2500",
                     "--group", str(GROUP.get(cid, 8))]
+        elif bg == "Full scene" and not cid.startswith(("TF-", "TH-")):
+            args = ["-c", "import sys;from PIL import Image;im=Image.open(sys.argv[1]).convert('RGB');"
+                    "im=im.resize((1920,round(im.height*1920/im.width)),Image.LANCZOS) if im.width>1920 else im;"
+                    "im.save(sys.argv[2],'WEBP',quality=88);print('wrote',sys.argv[2])", str(src), f"public/assets/scenes/{cid}.webp"]
+            (ROOT / "public" / "assets" / "scenes").mkdir(parents=True, exist_ok=True)
         else:
-            continue  # full scenes and town edits are used whole or go through town_layers.py
+            continue  # town edits go through town_layers.py
         print(cid, run(args), flush=True)
 
 

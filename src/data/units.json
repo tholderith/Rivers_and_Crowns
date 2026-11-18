@@ -106,9 +106,9 @@
   "faction": "french",
   "tier": 5,
   "job": "Breaks lines and walls",
-  "hp": 27,
+  "hp": 40,
   "attack": 10,
-  "defense": 4,
+  "defense": 6,
   "dmg": [
    14,
    22
