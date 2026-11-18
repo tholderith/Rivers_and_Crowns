@@ -1,0 +1,124 @@
+{
+ "_note": "Hero skills. values[i] is the number for level i+1; text[i] describes that level. priority = the AI's pick order for new skills.",
+ "priority": [
+  "leadership",
+  "tactics",
+  "marksmanship",
+  "logistics",
+  "pathfinding",
+  "surgery",
+  "scouting",
+  "diplomacy"
+ ],
+ "skills": {
+  "pathfinding": {
+   "name": "Pathfinding",
+   "values": [
+    0.25,
+    0.5,
+    0.75
+   ],
+   "text": [
+    "Forest and ford steps cost 25% less of their extra over grass.",
+    "Forest and ford steps cost 50% less of their extra over grass.",
+    "Forest and ford steps cost 75% less of their extra over grass."
+   ]
+  },
+  "logistics": {
+   "name": "Logistics",
+   "values": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "text": [
+    "+10% movement.",
+    "+20% movement.",
+    "+30% movement."
+   ]
+  },
+  "scouting": {
+   "name": "Scouting",
+   "values": [
+    2,
+    3,
+    4
+   ],
+   "text": [
+    "+2 sight radius.",
+    "+3 sight radius.",
+    "+4 sight radius."
+   ]
+  },
+  "leadership": {
+   "name": "Leadership",
+   "values": [
+    1,
+    2,
+    3
+   ],
+   "text": [
+    "+1 morale for the army in battle.",
+    "+2 morale for the army in battle.",
+    "+3 morale for the army in battle."
+   ]
+  },
+  "marksmanship": {
+   "name": "Marksmanship",
+   "values": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "text": [
+    "+10% ranged damage.",
+    "+20% ranged damage.",
+    "+30% ranged damage."
+   ]
+  },
+  "tactics": {
+   "name": "Tactics",
+   "values": [
+    0.05,
+    0.1,
+    0.15
+   ],
+   "text": [
+    "+5% melee damage.",
+    "+10% melee damage.",
+    "+15% melee damage."
+   ]
+  },
+  "diplomacy": {
+   "name": "Diplomacy",
+   "values": [
+    0.2,
+    0.35,
+    0.5
+   ],
+   "hire": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "text": [
+    "Village agreements cost 20% less; hiring heroes costs 10% less.",
+    "Village agreements cost 35% less; hiring heroes costs 20% less.",
+    "Village agreements cost 50% less; hiring heroes costs 30% less."
+   ]
+  },
+  "surgery": {
+   "name": "Surgery",
+   "values": [
+    0.1,
+    0.2,
+    0.3
+   ],
+   "text": [
+    "10% of lost figures return after a won battle.",
+    "20% of lost figures return after a won battle.",
+    "30% of lost figures return after a won battle."
+   ]
+  }
+ }
+}

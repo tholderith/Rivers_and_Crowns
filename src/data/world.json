@@ -126,6 +126,49 @@
    "sprite": "L-05/L-05-02"
   },
   {
+   "id": "ford-blockhouse",
+   "type": "mine",
+   "kind": "route",
+   "name": "Ford Blockhouse",
+   "income": {
+    "coin": 100
+   },
+   "tile": [
+    11,
+    15
+   ],
+   "sprite": "L-05/L-05-04"
+  },
+  {
+   "id": "portage-camp",
+   "type": "mine",
+   "kind": "route",
+   "name": "Portage Camp",
+   "income": {
+    "coin": 100
+   },
+   "tile": [
+    26,
+    17
+   ],
+   "sprite": "L-06/L-06-01"
+  },
+  {
+   "id": "village",
+   "type": "village",
+   "name": "Riverside Village",
+   "tile": [
+    15,
+    20
+   ],
+   "sprite": "L-03/L-03-01",
+   "owner": null,
+   "stock": {
+    "U-HD-01": 8,
+    "U-HD-02": 10
+   }
+  },
+  {
    "id": "tower-west",
    "type": "tower",
    "name": "Lookout Tower",
@@ -135,17 +178,6 @@
     3
    ],
    "sprite": "L-05/L-05-03"
-  },
-  {
-   "id": "tower-east",
-   "type": "tower",
-   "name": "Blockhouse",
-   "radius": 12,
-   "tile": [
-    33,
-    20
-   ],
-   "sprite": "L-05/L-05-04"
   },
   {
    "id": "pk-chest",
@@ -321,19 +353,6 @@
   {
    "faction": "french",
    "name": "New France",
-   "hero": {
-    "name": "Élise Marchand",
-    "portrait": "H-FR-01",
-    "sprite": "L-09/L-09-01",
-    "tile": [
-     5,
-     13
-    ],
-    "attack": 1,
-    "defense": 1,
-    "command": 5,
-    "move": 22
-   },
    "army": [
     {
      "unit": "U-FR-01",
@@ -357,24 +376,15 @@
     "timber": 10,
     "iron": 4,
     "provisions": 10
-   }
+   },
+   "start": [
+    5,
+    13
+   ]
   },
   {
    "faction": "haudenosaunee",
    "name": "Haudenosaunee",
-   "hero": {
-    "name": "War Captain",
-    "portrait": "H-HD-02",
-    "sprite": "L-09/L-09-03",
-    "tile": [
-     36,
-     14
-    ],
-    "attack": 1,
-    "defense": 1,
-    "command": 5,
-    "move": 22
-   },
    "army": [
     {
      "unit": "U-HD-01",
@@ -398,7 +408,89 @@
     "timber": 10,
     "iron": 4,
     "provisions": 10
-   }
+   },
+   "start": [
+    36,
+    14
+   ]
   }
- ]
+ ],
+ "heroes": {
+  "french": [
+   {
+    "id": "fr-elise",
+    "name": "Élise Marchand",
+    "portrait": "H-FR-01",
+    "title": "Officer of the Marine",
+    "skill": "leadership",
+    "lean": "command",
+    "attack": 1,
+    "defense": 1,
+    "command": 5,
+    "move": 22
+   },
+   {
+    "id": "fr-antoine",
+    "name": "Antoine Lefèvre",
+    "portrait": "H-FR-02",
+    "title": "Engineer",
+    "skill": "logistics",
+    "lean": "defense",
+    "attack": 1,
+    "defense": 2,
+    "command": 4,
+    "move": 22
+   },
+   {
+    "id": "fr-jb",
+    "name": "Jean-Baptiste Roy",
+    "portrait": "H-FR-03",
+    "title": "Voyageur guide",
+    "skill": "pathfinding",
+    "lean": "attack",
+    "attack": 2,
+    "defense": 1,
+    "command": 4,
+    "move": 22
+   }
+  ],
+  "haudenosaunee": [
+   {
+    "id": "hd-captain",
+    "name": "War Captain",
+    "portrait": "H-HD-02",
+    "title": "War Captain",
+    "skill": "tactics",
+    "lean": "attack",
+    "attack": 1,
+    "defense": 1,
+    "command": 5,
+    "move": 22
+   },
+   {
+    "id": "hd-clanmother",
+    "name": "Clan Mother",
+    "portrait": "H-HD-01",
+    "title": "Diplomat",
+    "skill": "diplomacy",
+    "lean": "command",
+    "attack": 0,
+    "defense": 2,
+    "command": 5,
+    "move": 22
+   },
+   {
+    "id": "hd-pathfinder",
+    "name": "Pathfinder",
+    "portrait": "H-HD-03",
+    "title": "Navigator",
+    "skill": "scouting",
+    "lean": "defense",
+    "attack": 2,
+    "defense": 1,
+    "command": 4,
+    "move": 22
+   }
+  ]
+ }
 }

@@ -42,6 +42,9 @@ export interface Hero {
   defense: number;
   command: number;
   commandMax: number;
+  morale?: number; // flat morale for every unit (Leadership)
+  rangedBonus?: number; // +fraction ranged damage (Marksmanship)
+  meleeBonus?: number; // +fraction melee damage (Tactics)
 }
 
 export interface SideState {
@@ -223,6 +226,7 @@ export function moraleOf(st: BattleState, s: Stack): number {
   if (adjacentAllyWith(st, s, 'inspire')) m += 1;
   if (s.rallied > 0) m += 2;
   if (s.wavering) m -= 2;
+  m += st.sides[s.side].hero.morale ?? 0;
   return Math.max(-3, Math.min(3, m));
 }
 
@@ -312,6 +316,8 @@ export function damageRoll(st: BattleState, a: Stack, d: Stack, o: HitOpts): { d
     if (isShooter(a) && !has(a, 'bayonet')) mult *= 0.5;
     if (has(a, 'charge') && o.moved >= 3) mult *= 1.25;
   }
+  const bonus = o.ranged ? ha.rangedBonus : ha.meleeBonus;
+  if (bonus) mult *= 1 + bonus;
   if (a.wavering) mult *= 0.75;
   if (st.inspired && st.active === a.id) mult *= 1.25;
   return { damage: Math.max(1, Math.round(base * mult)), cover };
