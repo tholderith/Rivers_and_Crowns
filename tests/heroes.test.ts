@@ -597,7 +597,7 @@ describe('holding the river routes', () => {
     expect(st.players[0].resources.coin).toBe(coin + 500 + 100);
   });
 
-  it('counts consecutive own turns, resets when one is lost, and wins at seven', () => {
+  it('counts consecutive own turns, resets when one is lost, and wins after ROUTE_DAYS turns', () => {
     const st = createWorld();
     own(st, 0);
     expect(routeHold(st, 0)).toBe(0);

@@ -507,6 +507,11 @@
    "id": "skill-icons-sheet",
    "model": "google/gemini-nano-banana-2.1",
    "cost": 0.057987
+  },
+  {
+   "id": "walk-sheet-hd-clanmother-r3",
+   "model": "google/gemini-nano-banana-2.1",
+   "cost": 0.063828
   }
  ]
 }

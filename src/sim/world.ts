@@ -164,7 +164,7 @@ const TOWN_INCOME: Partial<Record<Res, number>> = { coin: 500 };
 export const MAX_HEROES = 3;
 export const HIRE_COST = 1500;
 export const ROUTE_OBJECTS = ['ford-blockhouse', 'portage-camp', 'post-island'];
-export const ROUTE_DAYS = 7;
+export const ROUTE_DAYS = 4;
 export const VILLAGE_STOCK: Record<string, number> = { 'U-HD-01': 8, 'U-HD-02': 10 };
 export const ALLIANCE_COST: Partial<Record<Res, number>> = { coin: 800, provisions: 10 };
 export const GUIDES_COST: Partial<Record<Res, number>> = { coin: 300 };
@@ -367,7 +367,9 @@ function freeTileNear(st: WorldState, town: WObject): Tile | null {
     if (objectOn(st, t) || heroAt(st, t) || guardsNear(st, t).length) continue;
     cands.push(t);
   }
-  const rank = (t: Tile) => cheb(t, town.tile) * 100 - (t[1] - town.tile[1]) * 10 + Math.abs(t[0] - town.tile[0]);
+  // keep clear of other heroes so the newcomer doesn't stand on top of them
+  const crowded = (t: Tile) => st.players.some(pl => pl.heroes.some(h => cheb(h.tile, t) <= 1));
+  const rank = (t: Tile) => (crowded(t) ? 1000 : 0) + cheb(t, town.tile) * 100 - (t[1] - town.tile[1]) * 10 + Math.abs(t[0] - town.tile[0]);
   cands.sort((a, b) => rank(a) - rank(b));
   return cands[0] ?? null;
 }
@@ -912,7 +914,7 @@ export function recruitAtVillage(st: WorldState, villageId: string, unit: string
 // ------------------------------------------------------------------ the river routes
 
 const holdsRoutes = (st: WorldState, p: number) => ROUTE_OBJECTS.every(id => st.objects.find(o => o.id === id)?.owner === p);
-/** Consecutive own turns that began with this player holding both route outposts and the Island Trading Post. Seven wins. */
+/** Consecutive own turns that began with this player holding both route outposts and the Island Trading Post. ROUTE_DAYS of them wins. */
 export const routeHold = (st: WorldState, player: number): number => st.players[player].routeDays;
 
 export function endTurn(st: WorldState): WorldEvent[] {
@@ -990,10 +992,21 @@ export function aiTarget(st: WorldState): Tile | null {
     if (!best || v > best.v) best = { t, v };
   };
   const routesHeld = ROUTE_OBJECTS.filter(id => st.objects.find(o => o.id === id)?.owner === p).length;
+  // the rival's grip on the river routes: posts they hold, and turns they have held all three
+  const rivalHeld = (q: number) => ROUTE_OBJECTS.filter(id => st.objects.find(o => o.id === id)?.owner === q).length;
+  const routeValue = (o: WObject) => {
+    if (o.owner != null && o.owner !== p) {
+      const held = rivalHeld(o.owner);
+      if (held === 3) return 300 + 60 * st.players[o.owner].routeDays; // break their hold before it wins
+      if (held === 2) return 160;
+    }
+    // side heroes work the routes harder than the main army does
+    return (main ? 75 : 120) + (main ? 25 : 45) * routesHeld;
+  };
   for (const o of st.objects) {
     if (o.gone) continue;
     if (o.type === 'pickup') consider(o.tile, 30);
-    else if (o.type === 'mine' && o.owner !== p) consider(o.tile, ROUTE_OBJECTS.includes(o.id) ? 75 + 25 * routesHeld : o.kind === 'coin' ? 70 : 45);
+    else if (o.type === 'mine' && o.owner !== p) consider(o.tile, ROUTE_OBJECTS.includes(o.id) ? routeValue(o) : o.kind === 'coin' ? 70 : 45);
     else if (o.type === 'tower' && !isExplored(st, p, [o.tile[0] + 6, o.tile[1]])) consider(o.tile, 12);
     else if (o.type === 'guard' && power > armyPower(o.army!) * 1.6) consider(o.tile, 25);
     else if (o.type === 'town' && o.owner !== p && power > armyPower(garrisonOf(o)) * 1.4) consider(o.tile, 400);
