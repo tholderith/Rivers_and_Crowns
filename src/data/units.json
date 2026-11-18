@@ -1,0 +1,259 @@
+{
+ "_note": "Battle unit stats. dmg is per figure. range 0 = melee only. Traits: musket (must reload after firing), skirmish (may move up to 2 hexes and fire in one turn), drilled (reload and move up to 2 in one turn), woodland (woods cost 1 move, not 2), rapid (bow: never needs reloading), ambush (+25% fire damage from woods), charge (+25% melee damage after moving 3+ hexes), grapeshot (half damage to enemies next to the target), colours (adjacent allies: +1 morale, never falter), inspire (adjacent allies: +1 attack), bayonet (no melee penalty for a shooting unit), heavy (cannot enter woods).",
+ "U-FR-01": {
+  "name": "Habitant Militia",
+  "faction": "french",
+  "tier": 1,
+  "job": "Cheap line holders",
+  "hp": 4,
+  "attack": 3,
+  "defense": 3,
+  "dmg": [
+   2,
+   3
+  ],
+  "speed": 4,
+  "range": 5,
+  "traits": [
+   "musket",
+   "woodland"
+  ],
+  "poses": {
+   "ready": 1,
+   "attack": 2,
+   "reload": 3,
+   "defeated": 4
+  }
+ },
+ "U-FR-02": {
+  "name": "Voyageurs",
+  "faction": "french",
+  "tier": 2,
+  "job": "Scouts and skirmishers",
+  "hp": 5,
+  "attack": 5,
+  "defense": 3,
+  "dmg": [
+   3,
+   5
+  ],
+  "speed": 5,
+  "range": 6,
+  "traits": [
+   "musket",
+   "woodland",
+   "skirmish"
+  ],
+  "poses": {
+   "ready": 1,
+   "attack": 2,
+   "reload": 3,
+   "defeated": 4
+  }
+ },
+ "U-FR-03": {
+  "name": "Troupes de la Marine",
+  "faction": "french",
+  "tier": 3,
+  "job": "Steady line infantry",
+  "hp": 8,
+  "attack": 6,
+  "defense": 6,
+  "dmg": [
+   4,
+   6
+  ],
+  "speed": 4,
+  "range": 6,
+  "traits": [
+   "musket",
+   "drilled",
+   "bayonet"
+  ],
+  "poses": {
+   "ready": 1,
+   "attack": 3,
+   "reload": 2,
+   "defeated": 6
+  }
+ },
+ "U-FR-04": {
+  "name": "Colour Party",
+  "faction": "french",
+  "tier": 4,
+  "job": "Support: steadies nearby units",
+  "hp": 13,
+  "attack": 5,
+  "defense": 8,
+  "dmg": [
+   2,
+   4
+  ],
+  "speed": 4,
+  "range": 0,
+  "traits": [
+   "colours"
+  ],
+  "poses": {
+   "ready": 3,
+   "attack": 2,
+   "reload": 1,
+   "defeated": 5
+  }
+ },
+ "U-FR-05": {
+  "name": "Field Gun",
+  "faction": "french",
+  "tier": 5,
+  "job": "Breaks lines and walls",
+  "hp": 27,
+  "attack": 10,
+  "defense": 4,
+  "dmg": [
+   14,
+   22
+  ],
+  "speed": 2,
+  "range": 11,
+  "traits": [
+   "musket",
+   "grapeshot",
+   "heavy"
+  ],
+  "poses": {
+   "ready": 1,
+   "attack": 2,
+   "reload": 3,
+   "defeated": 4
+  }
+ },
+ "U-HD-01": {
+  "name": "Scouts",
+  "faction": "haudenosaunee",
+  "tier": 1,
+  "job": "Fast scouts",
+  "hp": 4,
+  "attack": 4,
+  "defense": 3,
+  "dmg": [
+   2,
+   4
+  ],
+  "speed": 7,
+  "range": 5,
+  "traits": [
+   "musket",
+   "woodland",
+   "skirmish"
+  ],
+  "poses": {
+   "ready": 1,
+   "attack": 3,
+   "reload": 5,
+   "defeated": 8
+  }
+ },
+ "U-HD-02": {
+  "name": "Bowmen",
+  "faction": "haudenosaunee",
+  "tier": 2,
+  "job": "Skirmishers that never reload",
+  "hp": 5,
+  "attack": 5,
+  "defense": 3,
+  "dmg": [
+   1,
+   2
+  ],
+  "speed": 5,
+  "range": 4,
+  "traits": [
+   "rapid",
+   "woodland"
+  ],
+  "poses": {
+   "ready": 1,
+   "attack": 2,
+   "reload": 3,
+   "defeated": 4
+  }
+ },
+ "U-HD-03": {
+  "name": "Musket Warriors",
+  "faction": "haudenosaunee",
+  "tier": 3,
+  "job": "Hold ground, deadly from cover",
+  "hp": 7,
+  "attack": 6,
+  "defense": 5,
+  "dmg": [
+   4,
+   6
+  ],
+  "speed": 5,
+  "range": 6,
+  "traits": [
+   "musket",
+   "woodland",
+   "ambush"
+  ],
+  "poses": {
+   "ready": 1,
+   "attack": 2,
+   "reload": 5,
+   "defeated": 8
+  }
+ },
+ "U-HD-04": {
+  "name": "Club Warriors",
+  "faction": "haudenosaunee",
+  "tier": 4,
+  "job": "Close assault and flanking",
+  "hp": 10,
+  "attack": 8,
+  "defense": 5,
+  "dmg": [
+   3,
+   5
+  ],
+  "speed": 6,
+  "range": 0,
+  "traits": [
+   "woodland",
+   "charge"
+  ],
+  "poses": {
+   "ready": 1,
+   "attack": 2,
+   "reload": 3,
+   "defeated": 4
+  }
+ },
+ "U-HD-05": {
+  "name": "War Captain's Band",
+  "faction": "haudenosaunee",
+  "tier": 5,
+  "job": "Elite support: inspires nearby units",
+  "hp": 18,
+  "attack": 9,
+  "defense": 7,
+  "dmg": [
+   6,
+   9
+  ],
+  "speed": 5,
+  "range": 6,
+  "traits": [
+   "musket",
+   "woodland",
+   "inspire",
+   "bayonet"
+  ],
+  "poses": {
+   "ready": 1,
+   "attack": 2,
+   "reload": 4,
+   "defeated": 6
+  }
+ }
+}
