@@ -141,3 +141,9 @@ button { font: inherit; color: inherit; }
 .costs em { font-style: normal; color: var(--good); font-size: 12px; }
 .cost { display: inline-flex; align-items: center; gap: 3px; font: 700 13px/1 var(--ui); }
 .cost img { width: 20px; height: 16px; object-fit: contain; }
+
+/* music control */
+.musicctl { position: fixed; z-index: 30; right: calc(10px + env(safe-area-inset-right, 0px)); bottom: calc(10px + env(safe-area-inset-bottom, 0px)); display: flex; gap: 6px; align-items: center; background: rgba(11,20,40,.85); border: 1px solid #6d5a2f; border-radius: 8px; padding: 5px 8px; }
+.musicctl .btn { padding: 6px 9px; font-size: 13px; }
+.musicctl input { width: 90px; accent-color: #d6b25a; }
+.musicctl input:disabled { opacity: .4; }

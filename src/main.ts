@@ -9,6 +9,7 @@ import { type Hex, distance, fromKey, key, neighbors, same } from './sim/hex';
 import { BattleView, center } from './render/battleView';
 import { asset, loadBattleTextures, poseUrl } from './render/assets';
 import { startCampaign } from './ui/mapScreen';
+import { music, mountMusicControl } from './audio/music';
 
 type Controller = 'human' | 'ai';
 const BATTLE = 'forest-edge';
@@ -40,6 +41,7 @@ let seed = Date.now() % 100000;
 // ------------------------------------------------------------------ start
 
 function startScreen() {
+  music.play('title');
   const el = $('start');
   el.style.backgroundImage = `url(${asset('scenes/K-01.webp')})`;
   el.hidden = false;
@@ -96,6 +98,7 @@ function playBattle(state: BattleState, ctrl: [Controller, Controller], campaign
 }
 
 async function setupBattle(state: BattleState, ctrl: [Controller, Controller]) {
+  music.play('battle');
   st = state;
   control = ctrl;
   $('game').hidden = false;
@@ -349,6 +352,7 @@ function endScreen() {
   const w = st.winner;
   const humanSides = control.map((c, i) => (c === 'human' ? i : -1)).filter(i => i >= 0);
   const won = typeof w === 'number' && humanSides.includes(w);
+  music.play(won || humanSides.length !== 1 ? 'victory' : 'defeat');
   const title = w === 'draw' ? 'A Draw' : humanSides.length === 1 ? (won ? 'Victory' : 'Defeat') : `${st.sides[w as number].name} Win`;
   el.style.backgroundImage = `url(${asset(`scenes/${won || humanSides.length !== 1 ? 'K-06' : 'K-07'}.webp`)})`;
   const losses = st.sides.map((sd, i) => {
@@ -373,5 +377,6 @@ function endScreen() {
 // test hook: lets automated playtests drive the game the same way a click would
 (window as unknown as { __rc: unknown }).__rc = { get st() { return st; }, submit, chooseAction: () => chooseAction(st), isHumanTurn, get busy() { return busy; } };
 void UNITS;
+mountMusicControl();
 $('game').hidden = true;
 startScreen();

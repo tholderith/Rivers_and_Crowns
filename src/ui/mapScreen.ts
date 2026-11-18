@@ -11,6 +11,7 @@ import { chooseAbility, chooseAction } from '../sim/ai';
 import { MapView, loadMapTextures } from '../render/mapView';
 import { asset, poseUrl } from '../render/assets';
 import battlesJson from '../data/battles.json';
+import { music } from '../audio/music';
 
 type Ctrl = 'human' | 'ai';
 type PlayBattle = (st: BattleState, ctrl: [Ctrl, Ctrl]) => Promise<BattleState>;
@@ -63,8 +64,12 @@ export async function startCampaign(ctrl: [Ctrl, Ctrl], play: PlayBattle, onExit
 
 // ------------------------------------------------------------------ rendering
 
+/** The map theme of whichever faction's player is looking at the map. */
+const mapTrack = () => (world.players[viewer()].faction === 'french' ? 'map-french' : 'map-haudenosaunee');
+
 function render() {
   const v = viewer();
+  if ($('recruit').hidden && !$('map').hidden) music.play(mapTrack());
   view.sync(world, v);
   const pl = world.players[world.turn], me = world.players[v];
   $('mapres').innerHTML = RESOURCES.map(r => `<span title="${r}"><img src="${asset(`sprites/${RES_ICON[r]}.webp`)}" alt="${r}">${me.resources[r].toLocaleString('en-US')}</span>`).join('');
@@ -254,6 +259,8 @@ function passScreen(): Promise<void> {
 }
 
 function finish() {
+  const humansWon = control.map((c, i) => (c === 'human' ? i : -1)).filter(i => i >= 0);
+  music.play(humansWon.length !== 1 || humansWon[0] === world.winner ? 'victory' : 'defeat');
   const el = $('end');
   const w = world.winner!;
   const humans = control.map((c, i) => (c === 'human' ? i : -1)).filter(i => i >= 0);
@@ -305,6 +312,7 @@ async function townPicture(o: WObject): Promise<string> {
 async function openRecruit() {
   const town = townHere(world, world.turn);
   if (!town || !town.stock) return;
+  music.play(town.faction === 'french' ? 'town-french' : 'town-haudenosaunee');
   const pl = world.players[world.turn];
   const el = $('recruit');
   const defs = BUILDINGS[town.faction!].buildings;
@@ -335,7 +343,7 @@ async function openRecruit() {
   $('rClose').onclick = closeRecruit;
 }
 
-function closeRecruit() { $('recruit').hidden = true; }
+function closeRecruit() { $('recruit').hidden = true; if (world && !$('map').hidden) music.play(mapTrack()); }
 
 // test hook for automated playtests
 (window as unknown as { __map: unknown }).__map = {
