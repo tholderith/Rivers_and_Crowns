@@ -1,15 +1,15 @@
 import { describe, expect, it } from 'vitest';
 import {
-  aiTarget, build, cannotBuild, createWorld, endTurn, findPath, guardsNear, moveHero, objectAt, recruit, resolveBattle, terrainAt, townFootprint, townHere, transfer, type Tile, type WorldState,
+  aiTarget, heroPool, build, cannotBuild, createWorld, endTurn, findPath, guardsNear, moveHero, objectAt, recruit, resolveBattle, terrainAt, townFootprint, townHere, transfer, type Tile, type WorldState,
 } from '../src/sim/world';
 
-const teleport = (st: WorldState, p: number, t: Tile) => { st.players[p].hero.tile = t; };
+const teleport = (st: WorldState, p: number, t: Tile) => { st.players[p].heroes[0].tile = t; };
 
 describe('adventure map', () => {
   it('the only ways across the river are the ford and the portage', () => {
     const st = createWorld();
     st.objects = st.objects.filter(o => o.type !== 'guard');
-    st.players[0].hero.mp = 99999;
+    st.players[0].heroes[0].mp = 99999;
     const r = findPath(st, 0, [33, 15])!;
     expect(r).not.toBeNull();
     const kinds = new Set(r.path.map(t => terrainAt(st, t)));
@@ -25,21 +25,19 @@ describe('adventure map', () => {
     const r = findPath(st, 0, [wolves.tile[0] - 1, wolves.tile[1]])!;
     const ev = moveHero(st, r.path);
     expect(ev.at(-1)?.type).toBe('encounter');
-    expect(st.encounter).toEqual({ kind: 'guard', object: 'g-wolves' });
-    expect(guardsNear(st, st.players[0].hero.tile).length).toBe(1);
+    expect(st.encounter).toEqual({ kind: 'guard', attacker: 'fr-elise', object: 'g-wolves' });
+    expect(guardsNear(st, st.players[0].heroes[0].tile).length).toBe(1);
   });
 
-  it('beating guards removes them; losing sends the hero home', () => {
+  it('beating guards removes them; losing removes the hero into the hire pool', () => {
     const st = createWorld();
-    st.encounter = { kind: 'guard', object: 'g-wolves' };
+    st.encounter = { kind: 'guard', attacker: 'fr-elise', object: 'g-wolves' };
     resolveBattle(st, true, [20, 10, 8, 1], [0]);
     expect(st.objects.find(o => o.id === 'g-wolves')!.gone).toBe(true);
-    st.encounter = { kind: 'guard', object: 'g-bear' };
+    st.encounter = { kind: 'guard', attacker: 'fr-elise', object: 'g-bear' };
     resolveBattle(st, false, [0, 0, 0, 0], [3]);
-    expect(st.players[0].hero.defeated).toBe(true);
-    endTurn(st); endTurn(st);
-    expect(st.players[0].hero.defeated).toBe(false);
-    expect(st.players[0].hero.tile).toEqual(st.players[0].hero.home);
+    expect(st.players[0].heroes).toEqual([]);
+    expect(heroPool(st, 0).map(h => h.id)).toContain('fr-elise');
   });
 
   it('captured mines pay out at the start of each day', () => {
@@ -72,7 +70,7 @@ describe('adventure map', () => {
     expect(fp.some(t => t[0] === town.tile[0] && t[1] === town.tile[1])).toBe(false);
     for (const t of fp) expect(objectAt(st, t)).toBe(town);
     expect(objectAt(st, town.tile)).toBe(town);
-    st.players[0].hero.mp = 99999;
+    st.players[0].heroes[0].mp = 99999;
     const around = findPath(st, 0, [town.tile[0], town.tile[1] - 5])!;
     expect(around).not.toBeNull();
     expect(around.path.some(t => fp.some(f => f[0] === t[0] && f[1] === t[1]))).toBe(false);
@@ -80,14 +78,14 @@ describe('adventure map', () => {
     expect(findPath(st, 0, fp[0])!.path.at(-1)).toEqual(town.tile);
     // a hand-made path through the footprint is refused
     teleport(st, 0, [town.tile[0], town.tile[1] + 1]);
-    const hero = st.players[0].hero;
+    const hero = st.players[0].heroes[0];
     moveHero(st, [[town.tile[0], town.tile[1] - 1]]);
     expect(hero.tile).toEqual([town.tile[0], town.tile[1] + 1]);
     // the entrance is enterable: visiting an own town; attacking an enemy one
     expect(moveHero(st, [town.tile]).some(e => e.type === 'town')).toBe(true);
     town.owner = 1;
     expect(moveHero(st, [town.tile]).some(e => e.type === 'encounter')).toBe(true);
-    expect(st.encounter).toEqual({ kind: 'town', object: 'town-fr' });
+    expect(st.encounter).toEqual({ kind: 'town', attacker: 'fr-elise', object: 'town-fr' });
   });
 
   it('towns and hero starts sit on clear land', () => {
@@ -101,14 +99,14 @@ describe('adventure map', () => {
     st.players.forEach((p, i) => {
       const gate = st.objects.find(o => o.type === 'town' && o.owner === i)!;
       expect(townHere(st, i)).toBe(gate);
-      expect(townFootprint(gate).some(t => t[0] === p.hero.tile[0] && t[1] === p.hero.tile[1])).toBe(false);
+      expect(townFootprint(gate).some(t => t[0] === p.heroes[0].tile[0] && t[1] === p.heroes[0].tile[1])).toBe(false);
     });
   });
 
   it('both gates can be reached from the other side of the map', () => {
     const st = createWorld();
     st.objects = st.objects.filter(o => o.type !== 'guard');
-    st.players[0].hero.mp = 99999;
+    st.players[0].heroes[0].mp = 99999;
     expect(findPath(st, 0, st.objects.find(o => o.id === 'town-hd')!.tile)).not.toBeNull();
   });
 
@@ -123,9 +121,9 @@ describe('adventure map', () => {
           const r = findPath(st, st.turn, t);
           if (!r) break;
           moveHero(st, r.path);
-          if (st.encounter) resolveBattle(st, true, st.players[st.turn].hero.army.map(a => a.count), []);
+          if (st.encounter) resolveBattle(st, true, st.players[st.turn].heroes[0].army.map(a => a.count), []);
         }
-        tiles.push(st.players.map(p => p.hero.tile.join(',')).join('|'));
+        tiles.push(st.players.map(p => p.heroes[0].tile.join(',')).join('|'));
         endTurn(st);
       }
       return tiles.join(';');
@@ -169,7 +167,7 @@ describe('towns', () => {
     const st = createWorld(); rich(st);
     build(st, 'town-fr', 'wharf'); endTurn(st); endTurn(st);
     build(st, 'town-fr', 'military_dock'); endTurn(st); endTurn(st);
-    expect(st.players[0].hero.mp).toBe(st.players[0].hero.mpMax + 50);
+    expect(st.players[0].heroes[0].mp).toBe(st.players[0].heroes[0].mpMax + 50);
   });
 });
 
@@ -187,9 +185,9 @@ describe('garrisons', () => {
   it('recruiting with the hero far away fills the garrison, not the hero', () => {
     const st = createWorld(); rich(st);
     teleport(st, 0, [20, 2]);
-    const heroArmy = JSON.stringify(st.players[0].hero.army);
+    const heroArmy = JSON.stringify(st.players[0].heroes[0].army);
     expect(recruit(st, 'town-fr', 'U-FR-01', 3)).toBe(true);
-    expect(JSON.stringify(st.players[0].hero.army)).toBe(heroArmy);
+    expect(JSON.stringify(st.players[0].heroes[0].army)).toBe(heroArmy);
     expect(st.objects.find(o => o.id === 'town-fr')!.army!.find(a => a.unit === 'U-FR-01')!.count).toBe(33);
     expect(recruit(st, 'town-hd', 'U-HD-01', 1)).toBe(false); // not your town
   });
@@ -200,9 +198,9 @@ describe('garrisons', () => {
     teleport(st, 0, [20, 2]);
     expect(transfer(st, 'town-fr', 'garrison', 0, 5)).toBe(false);
     teleport(st, 0, [town.tile[0] + 1, town.tile[1] + 1]);
-    const heroBefore = st.players[0].hero.army.find(a => a.unit === 'U-FR-01')!.count;
+    const heroBefore = st.players[0].heroes[0].army.find(a => a.unit === 'U-FR-01')!.count;
     expect(transfer(st, 'town-fr', 'garrison', 0, 5)).toBe(true); // merges into the hero's U-FR-01
-    expect(st.players[0].hero.army.find(a => a.unit === 'U-FR-01')!.count).toBe(heroBefore + 5);
+    expect(st.players[0].heroes[0].army.find(a => a.unit === 'U-FR-01')!.count).toBe(heroBefore + 5);
     expect(town.army![0].count).toBe(25);
     expect(transfer(st, 'town-fr', 'garrison', 0, 999)).toBe(false);
     expect(transfer(st, 'town-fr', 'hero', 0, 5)).toBe(true);
@@ -211,7 +209,7 @@ describe('garrisons', () => {
 
   it('stack limits and the hero keeping an army', () => {
     const st = createWorld(); rich(st);
-    const town = st.objects.find(o => o.id === 'town-fr')!, hero = st.players[0].hero;
+    const town = st.objects.find(o => o.id === 'town-fr')!, hero = st.players[0].heroes[0];
     teleport(st, 0, [town.tile[0], town.tile[1] + 1]);
     town.army = ['U-FR-01', 'U-FR-02', 'U-FR-03', 'U-FR-04', 'U-FR-05', 'U-HD-01', 'U-HD-02'].map(unit => ({ unit, count: 3 }));
     expect(recruit(st, 'town-fr', 'U-FR-01', 1)).toBe(true); // merges even when full

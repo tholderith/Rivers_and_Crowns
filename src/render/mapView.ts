@@ -3,32 +3,38 @@
 // Reads the world state; never changes it.
 
 import { Application, Assets, Container, Graphics, Sprite, Text, type Texture, type FederatedPointerEvent } from 'pixi.js';
-import { type Tile, type WorldState, type WObject, MAP_W, MAP_H, TILE, isExplored } from '../sim/world';
+import { type Tile, type WorldState, type WObject, MAP_W, MAP_H, TILE, isExplored, ROSTER, activeHero } from '../sim/world';
 import { asset } from './assets';
 import { sfx } from '../audio/sfx';
 
 const MW = MAP_W * TILE, MH = MAP_H * TILE;
 const FLAG: number[] = [0x2f5aa8, 0x7a3b8f];
 /** Sprite width in tiles. Towns fill their 6×4 footprint. */
-const SIZE: Record<string, number> = { town: 6.6, mine: 2.2, tower: 2.0, pickup: 1.2, guard: 1.8, hero: 1.7 };
+const SIZE: Record<string, number> = { town: 6.6, mine: 2.2, tower: 2.0, pickup: 1.2, guard: 1.8, hero: 1.7, village: 2.6 };
 const VISIBLE_TILES = 20; // tiles across the view at the default zoom
 const BG = 'scenes/L-10-hd.webp';
 
 export const tileCenter = (t: Tile) => ({ x: t[0] * TILE + TILE / 2, y: t[1] * TILE + TILE / 2 });
 const spriteUrl = (s: string) => asset(`sprites/${s}.webp`);
-const STARTER: Record<string, string> = { french: 'fr-elise', haudenosaunee: 'hd-captain' };
-export const walkFrameUrls = (faction: string) =>
-  [1, 2, 3, 4, 5, 6].map(i => asset(`sprites/hero-walk-${STARTER[faction] ?? faction}/frame-${i}.webp`));
+export const walkFrameUrls = (heroId: string) =>
+  [1, 2, 3, 4, 5, 6].map(i => asset(`sprites/hero-walk-${heroId}/frame-${i}.webp`));
+/** Every hero that could appear: the starting heroes and everyone in the hire pools. */
+const allHeroIds = (world: WorldState) => {
+  const ids = new Set<string>();
+  for (const p of world.players) { for (const h of p.heroes) ids.add(h.id); for (const d of ROSTER[p.faction] ?? []) ids.add(d.id); }
+  return [...ids];
+};
 
 export async function loadMapTextures(world: WorldState): Promise<Record<string, Texture>> {
   const urls = new Set<string>([asset(BG)]);
   for (const o of world.objects) urls.add(spriteUrl(o.sprite));
-  for (const p of world.players) urls.add(spriteUrl(p.hero.sprite));
+  const heroIds = allHeroIds(world);
+  for (const id of heroIds) urls.add(spriteUrl(`heroes/${id}`));
   const tex = (await Assets.load([...urls])) as Record<string, Texture>;
   // walk frames are optional: any that are missing are skipped, and with none the hero just bobs
-  for (const p of world.players) for (const u of walkFrameUrls(p.faction)) {
+  await Promise.all(heroIds.flatMap(id => walkFrameUrls(id).map(async u => {
     try { tex[u] = await Assets.load(u); } catch { /* frame not present */ }
-  }
+  })));
   return tex;
 }
 
@@ -37,7 +43,7 @@ function townPos(o: WObject) {
   return { x: o.tile[0] * TILE, y: (o.tile[1] + 1) * TILE };
 }
 
-interface HeroView { sprite: Sprite; idle: Texture; frames: Texture[]; baseScale: number; frameScale: number }
+interface HeroView { sprite: Sprite; idle: Texture; frames: Texture[]; baseScale: number; frameScale: number; player: number }
 
 export class MapView {
   app = new Application();
@@ -49,7 +55,7 @@ export class MapView {
   private fog = new Graphics();
   private fx = new Container();
   private ring = new Graphics();
-  private heroes: HeroView[] = [];
+  private heroes = new Map<string, HeroView>();
   private objSprites = new Map<string, Sprite>();
   private townLabels = new Map<string, Container>();
   private host!: HTMLElement;
@@ -105,17 +111,6 @@ export class MapView {
         this.townLabels.set(o.id, label);
       }
     }
-    world.players.forEach(p => {
-      const idle = this.tex[spriteUrl(p.hero.sprite)];
-      const frames = walkFrameUrls(p.faction).map(u => this.tex[u]).filter(Boolean);
-      const sp = new Sprite(idle);
-      sp.anchor.set(0.5, 0.92);
-      const baseScale = (TILE * SIZE.hero) / Math.max(idle.width, idle.height);
-      sp.scale.set(baseScale);
-      this.objLayer.addChild(sp);
-      // frames are drawn at the same on-screen height as the idle sprite
-      this.heroes.push({ sprite: sp, idle, frames: frames.length >= 4 ? frames : [], baseScale, frameScale: frames.length ? baseScale * (idle.height * 0.95) / frames[0].height : baseScale });
-    });
 
     this.setupInput();
     const ro = new ResizeObserver(() => { this.app.resize(); this.fitZoom(false); this.applyCamera(); });
@@ -292,12 +287,12 @@ export class MapView {
       g.fillStyle = colour;
       g.fillRect((o.tile[0] - (big ? 3 : 0.4)) * sx, (o.tile[1] - (big ? 3 : 0.4)) * sy, (big ? 6 : 1.2) * sx, (big ? 4 : 1.2) * sy);
     }
-    world.players.forEach((p, i) => {
-      if (p.hero.defeated || (i !== this.lastViewer && !isExplored(world, this.lastViewer, p.hero.tile))) return;
+    world.players.forEach((p, i) => p.heroes.forEach(h => {
+      if (i !== this.lastViewer && !isExplored(world, this.lastViewer, h.tile)) return;
       g.fillStyle = i === 0 ? '#9cc0ff' : '#e0a8ff';
       g.strokeStyle = '#0b1428';
-      g.beginPath(); g.arc((p.hero.tile[0] + 0.5) * sx, (p.hero.tile[1] + 0.5) * sy, Math.max(2.5, sx * 0.8), 0, 7); g.fill(); g.stroke();
-    });
+      g.beginPath(); g.arc((h.tile[0] + 0.5) * sx, (h.tile[1] + 0.5) * sy, Math.max(2.5, sx * 0.8), 0, 7); g.fill(); g.stroke();
+    }));
     // the camera's view
     const vw = this.app.screen.width / this.zoom, vh = this.app.screen.height / this.zoom;
     g.strokeStyle = '#f2d68c';
@@ -317,16 +312,20 @@ export class MapView {
       const lab = this.townLabels.get(o.id);
       if (lab) lab.visible = isExplored(world, viewer, o.tile);
     }
-    world.players.forEach((p, i) => {
-      const hv = this.heroes[i];
-      hv.sprite.visible = !p.hero.defeated && (i === viewer || isExplored(world, viewer, p.hero.tile));
-      const c = tileCenter(p.hero.tile);
+    const alive = new Set<string>();
+    world.players.forEach((p, i) => p.heroes.forEach(h => {
+      alive.add(h.id);
+      const hv = this.heroView(h.id, i);
+      hv.sprite.visible = i === viewer || isExplored(world, viewer, h.tile);
+      const c = tileCenter(h.tile);
       hv.sprite.position.set(c.x, c.y + TILE * 0.42);
       hv.sprite.zIndex = c.y + 1;
       hv.sprite.texture = hv.idle;
+      hv.sprite.anchor.set(0.5, 0.92);
       hv.sprite.scale.set(hv.baseScale * (i === 1 ? -1 : 1), hv.baseScale);
       hv.sprite.rotation = 0;
-    });
+    }));
+    for (const [id, hv] of this.heroes) if (!alive.has(id)) { hv.sprite.destroy(); this.heroes.delete(id); }
     const f = this.flags;
     f.clear();
     for (const o of world.objects) {
@@ -338,9 +337,9 @@ export class MapView {
       f.rect(x, y, 3, h).fill({ color: 0xe9e4d6 });
       f.poly([x + 3, y, x + (town ? 34 : 22), y + 8, x + 3, y + (town ? 17 : 12)]).fill({ color: FLAG[o.owner] }).stroke({ width: 1, color: 0x0b1428 });
     }
-    const cur = world.players[world.turn].hero;
+    const cur = activeHero(world);
     this.ring.clear();
-    if (!cur.defeated && world.turn === viewer) {
+    if (cur && world.turn === viewer) {
       const c = tileCenter(cur.tile);
       this.ring.ellipse(c.x, c.y + TILE * 0.38, TILE * 0.55, TILE * 0.22).stroke({ width: 3, color: 0xf2d68c });
     }
@@ -378,6 +377,23 @@ export class MapView {
     });
   }
 
+  /** The sprite for a hero, made the first time the hero is seen (hired heroes appear mid-game). */
+  private heroView(id: string, player: number): HeroView {
+    let hv = this.heroes.get(id);
+    if (hv) return hv;
+    const idle = this.tex[spriteUrl(`heroes/${id}`)];
+    const frames = walkFrameUrls(id).map(u => this.tex[u]).filter(Boolean);
+    const sp = new Sprite(idle);
+    sp.anchor.set(0.5, 0.92);
+    const baseScale = (TILE * SIZE.hero) / Math.max(idle.width, idle.height);
+    sp.scale.set(baseScale);
+    this.objLayer.addChild(sp);
+    // frames are drawn at the same on-screen height as the idle sprite
+    hv = { sprite: sp, idle, frames: frames.length >= 4 ? frames : [], baseScale, frameScale: frames.length ? baseScale * (idle.height * 0.95) / frames[0].height : baseScale, player };
+    this.heroes.set(id, hv);
+    return hv;
+  }
+
   // ------------------------------------------------------------------ animation
 
   private tween(ms: number, step: (t: number) => void): Promise<void> {
@@ -395,8 +411,10 @@ export class MapView {
   }
 
   /** Walk a hero along tiles: walk-cycle frames if we have them, plus a gait bob, a lean and hoof dust. */
-  async walk(player: number, from: Tile, steps: Tile[]) {
-    const hv = this.heroes[player], sp = hv.sprite;
+  async walk(heroId: string, from: Tile, steps: Tile[]) {
+    const hv = this.heroes.get(heroId);
+    if (!hv) return;
+    const sp = hv.sprite;
     const STEP_MS = 230;
     this.ring.visible = false;
     let prev = from, frame = 0, elapsed = 0;
@@ -409,7 +427,7 @@ export class MapView {
       sp.scale.set(sc * dir, sc);
       if (hv.frames.length) sp.anchor.set(0.5, 0.97);
       this.dust(a.x, a.y + TILE * 0.4);
-      if (player === 0 && hv.frames.length >= 6) sfx.hoof(); else sfx.step();
+      if (hv.player === 0 && hv.frames.length >= 6) sfx.hoof(); else sfx.step();
       await this.tween(STEP_MS, k => {
         const x = a.x + (b.x - a.x) * k, y = a.y + (b.y - a.y) * k;
         const phase = (elapsed + k * STEP_MS) / 115;

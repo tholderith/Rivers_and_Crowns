@@ -8,7 +8,7 @@ import { chooseAbility, chooseAction } from './sim/ai';
 import { type Hex, distance, fromKey, key, neighbors, same } from './sim/hex';
 import { BattleView, center } from './render/battleView';
 import { asset, loadBattleTextures, poseUrl } from './render/assets';
-import { startCampaign } from './ui/mapScreen';
+import { startCampaign, savedCampaign, continueCampaign } from './ui/mapScreen';
 import { music, mountMusicControl } from './audio/music';
 
 type Controller = 'human' | 'ai';
@@ -45,11 +45,13 @@ function startScreen() {
   const el = $('start');
   el.style.backgroundImage = `url(${asset('scenes/K-01.webp')})`;
   el.hidden = false;
+  const saved = savedCampaign();
   el.innerHTML = `<div class="card">
     <h1>Rivers &amp; Crowns</h1>
     <p><b>The River Basin.</b> Explore, claim mines, cross the ford and the portage, and take the enemy town.</p>
     <div class="choices">
-      <button class="choice primary" data-camp="french"><b>Campaign: New France</b><span>Against the Haudenosaunee AI</span></button>
+      ${saved ? `<button class="choice primary" id="contGame"><b>Continue</b><span>${saved}</span></button>` : ''}
+      <button class="choice${saved ? '' : ' primary'}" data-camp="french"><b>Campaign: New France</b><span>Against the Haudenosaunee AI</span></button>
       <button class="choice" data-camp="haudenosaunee"><b>Campaign: Haudenosaunee</b><span>Against the New France AI</span></button>
       <button class="choice" data-camp="hotseat"><b>Campaign hotseat</b><span>Two players, one screen</span></button>
     </div>
@@ -67,6 +69,8 @@ function startScreen() {
       <li>Your hero's <b>Command</b> points pay for Rally, Coordinated Volley and Fieldworks, one per round.</li>
     </ul>
   </div>`;
+  const cont = document.getElementById('contGame');
+  if (cont) cont.onclick = () => { el.hidden = true; void continueCampaign(playBattle, startScreen).then(ok => { if (!ok) startScreen(); }); };
   el.querySelectorAll<HTMLButtonElement>('[data-camp]').forEach(b => b.addEventListener('click', () => {
     const m = b.dataset.camp!;
     const ctrl: [Controller, Controller] = m === 'french' ? ['human', 'ai'] : m === 'haudenosaunee' ? ['ai', 'human'] : ['human', 'human'];
