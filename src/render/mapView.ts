@@ -49,6 +49,7 @@ export class MapView {
   private ring = new Graphics();
   private heroes: HeroView[] = [];
   private objSprites = new Map<string, Sprite>();
+  private townLabels = new Map<string, Container>();
   private host!: HTMLElement;
   private zoom = 1;
   private minZoom = 0.5;
@@ -89,6 +90,18 @@ export class MapView {
       }
       this.objLayer.addChild(sp);
       this.objSprites.set(o.id, sp);
+      if (o.type === 'town') {
+        const p = townPos(o);
+        const label = new Container();
+        const t = new Text({ text: o.name ?? '', style: { fontFamily: 'Cormorant Garamond, Georgia, serif', fontStyle: 'italic', fontWeight: '700', fontSize: 26, fill: 0xf2d68c } });
+        t.anchor.set(0.5);
+        const bgp = new Graphics().roundRect(-t.width / 2 - 12, -t.height / 2 - 3, t.width + 24, t.height + 6, 8).fill({ color: 0x0b1428, alpha: 0.82 }).stroke({ width: 2, color: 0xd6b25a });
+        label.addChild(bgp, t);
+        label.position.set(p.x, p.y - sp.height * 0.95 - 4); // above the town, clear of the gate
+        label.zIndex = 99999;
+        this.objLayer.addChild(label);
+        this.townLabels.set(o.id, label);
+      }
     }
     world.players.forEach(p => {
       const idle = this.tex[spriteUrl(p.hero.sprite)];
@@ -189,16 +202,18 @@ export class MapView {
     stage.on('pointerup', e => { const d = drag; drag = null; if (d && !d.moved) this.onClick(toTile(e)); });
     stage.on('pointerupoutside', () => { drag = null; });
     stage.on('pointerleave', () => this.onHover(null));
+    // scroll / two-finger trackpad swipe pans; pinch (ctrlKey) or Ctrl+wheel zooms
     this.app.canvas.addEventListener('wheel', ev => {
       ev.preventDefault();
-      const before = this.zoom;
-      this.zoom = Math.min(2.6, Math.max(this.minZoom, this.zoom * (ev.deltaY < 0 ? 1.12 : 1 / 1.12)));
-      // zoom around the cursor
-      const r = this.app.canvas.getBoundingClientRect();
-      const sx = ev.clientX - r.left - this.app.screen.width / 2, sy = ev.clientY - r.top - this.app.screen.height / 2;
-      this.cam.x += sx / before - sx / this.zoom;
-      this.cam.y += sy / before - sy / this.zoom;
       this.follow = null;
+      if (ev.ctrlKey || ev.metaKey) {
+        const r = this.app.canvas.getBoundingClientRect();
+        this.zoomBy(Math.exp(-ev.deltaY * 0.01), ev.clientX - r.left, ev.clientY - r.top);
+        return;
+      }
+      const k = ev.deltaMode === 1 ? 30 : 1; // line-based wheels report lines, not pixels
+      this.cam.x += (ev.deltaX * k) / this.zoom;
+      this.cam.y += (ev.deltaY * k) / this.zoom;
       this.applyCamera();
     }, { passive: false });
     // arrow keys / WASD scroll the map
@@ -220,6 +235,22 @@ export class MapView {
   tileToScreen(t: Tile): { x: number; y: number } {
     const p = this.worldLayer.toGlobal({ x: t[0] * TILE + TILE / 2, y: t[1] * TILE });
     return { x: p.x, y: p.y };
+  }
+
+  /** Zoom by a factor around a screen point (default: the view centre). */
+  zoomBy(f: number, sx = this.app.screen.width / 2, sy = this.app.screen.height / 2) {
+    const before = this.zoom;
+    this.zoom = Math.min(2.6, Math.max(this.minZoom, this.zoom * f));
+    const ox = sx - this.app.screen.width / 2, oy = sy - this.app.screen.height / 2;
+    this.cam.x += ox / before - ox / this.zoom;
+    this.cam.y += oy / before - oy / this.zoom;
+    this.applyCamera();
+  }
+
+  /** Back to the standard zoom, centred on a tile. */
+  resetView(t: Tile) {
+    this.fitZoom(true);
+    this.centerOn(t, true);
   }
 
   // ------------------------------------------------------------------ minimap
@@ -281,6 +312,8 @@ export class MapView {
     for (const o of world.objects) {
       const sp = this.objSprites.get(o.id)!;
       sp.visible = !o.gone;
+      const lab = this.townLabels.get(o.id);
+      if (lab) lab.visible = isExplored(world, viewer, o.tile);
     }
     world.players.forEach((p, i) => {
       const hv = this.heroes[i];

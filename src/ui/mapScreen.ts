@@ -60,6 +60,9 @@ export async function startCampaign(ctrl: [Ctrl, Ctrl], play: PlayBattle, onExit
   view.onHover = onHover;
   view.onClick = onClick;
   view.attachMinimap($('minimap') as HTMLCanvasElement);
+  $('zIn').onclick = () => view.zoomBy(1.25);
+  $('zOut').onclick = () => view.zoomBy(0.8);
+  $('zHome').onclick = () => view.resetView(world.players[viewer()].hero.tile);
   view.centerOn(world.players[viewer()].hero.tile, true);
   render();
   if (!humanTurn()) await aiTurn();

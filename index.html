@@ -31,10 +31,11 @@
     <header class="topbar mapbar">
       <div class="mapres" id="mapres"></div>
       <div class="roundbox"><div class="title">Rivers &amp; Crowns</div><div id="mapday"></div></div>
-      <div class="maphelp">Click a tile to plan a route, click it again to march. Drag, scroll the wheel or use the arrow keys to look around.</div>
+      <div class="maphelp">Click a tile to plan a route, click it again to march. Drag, scroll or use the arrow keys to look around; pinch or Ctrl+scroll to zoom.</div>
     </header>
     <div class="mapwrap">
-      <main class="field"><div id="mapstage"></div><div class="tip" id="maptip" hidden></div></main>
+      <main class="field"><div id="mapstage"></div><div class="tip" id="maptip" hidden></div>
+        <div class="mapctl"><button class="btn" id="zIn" aria-label="Zoom in">+</button><button class="btn" id="zOut" aria-label="Zoom out">−</button><button class="btn" id="zHome" aria-label="Find my hero">⌖ Hero</button></div></main>
       <aside class="side"><canvas id="minimap" width="252" height="164" aria-label="Minimap: click to move the view"></canvas><div id="side"></div></aside>
     </div>
     <div class="screen" id="recruit" hidden></div>
