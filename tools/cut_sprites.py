@@ -32,12 +32,47 @@ def background_mask(rgba: np.ndarray, tolerance: float) -> np.ndarray:
     # inside an object (a white sail, a pale face) are not removed
     labels, _ = ndimage.label(close)
     edge = np.unique(np.concatenate([labels[0], labels[-1], labels[:, 0], labels[:, -1]]))
-    return np.isin(labels, edge[edge > 0])
+    mask = np.isin(labels, edge[edge > 0])
+    # background enclosed by an object (between legs, inside a bow): only near-exact,
+    # flat patches of the background colour, so shaded cloth of a similar colour stays
+    tight = np.sqrt(((rgb - bg) ** 2).sum(-1)) < 7
+    labels, n = ndimage.label(tight & ~mask)
+    for i, sl in enumerate(ndimage.find_objects(labels)):
+        region = labels[sl] == i + 1
+        if region.sum() > 400 and rgb[sl][region].std(0).max() < 3:
+            mask[sl] |= region
+    return mask
+
+
+def soften_shadows(im: np.ndarray, bg: np.ndarray, base: np.ndarray, from_row: int = 0) -> None:
+    """Turn painted ground shadows into real transparent shadows, in place.
+
+    On a flat background the model paints shadows as darker versions of the background
+    colour. Those pixels keep the background's hue but are dimmer. Where such pixels
+    touch the background (outlines keep clothing and objects from touching it), they
+    become a dark colour whose transparency follows how much darker they were.
+    """
+    if not bg.any():
+        return
+    rgb = im[..., :3].astype(np.float32)
+    base = base + 1e-3
+    ratio = rgb / base                       # per-channel brightness relative to the background
+    k = ratio.mean(-1)
+    same_hue = (np.abs(ratio - k[..., None]).max(-1) < 0.07)
+    cand = same_hue & (k > 0.35) & (k < 0.97) & ~bg
+    cand[:from_row] = False  # shadows lie at the foot of an object, never higher up
+    labels, _ = ndimage.label(cand)
+    touching = np.unique(labels[ndimage.binary_dilation(bg, iterations=1) & cand])
+    shadow = np.isin(labels, touching[touching > 0])
+    alpha = np.clip((1 - k) * 1.6, 0, 0.75) * 255
+    im[shadow, :3] = (24, 18, 12)
+    im[shadow, 3] = alpha[shadow].astype(np.uint8)
 
 
 def cut(sheet: Path, out_dir: Path, tolerance: float, min_area: int, pad: int, group: int = 8, scale: float = 0.5) -> int:
     im = np.array(Image.open(sheet).convert("RGBA"))
     bg = background_mask(im, tolerance)
+    base = np.median(im[..., :3][bg].astype(np.float32), axis=0) if bg.any() else np.zeros(3, np.float32)
     im[bg, 3] = 0
     fg = ~bg
     # group pieces that sit close together (smoke wisps, splinters, a musket barrel
@@ -59,7 +94,9 @@ def cut(sheet: Path, out_dir: Path, tolerance: float, min_area: int, pad: int, g
         y0, y1 = max(0, ys.start - pad), min(im.shape[0], ys.stop + pad)
         x0, x1 = max(0, xs.start - pad), min(im.shape[1], xs.stop + pad)
         crop = im[y0:y1, x0:x1].copy()
-        crop[..., 3] = np.where((labels[y0:y1, x0:x1] == lab) & fg[y0:y1, x0:x1], crop[..., 3], 0)
+        mine = (labels[y0:y1, x0:x1] == lab) & fg[y0:y1, x0:x1]
+        crop[..., 3] = np.where(mine, crop[..., 3], 0)
+        soften_shadows(crop, ~mine, base, from_row=int((y1 - y0) * 0.7))
         img = Image.fromarray(crop)
         if scale != 1:
             img = img.resize((max(1, round(img.width * scale)), max(1, round(img.height * scale))), Image.LANCZOS)
