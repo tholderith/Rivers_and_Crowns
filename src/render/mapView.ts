@@ -5,6 +5,7 @@
 import { Application, Assets, Container, Graphics, Sprite, Text, type Texture, type FederatedPointerEvent } from 'pixi.js';
 import { type Tile, type WorldState, type WObject, MAP_W, MAP_H, TILE, isExplored } from '../sim/world';
 import { asset } from './assets';
+import { sfx } from '../audio/sfx';
 
 const MW = MAP_W * TILE, MH = MAP_H * TILE;
 const FLAG: number[] = [0x2f5aa8, 0x7a3b8f];
@@ -15,8 +16,9 @@ const BG = 'scenes/L-10-hd.webp';
 
 export const tileCenter = (t: Tile) => ({ x: t[0] * TILE + TILE / 2, y: t[1] * TILE + TILE / 2 });
 const spriteUrl = (s: string) => asset(`sprites/${s}.webp`);
+const STARTER: Record<string, string> = { french: 'fr-elise', haudenosaunee: 'hd-captain' };
 export const walkFrameUrls = (faction: string) =>
-  [1, 2, 3, 4, 5, 6].map(i => asset(`sprites/hero-walk-${faction}/frame-${i}.webp`));
+  [1, 2, 3, 4, 5, 6].map(i => asset(`sprites/hero-walk-${STARTER[faction] ?? faction}/frame-${i}.webp`));
 
 export async function loadMapTextures(world: WorldState): Promise<Record<string, Texture>> {
   const urls = new Set<string>([asset(BG)]);
@@ -407,6 +409,7 @@ export class MapView {
       sp.scale.set(sc * dir, sc);
       if (hv.frames.length) sp.anchor.set(0.5, 0.97);
       this.dust(a.x, a.y + TILE * 0.4);
+      if (player === 0 && hv.frames.length >= 6) sfx.hoof(); else sfx.step();
       await this.tween(STEP_MS, k => {
         const x = a.x + (b.x - a.x) * k, y = a.y + (b.y - a.y) * k;
         const phase = (elapsed + k * STEP_MS) / 115;

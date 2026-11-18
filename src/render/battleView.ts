@@ -6,6 +6,7 @@ import { Application, Container, Graphics, Sprite, Text, type Texture, type Fede
 import { type BattleEvent, type BattleState, type Stack, alive, byId, has, unitOf } from '../sim/battle';
 import { type Hex, COLS, allHexes } from '../sim/hex';
 import { PROPS, asset, poseUrl, type Pose } from './assets';
+import { sfx } from '../audio/sfx';
 
 export const W = 1600, H = 900;
 const R = 64; // hex radius (pointy top)
@@ -270,6 +271,7 @@ export class BattleView {
           if (e.round > 1) this.banner(`Round ${e.round}`);
           break;
         case 'move': {
+          sfx.step();
           const s = byId(st, e.stack);
           const v = this.units.get(e.stack)!;
           for (let i = 1; i < e.path.length; i++) {
@@ -286,6 +288,9 @@ export class BattleView {
           this.faceToward(e.stack, e.target);
           this.setPose(a, 'attack');
           const sx = v.root.x + 60 * Math.sign(v.body.scale.x), sy = v.root.y - 70;
+          if (unitOf(a).id === 'U-FR-05') sfx.cannon();
+          else if (unitOf(a).traits.includes('rapid')) sfx.bow();
+          else sfx.musket(Math.min(6, 2 + Math.floor(a.count / 6)));
           if (unitOf(a).id === 'U-FR-05') this.puff(PROPS.cannonBlast, sx + 20 * Math.sign(v.body.scale.x), sy + 30, 150, 900, Math.sign(v.body.scale.x));
           else { this.puff(PROPS.flash, sx, sy, 60, 300, Math.sign(v.body.scale.x)); this.puff(PROPS.puff, sx + 10, sy - 6, 70, 900); }
           await this.wait(330);
@@ -304,6 +309,7 @@ export class BattleView {
           break;
         }
         case 'melee': {
+          if (byId(st, e.stack).unit.startsWith('U-NE-0') && !unitOf(byId(st, e.stack)).traits.includes('musket')) sfx.hit(); else sfx.clash();
           const a = byId(st, e.stack), v = this.units.get(e.stack)!, tv = this.units.get(e.target)!;
           this.faceToward(e.stack, e.target);
           this.setPose(a, 'attack');
@@ -317,6 +323,7 @@ export class BattleView {
           break;
         }
         case 'reload': {
+          sfx.reload();
           const s = byId(st, e.stack), v = this.units.get(e.stack)!;
           this.float('Reloaded', v.root.x, v.root.y - 130, 0xcfe8c2);
           this.setPose(s, 'ready');
@@ -336,7 +343,7 @@ export class BattleView {
           await this.tween(400, k => { v.root.alpha = 1 - 0.5 * k; });
           break;
         }
-        case 'ability': this.banner(abilityTitle(e.ability)); await this.wait(500); break;
+        case 'ability': sfx.drum(); this.banner(abilityTitle(e.ability)); await this.wait(500); break;
         default: break;
       }
     }
