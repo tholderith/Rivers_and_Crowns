@@ -1,3 +1,4 @@
+import { type BattleCursor, battleCursor } from './ui/battleCursors';
 import './ui/style.css';
 import {
   ABILITIES, type Ability, type Action, type BattleState, type SideIndex, type Stack, abilityAllowed, act, activeStack,
@@ -174,28 +175,29 @@ function withHex<T>(s: Stack, h: Hex, fn: () => T): T {
 }
 
 /** What clicking this hex would do for the active stack. */
-function intent(h: Hex, px = 0, py = 0): { action: Action; label: string; detail?: string } | null {
+function intent(h: Hex, px = 0, py = 0): { action: Action; label: string; detail?: string; cursor?: BattleCursor } | null {
   const s = activeStack(st);
   if (!s) return null;
   const t = stackAt(st, h);
   if (armed === 'rally') {
-    return t && t.side === s.side ? { action: { type: 'ability', ability: 'rally', target: t.id }, label: `Rally ${unitOf(t).name}` } : null;
+    return t && t.side === s.side ? { action: { type: 'ability', ability: 'rally', target: t.id }, label: `Rally ${unitOf(t).name}`, cursor: { kind: 'rally' } } : null;
   }
   if (armed === 'fieldworks') {
     const ok = !t && !isCover(st, h) && !st.rocks.includes(key(h)) && alive(st).some(o => o.side === s.side && distance(o.hex, h) === 1);
-    return ok ? { action: { type: 'ability', ability: 'fieldworks', hex: h }, label: 'Build fieldworks here' } : null;
+    return ok ? { action: { type: 'ability', ability: 'fieldworks', hex: h }, label: 'Build fieldworks here', cursor: { kind: 'dig' } } : null;
   }
   if (t && t.side !== s.side) {
     if (isShooter(s) && canFire(st, s)) {
       const p = preview(st, s, t, true);
-      return { action: { type: 'fire', target: t.id }, label: `Fire: about ${p.damage} damage, ${p.killed} fall`, detail: p.cover ? 'Target is in cover: half damage' : distance(s.hex, t.hex) > unitOf(s).range ? 'Long shot: half damage' : undefined };
+      const long = distance(s.hex, t.hex) > unitOf(s).range;
+      return { action: { type: 'fire', target: t.id }, label: `Fire: about ${p.damage} damage, ${p.killed} fall`, detail: p.cover ? 'Target is in cover: half damage' : long ? 'Long shot: half damage' : undefined, cursor: { kind: 'fire', bow: !has(s, 'musket'), half: !!p.cover || long } };
     }
     if (isShooter(s) && has(s, 'skirmish') && (s.loaded || !has(s, 'musket'))) {
       const spots = [...firePositions(st, s)].map(([k]) => fromKey(k)).filter(f => withHex(s, f, () => canFire(st, s)));
       spots.sort((a, b) => distance(a, s.hex) - distance(b, s.hex));
       if (spots.length) {
         const p = preview(st, s, t, true, spots[0]);
-        return { action: { type: 'fire', target: t.id, from: spots[0] }, label: `Skirmish and fire: about ${p.damage} damage, ${p.killed} fall` };
+        return { action: { type: 'fire', target: t.id, from: spots[0] }, label: `Skirmish and fire: about ${p.damage} damage, ${p.killed} fall`, cursor: { kind: 'fire', bow: !has(s, 'musket'), half: !!p.cover || distance(spots[0], t.hex) > unitOf(s).range } };
       }
     }
     const reach = reachable(st, s);
@@ -209,11 +211,12 @@ function intent(h: Hex, px = 0, py = 0): { action: Action; label: string; detail
     const moved = reach.get(key(from))!.cost;
     const p = preview(st, s, t, false, from, moved);
     const back = p.killed < t.count && !t.retaliated ? preview(st, t, s, false, t.hex) : null;
-    return { action: { type: 'attack', target: t.id, from }, label: `Attack: about ${p.damage} damage, ${p.killed} fall`, detail: back ? `They strike back for about ${Math.round(back.damage * (t.count - p.killed) / t.count)}` : 'No strike back' };
+    const cf = center(from), ct = center(t.hex);
+    return { cursor: { kind: 'melee', angle: (Math.atan2(ct.y - cf.y, ct.x - cf.x) * 180) / Math.PI }, action: { type: 'attack', target: t.id, from }, label: `Attack: about ${p.damage} damage, ${p.killed} fall`, detail: back ? `They strike back for about ${Math.round(back.damage * (t.count - p.killed) / t.count)}` : 'No strike back' };
   }
   if (!t) {
     const r = reachable(st, s).get(key(h));
-    if (r && r.cost > 0) return { action: { type: 'move', to: h }, label: `Move here`, detail: isCover(st, h) ? 'Woods: cover from fire' : undefined };
+    if (r && r.cost > 0) return { action: { type: 'move', to: h }, label: `Move here`, detail: isCover(st, h) ? 'Woods: cover from fire' : undefined, cursor: { kind: 'move' } };
   }
   return null;
 }
@@ -232,6 +235,8 @@ function onHover(h: Hex | null, x: number, y: number) {
     tip.hidden = false;
   } else tip.hidden = true;
   const over = h ? stackAt(st, h) : undefined;
+  const enemy = over && activeStack(st) && over.side !== activeStack(st)!.side;
+  (view.app.canvas as HTMLCanvasElement).style.cursor = !isHumanTurn() || busy ? (busy ? 'wait' : '') : battleCursor(it?.cursor ?? (enemy || armed ? { kind: 'none' } : null));
   renderInfo(over ?? activeStack(st) ?? undefined);
   drawHighlights(it?.action);
 }
